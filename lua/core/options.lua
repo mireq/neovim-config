@@ -67,6 +67,12 @@ opt.undofile = true
 opt.undolevels = 2048
 opt.undoreload = 65538
 
+--
+opt.completeopt = 'menuone,menu'
+--                 |       |
+--                 |       + Display popup
+--                 + Display when single option
+
 
 -- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 -- " => Display
@@ -153,3 +159,6 @@ opt.shiftwidth = 3
 --
 -- Indent for language
 opt.smartindent = true
+
+
+vim.cmd('colorscheme mirec')

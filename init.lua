@@ -9,4 +9,6 @@
 -- " Maintainer: Miroslav Bendík
 -- " -------------------------------------------------------------
 
+require('lazy_init')
 require('core/options')
+require('plugins/lazy')
