@@ -48,8 +48,22 @@ require("lazy").setup({
 			local lspconfig = require('lspconfig')
 			local cmp_nvim_lsp = require('cmp_nvim_lsp');
 			cmp_nvim_lsp.setup()
-			lspconfig['jedi_language_server'].setup {}
-			lspconfig['jedi_language_server'].manager.try_add()
+			lspconfig['pylsp'].setup {
+				settings = {
+					pylsp = {
+						plugins = {
+							pylint = { enabled = true },
+							autopep8 = { enabled = false },
+							mccabe = { enabled = false },
+							preload = { enabled = false },
+							pyflakes = { enabled = false },
+							pycodestyle = { enabled = false },
+							yapf = { enabled = false },
+						}
+					}
+				}
+			}
+			lspconfig['pylsp'].manager.try_add()
 
 			--cmp.register_source('buffer', require('cmp_buffer'))
 			--cmp.register_source('path', require('cmp_path').new())
