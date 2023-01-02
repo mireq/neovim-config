@@ -170,4 +170,24 @@ require("lazy").setup({
 			})
 		end,
 	},
+	{
+		"FelikZ/ctrlp-py-matcher",
+		keys = {
+			{"<C-p>", "<cmd>CtrlP<CR>", desc="CtrlP"},
+			{"<F3>", "<cmd>CtrlPBuffer<CR>", desc="CtrlP-buffers"},
+		},
+		dependencies = {
+			'kien/ctrlp.vim',
+		},
+		config = function()
+			--let g:ctrlp_use_caching = 0
+			vim.g.ctrlp_cache_dir = vim.env.HOME .. '/.cache/ctrlp'
+			vim.g.ctrlp_follow_symlinks = 1
+			vim.g.ctrlp_working_path_mode = 'raw'
+			vim.g.ctrlp_match_func = { match='pymatcher#PyMatch' }
+			if vim.fn.executable('ag') then
+				vim.g.ctrlp_user_command = 'ag %s --ignore-case --nogroup --nocolor --hidden --follow -U -p ~/.ignore -l -m 50000 -g ""'
+			end
+		end
+	},
 })
