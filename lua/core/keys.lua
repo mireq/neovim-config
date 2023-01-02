@@ -1,4 +1,5 @@
 local term = require("term")
+local cmd = vim.cmd
 
 -- Disable help
 vim.keymap.set('', '<F1>', '')
@@ -29,3 +30,7 @@ vim.api.nvim_set_keymap('', '<F9>', ':make -j 2<CR>', {})
 vim.keymap.set('n', '<F2>', term.toggle)
 vim.keymap.set('t', '<C-w>', '<C-\\><C-n>')
 vim.keymap.set('t', '<C-q>', '<C-\\><C-n>:lua require("term").toggle()<CR>')
+
+-- " Save with ctrl+s
+vim.keymap.set('n', '<C-S>', function() cmd("w") end)
+vim.keymap.set('i', '<C-S>', function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'n', false); cmd('w') end)
