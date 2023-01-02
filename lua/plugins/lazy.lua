@@ -190,4 +190,8 @@ require("lazy").setup({
 			end
 		end
 	},
+	{
+		dir = vim.fn.stdpath("config") .. "/pack/colors/opt/killor",
+		ft = 'python'
+	}
 })
