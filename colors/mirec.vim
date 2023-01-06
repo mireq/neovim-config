@@ -10,7 +10,7 @@ let colors_name = "mirec"
 
 hi Boolean         ctermfg=7     guifg=#e5e5e5 gui=bold cterm=bold
 hi Character       ctermfg=181   guifg=#d7afaf gui=bold cterm=bold
-hi ColorColumn     ctermbg=234   guibg=#1c1c1c
+hi ColorColumn     ctermbg=233   guibg=#080808
 hi Comment         ctermfg=8     guifg=#7f7f7f
 hi Conditional     ctermfg=229   guifg=#ffffaf gui=bold cterm=bold
 hi Conceal         ctermfg=120   ctermbg=233   guifg=#87ff87 guibg=#121212
