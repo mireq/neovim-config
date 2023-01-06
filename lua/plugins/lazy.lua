@@ -337,4 +337,9 @@ require("lazy").setup({
 		'Raimondi/delimitMate',
 		event = 'InsertEnter',
 	},
+	{
+		'tpope/vim-fugitive',
+		event = 'InsertEnter',
+		cmd = {'Git'},
+	},
 }, {install={colorscheme={"mirec"}}})

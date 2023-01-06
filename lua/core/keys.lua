@@ -79,3 +79,7 @@ vim.keymap.set('t', '<C-q>', '<C-\\><C-n>:lua require("term").toggle()<CR>')
 -- Save with ctrl+s
 vim.keymap.set('n', '<C-S>', function() cmd("w") end)
 vim.keymap.set('i', '<C-S>', function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'n', false); cmd('w') end)
+
+-- Git history
+vim.keymap.set('n', '<leader>gh', ':0GlLog<CR>')
+-- " :cexpr system('find . -name whatever.txt -printf "%p:1:1:%f\n"')
