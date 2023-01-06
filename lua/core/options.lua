@@ -83,6 +83,7 @@ opt.wrap = true
 
 -- Enable line number display
 opt.number = true
+opt.relativenumber = true
 --
 -- Hide conceal chars
 opt.conceallevel = 2
