@@ -34,3 +34,7 @@ vim.keymap.set('t', '<C-q>', '<C-\\><C-n>:lua require("term").toggle()<CR>')
 -- " Save with ctrl+s
 vim.keymap.set('n', '<C-S>', function() cmd("w") end)
 vim.keymap.set('i', '<C-S>', function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'n', false); cmd('w') end)
+
+-- common completion
+vim.keymap.set('i', '<C-Space>', '<C-X><C-O>')
+vim.keymap.set('i', '<Nul>', '<C-X><C-O>')
