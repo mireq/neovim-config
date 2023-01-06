@@ -147,3 +147,8 @@ hi mailQuoted4     ctermfg=88
 
 hi IndentGuidesOdd  guibg=#1c1c1c   ctermbg=234 ctermfg=8     guifg=#7f7f7f
 hi IndentGuidesEven guibg=#262626   ctermbg=235 ctermfg=8     guifg=#7f7f7f
+
+hi IndentBlanklineSpaceIndent1      ctermfg=242 ctermbg=16    guifg=#6c6c6c guibg=#000000
+hi IndentBlanklineSpaceIndent2      ctermfg=242 ctermbg=232   guifg=#6c6c6c guibg=#080808
+hi IndentBlanklineIndent1           ctermfg=242 ctermbg=16    guifg=#6c6c6c guibg=#000000
+hi IndentBlanklineIndent2           ctermfg=242 ctermbg=232   guifg=#6c6c6c guibg=#080808
