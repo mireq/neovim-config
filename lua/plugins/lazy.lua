@@ -10,24 +10,6 @@ require("lazy").setup({
 		end
 	},
 	{
-		"lukas-reineke/indent-blankline.nvim",
-		init = function()
-			require("indent_blankline").setup {
-				space_char_blankline = " ",
-				char = '│',
-				char_blankline = '┆',
-				space_char_highlight_list = {
-					"IndentBlanklineIndent1",
-					"IndentBlanklineIndent2",
-				},
-				char_highlight_list = {
-					"IndentBlanklineSpaceIndent1",
-					"IndentBlanklineSpaceIndent2",
-				},
-			}
-		end
-	},
-	{
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
 		dependencies = {
