@@ -48,6 +48,7 @@ vim.g.use_xhtml = 1
 vim.g.html_use_css = 1
 
 
+
 vim.cmd([[
 func! ReformatHTML() range
 	let content = join(getline(a:firstline, a:lastline), "\n")
@@ -119,5 +120,13 @@ vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
 	pattern = {'*.jinja'},
 	callback = function()
 		vim.bo.filetype = "htmldjango"
+	end
+})
+
+vim.api.nvim_create_autocmd({"FileType"}, {
+	pattern = {'htmldjango'},
+	callback = function(ev)
+		vim.keymap.set('v', '\\tr', "<ESC>`>a' %}<ESC>`<i{{% trans '<ESC>", { buffer = ev.buf })
+		vim.keymap.set('v', '\\tj', "<ESC>:set paste<CR>`>a{% endtrans %}<ESC>`<i{% trans %}<ESC>`>:set nopaste<CR>", { buffer = ev.buf })
 	end
 })
