@@ -203,5 +203,15 @@ require("lazy").setup({
 	{
 		dir = vim.fn.stdpath("config") .. "/pack/colors/opt/killor",
 		ft = 'python'
-	}
+	},
+	{
+		"mbbill/undotree",
+		keys = {
+			{"<F7>", "<cmd>UndotreeToggle<CR>", desc="UndoTree"},
+		},
+		config = function()
+			--let g:ctrlp_use_caching = 0
+			vim.g.undotree_RelativeTimestamp = 1
+		end
+	},
 })
