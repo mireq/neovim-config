@@ -176,7 +176,7 @@ require("lazy").setup({
 				},
 			})
 
-			vim.api.nvim_exec_autocmds("FileType", {})
+			vim.api.nvim_exec_autocmds("FileType", { group = 'lspconfig', modeline = false })
 		end,
 	},
 	{
