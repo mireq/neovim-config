@@ -45,7 +45,7 @@ hi MatchParen      ctermfg=233   ctermbg=192   guifg=#121212 guibg=#d7ff87 cterm
 hi ModeMsg         ctermfg=181   guifg=#d7afaf gui=bold cterm=bold
 hi MoreMsg         ctermfg=231   guifg=#ffffff gui=bold cterm=bold
 hi NonText         ctermfg=104   guifg=#8787d7
-hi Normal          ctermfg=252   ctermbg=233   guifg=#d0d0d0 guibg=#121212
+hi Normal          ctermfg=252   ctermbg=16    guifg=#d0d0d0 guibg=#000000
 hi Number          ctermfg=111   guifg=#87afff
 hi Operator        ctermfg=153   guifg=#afd7ff gui=bold cterm=bold
 hi Pmenu           ctermfg=231   ctermbg=240   guifg=#ffffff guibg=#585858
