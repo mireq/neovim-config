@@ -20,3 +20,21 @@ vim.g.pyindent_close_paren = '-shiftwidth()'
 --		vim.g.pymode_rope_project_root = vim.b.pymode_rope_project_root
 --	end
 --})
+
+-- Highlight whitespace
+
+vim.api.nvim_create_autocmd({"ColorScheme"}, {
+	command = 'highlight ExtraWhitespace ctermbg=red guibg=red'
+})
+vim.api.nvim_create_autocmd({"BufWinEnter"}, {
+	pattern = {'*.cpp', '*.h', '*.hpp', '*.php', '*.py', '*.css', '*.js', '*.html', '*.xhtml', '*.htm'},
+	command = "match ExtraWhitespace /\\s\\+$\\| \\+\\ze\\t/",
+})
+vim.api.nvim_create_autocmd({"InsertEnter"}, {
+	pattern = {'*.cpp', '*.h', '*.hpp', '*.php', '*.py', '*.css', '*.js', '*.html', '*.xhtml', '*.htm'},
+	command = "match ExtraWhitespace /\\s\\+\\%#\\@<!$\\| \\+\\ze\\t\\%#\\@<!/",
+})
+vim.api.nvim_create_autocmd({"BufWinLeave"}, {
+	pattern = {'*.cpp', '*.h', '*.hpp', '*.php', '*.py', '*.css', '*.js', '*.html', '*.xhtml', '*.htm'},
+	command = "match ExtraWhitespace /\\s\\+$\\| \\+\\ze\\t/",
+})
