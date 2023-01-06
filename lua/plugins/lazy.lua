@@ -1,6 +1,15 @@
 require("lazy").setup({
 	"gpanders/editorconfig.nvim",
 	{
+		"weilbith/nvim-code-action-menu",
+		cmd = 'CodeActionMenu',
+		config = function()
+			vim.g.code_action_menu_show_details = false
+			vim.g.code_action_menu_show_diff = true
+			vim.g.code_action_menu_show_action_kind = true
+		end
+	},
+	{
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
 		dependencies = {
@@ -72,7 +81,8 @@ require("lazy").setup({
 				end, bufopts)
 				vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
 				vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-				vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+				vim.keymap.set('n', '<space>ca', function() vim.cmd("CodeActionMenu") end, bufopts)
+				vim.keymap.set('n', '<C-c>ro', function() vim.lsp.buf.code_action({ apply = true, context = { only = {"source.organizeImports"} } }) end, bufopts)
 				vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
 				vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 			end
