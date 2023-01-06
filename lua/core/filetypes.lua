@@ -130,3 +130,18 @@ vim.api.nvim_create_autocmd({"FileType"}, {
 		vim.keymap.set('v', '\\tj', "<ESC>:set paste<CR>`>a{% endtrans %}<ESC>`<i{% trans %}<ESC>`>:set nopaste<CR>", { buffer = ev.buf })
 	end
 })
+
+
+vim.api.nvim_create_autocmd({"BufWritePre"}, {
+	callback = function(ev)
+		local dir = vim.fn.expand('<afile>:p:h')
+
+		if dir:find('%l+://') == 1 then -- skip netrw
+			return
+		end
+
+		if vim.fn.isdirectory(dir) == 0 then
+			vim.fn.mkdir(dir, 'p')
+		end
+	end
+})
