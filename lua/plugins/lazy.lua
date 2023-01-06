@@ -10,14 +10,15 @@ require("lazy").setup({
 		end
 	},
 	{
-		"hrsh7th/nvim-cmp",
-		event = "InsertEnter",
+		'hrsh7th/nvim-cmp',
+		event = 'InsertEnter',
 		dependencies = {
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-path",
+			'hrsh7th/cmp-nvim-lsp',
+			'hrsh7th/cmp-buffer',
+			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-nvim-lsp-signature-help',
-			"neovim/nvim-lspconfig",
+			'neovim/nvim-lspconfig',
+			'quangnguyen30192/cmp-nvim-ultisnips',
 			'SirVer/ultisnips',
 			'honza/vim-snippets',
 		},
