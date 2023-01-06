@@ -24,9 +24,41 @@ vim.api.nvim_create_autocmd({"BufEnter", "InsertLeave"}, {
 		vim.keymap.set('x', '<BS>', '<gv')
 	end
 })
+
+-- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+-- " => Snippets
+-- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 --
+vim.keymap.set('i', '\\...', '…')
 --
+-- " Better completion for {
+local function insert_parentheses(first, last)
+	return function()
+		local win = vim.api.nvim_get_current_win()
+		local cursor = vim.api.nvim_win_get_cursor(win)
+		local current_buf = vim.api.nvim_get_current_buf()
+		local line = vim.api.nvim_get_current_line()
+		local _, _, indent = string.find(line, "^([ \t]*)")
+		vim.api.nvim_buf_set_text(current_buf, cursor[1]-1, cursor[2], cursor[1]-1, cursor[2], {first, indent, indent .. last})
+		local keys = vim.api.nvim_replace_termcodes("<C-o>k<Tab>", true, false, true)
+		vim.api.nvim_feedkeys(keys, 'n', false)
+	end
+end
+vim.keymap.set('i', '{<CR>', insert_parentheses('{', '}'))
+vim.keymap.set('i', '[<CR>', insert_parentheses('[', ']'))
+vim.keymap.set('i', '(<CR>', insert_parentheses('(', ')'))
 --
+-- " Disable delimitmate for file types
+-- let delimitMate_excluded_ft = "mail,txt,htmldjango"
+--
+-- " Wrap
+vim.keymap.set('v', '(', '<ESC>`>a)<ESC>`<i(<ESC>`>lv`<l')
+vim.keymap.set('v', '[', '<ESC>`>a]<ESC>`<i[<ESC>`>lv`<l')
+vim.keymap.set('v', '{', '<ESC>`>a}<ESC>`<i{<ESC>`>lv`<l')
+vim.keymap.set('v', '\'', '<ESC>`>a\'<ESC>`<i\'<ESC>`>lv`<l')
+vim.keymap.set('v', '"', '<ESC>`>a"<ESC>`<i"<ESC>`>lv`<l')
+vim.keymap.set('v', ';', '<ESC>`>a“<ESC>`<i„<ESC>`>lv`<l')
+
 -- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 -- => Build
 -- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
