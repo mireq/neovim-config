@@ -308,4 +308,19 @@ require("lazy").setup({
 			}
 		end
 	},
+	{
+		'pangloss/vim-javascript',
+		config = function()
+			vim.g.javascript_conceal = 1
+			vim.g.javascript_conceal_function   = "∫"
+			vim.g.javascript_conceal_null       = "Ø"
+			vim.g.javascript_conceal_this       = "@"
+			vim.g.javascript_conceal_return     = "❱"
+			vim.g.javascript_conceal_undefined  = "¿"
+			vim.g.javascript_conceal_NaN        = "Ṉ"
+			vim.g.javascript_conceal_prototype  = "¶"
+			vim.g.javascript_conceal_static     = "•"
+			vim.g.javascript_conceal_super      = "Ω"
+		end
+	}
 })
