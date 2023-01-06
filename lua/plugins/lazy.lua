@@ -59,6 +59,7 @@ require("lazy").setup({
 			local cmp_nvim_lsp = require('cmp_nvim_lsp');
 			cmp_nvim_lsp.setup()
 
+
 			local opts = { noremap=true, silent=true }
 			vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
 			vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
@@ -104,11 +105,6 @@ require("lazy").setup({
 					}
 				}
 			}
-			lspconfig['pylsp'].manager.try_add()
-
-			--cmp.register_source('buffer', require('cmp_buffer'))
-			--cmp.register_source('path', require('cmp_path').new())
-			--cmp.register_source('nvim_lsp_signature_help', require('cmp_nvim_lsp_signature_help').new())
 
 			cmp.setup({
 				sources = cmp.config.sources(
@@ -179,6 +175,8 @@ require("lazy").setup({
 					-- native_menu = true,
 				},
 			})
+
+			vim.api.nvim_exec_autocmds("FileType", {})
 		end,
 	},
 	{
@@ -322,5 +320,5 @@ require("lazy").setup({
 			vim.g.javascript_conceal_static     = "•"
 			vim.g.javascript_conceal_super      = "Ω"
 		end
-	}
+	},
 })
