@@ -21,9 +21,14 @@ vim.api.nvim_create_autocmd({"BufReadPre"}, {
 		end
 	end
 })
+
 vim.api.nvim_create_autocmd({"BufEnter"}, {
 	group = group,
 	callback = function(ev)
+		local status, size = pcall(function() return vim.loop.fs_stat(ev.file).size end)
+		if status and size > 1024 * 1024 then
+			vim.o.eventignore = nil -- reset eventignore
+		end
 		local byte_size = vim.api.nvim_buf_get_offset(ev.buf, vim.api.nvim_buf_line_count(ev.buf))
 		if byte_size > 1024 * 1024 then
 			vim.cmd('NoMatchParen')
