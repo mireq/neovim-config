@@ -325,4 +325,8 @@ require("lazy").setup({
 		'mattn/emmet-vim',
 		filetype = {'html', 'htmldjango'}
 	},
+	{
+		'vim-scripts/po.vim--Jelenak',
+		filetype = {'po'}
+	},
 })
