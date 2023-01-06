@@ -122,7 +122,7 @@ opt.list = true
 
 vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter", "WinEnter", "CmdwinEnter"}, {
 	callback = function()
-		if (opt.previewwindow or vim.fn.bufname() == "__BUFFERLIST__") then
+		if (vim.wo.previewwindow or vim.fn.bufname() == "__BUFFERLIST__") then
 			vim.opt_local.list = false
 		end
 	end
