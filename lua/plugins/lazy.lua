@@ -329,4 +329,8 @@ require("lazy").setup({
 		'vim-scripts/po.vim--Jelenak',
 		filetype = {'po'}
 	},
+	{
+		'tikhomirov/vim-glsl',
+		filetype = {'glsl'}
+	},
 })
