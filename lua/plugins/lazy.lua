@@ -333,4 +333,4 @@ require("lazy").setup({
 		'tikhomirov/vim-glsl',
 		filetype = {'glsl'}
 	},
-})
+}, {install={colorscheme={"mirec"}}})
