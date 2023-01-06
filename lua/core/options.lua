@@ -107,7 +107,7 @@ opt.syntax = 'on'
 
 -- Whitespace symbols
 if vim.fn.has('multi_byte') then
-	opt.fillchars = 'stl: ,stlnc: ,vert:┆,fold:-,diff:-'
+	opt.fillchars = 'stl: ,stlnc: ,vert:┃,fold:-,diff:-'
 --	"set lcs=tab:\⁝\ ,trail:•,extends:>,precedes:<,nbsp:¤"
 	opt.lcs = 'tab:┆ ,extends:>,precedes:<,trail:•,nbsp:¤'
 	opt.sbr = '…'
