@@ -333,4 +333,8 @@ require("lazy").setup({
 		'tikhomirov/vim-glsl',
 		filetype = {'glsl'}
 	},
+	{
+		'Raimondi/delimitMate',
+		event = 'InsertEnter',
+	},
 }, {install={colorscheme={"mirec"}}})
