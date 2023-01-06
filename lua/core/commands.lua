@@ -40,3 +40,13 @@ execute "silent! '<,'>s/ó/\\&oacute;/g"
 execute "silent! '<,'>s/Ú/\\&Uacute;/g"
 execute "silent! '<,'>s/ú/\\&uacute;/g"
 ]], {range=true})
+
+vim.api.nvim_create_user_command('HTMLTextHighlight', [[
+syntax off
+syntax region comment start=/</ end=/>/
+syntax region comment start=/</ end=/>/
+syntax region comment start=/{%/ end=/%}/
+syntax region comment start=/{{/ end=/}}/
+syntax region comment start=/{#/ end=/#}/
+syntax match Title /{%\s*\(end\)\?trans[^%]*%}/
+]], {})
