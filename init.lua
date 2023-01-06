@@ -12,4 +12,5 @@
 require('lazy_init')
 require('core/options')
 require('core/keys')
+require('core/largefile')
 require('plugins/lazy')
