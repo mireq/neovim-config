@@ -217,7 +217,7 @@ require("lazy").setup({
 	},
 	{
 		'nvim-lualine/lualine.nvim',
-		init = function()
+		config = function()
 			require('lualine').setup {
 				options = {
 					icons_enabled = false,
@@ -262,7 +262,8 @@ require("lazy").setup({
 	},
 	{
 		'lewis6991/gitsigns.nvim',
-		init = function()
+		event = 'InsertEnter',
+		config = function()
 			require('gitsigns').setup {
 				signs = {
 					add          = { hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'    },
@@ -280,7 +281,7 @@ require("lazy").setup({
 					interval = 1000,
 					follow_files = true
 				},
-				attach_to_untracked = true,
+				attach_to_untracked = false,
 				current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
 				current_line_blame_opts = {
 					virt_text = true,
