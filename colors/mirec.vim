@@ -39,7 +39,7 @@ hi Include         ctermfg=156   guifg=#afff87 gui=bold cterm=bold
 hi IncSearch       ctermfg=0     ctermbg=131   guifg=#000000 guibg=#af5f5f
 hi Keyword         ctermfg=227   guifg=#ffff5f gui=bold cterm=bold
 hi Label           ctermfg=229   guifg=#ffffaf gui=bold,underline cterm=bold,underline
-hi LineNr          ctermfg=8     ctermbg=235   guifg=#7f7f7f guibg=#262626
+hi LineNr          ctermfg=244   ctermbg=235   guifg=#808080 guibg=#262626
 hi Macro           ctermfg=157   guifg=#afffaf gui=bold cterm=bold
 hi MatchParen      ctermfg=233   ctermbg=192   guifg=#121212 guibg=#d7ff87 cterm=NONE,bold gui=NONE,bold
 hi ModeMsg         ctermfg=181   guifg=#d7afaf gui=bold cterm=bold
@@ -75,7 +75,7 @@ hi Todo            ctermfg=231   ctermbg=0     guifg=#ffffff guibg=#000000 cterm
 hi Typedef         ctermfg=206   guifg=#ff5fd7 gui=bold,underline cterm=bold,underline
 hi Type            ctermfg=153   guifg=#afd7ff gui=NONE
 hi Underlined      ctermfg=81    guifg=#5fd7ff term=underline cterm=underline
-hi VertSplit       ctermfg=234   ctermbg=252   guifg=#1c1c1c guibg=#d0d0d0
+hi VertSplit       ctermfg=250   ctermbg=235   guifg=#bcbcbc guibg=#262626
 hi Visual          ctermfg=236   ctermbg=210   guifg=#303030 guibg=#ff8787 cterm=reverse gui=reverse
 hi VisualNOS       ctermfg=234   ctermbg=210   guifg=#1c1c1c guibg=#ff8787 cterm=bold,underline gui=bold,underline
 hi WarningMsg      ctermfg=231   ctermbg=234   guifg=#ffffff guibg=#1c1c1c cterm=bold gui=bold
