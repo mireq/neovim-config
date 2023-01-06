@@ -161,5 +161,6 @@ opt.shiftwidth = 3
 -- Indent for language
 opt.smartindent = true
 
+g.c_no_curly_error = 1
 
 vim.cmd('colorscheme mirec')
