@@ -321,4 +321,8 @@ require("lazy").setup({
 			vim.g.javascript_conceal_super      = "Ω"
 		end
 	},
+	{
+		'mattn/emmet-vim',
+		filetype = {'html', 'htmldjango'}
+	},
 })
