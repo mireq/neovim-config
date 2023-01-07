@@ -48,7 +48,7 @@ hi NonText         ctermfg=104   guifg=#8787d7
 hi Normal          ctermfg=252   ctermbg=16    guifg=#d0d0d0 guibg=#000000
 hi Number          ctermfg=111   guifg=#87afff
 hi Operator        ctermfg=153   guifg=#afd7ff gui=bold cterm=bold
-hi Pmenu           ctermfg=251   ctermbg=236   guifg=#c6c6c6 guibg=#303030
+hi Pmenu           ctermfg=248   ctermbg=236   guifg=#a8a8a8 guibg=#303030
 hi PmenuSel        ctermfg=0     ctermbg=156   guifg=#000000 guibg=#afff87
 hi PreCondit       ctermfg=157   guifg=#afffaf gui=bold cterm=bold
 hi PreProc         ctermfg=156   guifg=#d7ff87
@@ -159,3 +159,36 @@ hi CmpItemAbbrMatch cterm=bold ctermfg=231 gui=bold guifg=#ffffff
 hi CmpItemAbbrMatchFuzzy cterm=bold ctermfg=231 gui=bold guifg=#ffffff
 hi CmpItemMenu cterm=italic gui=italic
 hi CmpItemAbbrDeprecated ctermfg=244 guifg=#808080
+
+hi CmpItemKindField ctermfg=255 ctermbg=131 guifg=#eeeeee guibg=#af5f5f
+hi CmpItemKindProperty ctermfg=255 ctermbg=131 guifg=#eeeeee guibg=#af5f5f
+hi CmpItemKindEvent ctermfg=255 ctermbg=131 guifg=#eeeeee guibg=#af5f5f
+
+hi CmpItemKindText ctermfg=255 ctermbg=28 guifg=#eeeeee guibg=#008700
+hi CmpItemKindEnum ctermfg=255 ctermbg=28 guifg=#eeeeee guibg=#008700
+hi CmpItemKindKeyword ctermfg=255 ctermbg=28 guifg=#eeeeee guibg=#008700
+
+hi CmpItemKindConstant ctermfg=255 ctermbg=23 guifg=#eeeeee guibg=#afaf87
+hi CmpItemKindConstructor ctermfg=255 ctermbg=23 guifg=#eeeeee guibg=#afaf87
+hi CmpItemKindReference ctermfg=255 ctermbg=23 guifg=#eeeeee guibg=#afaf87
+
+hi CmpItemKindFunction ctermfg=255 ctermbg=125 guifg=#eeeeee guibg=#af005f
+hi CmpItemKindStruct ctermfg=255 ctermbg=125 guifg=#eeeeee guibg=#af005f
+hi CmpItemKindClass ctermfg=255 ctermbg=125 guifg=#eeeeee guibg=#af005f
+hi CmpItemKindModule ctermfg=255 ctermbg=125 guifg=#eeeeee guibg=#af005f
+hi CmpItemKindOperator ctermfg=255 ctermbg=125 guifg=#eeeeee guibg=#af005f
+
+hi CmpItemKindVariable ctermfg=255 ctermbg=55 guifg=#eeeeee guibg=#5f00af
+hi CmpItemKindFile ctermfg=255 ctermbg=55 guifg=#eeeeee guibg=#5f00af
+
+hi CmpItemKindUnit ctermfg=255 ctermbg=58 guifg=#eeeeee guibg=#5f5f00
+hi CmpItemKindSnippet ctermfg=255 ctermbg=58 guifg=#eeeeee guibg=#5f5f00
+hi CmpItemKindFolder ctermfg=255 ctermbg=58 guifg=#eeeeee guibg=#5f5f00
+
+hi CmpItemKindMethod ctermfg=255 ctermbg=61 guifg=#eeeeee guibg=#5f5faf
+hi CmpItemKindValue ctermfg=255 ctermbg=61 guifg=#eeeeee guibg=#5f5faf
+hi CmpItemKindEnumMember ctermfg=255 ctermbg=61 guifg=#eeeeee guibg=#5f5faf
+
+hi CmpItemKindInterface ctermfg=255 ctermbg=73 guifg=#eeeeee guibg=#5fafaf
+hi CmpItemKindColor ctermfg=255 ctermbg=73 guifg=#eeeeee guibg=#5fafaf
+hi CmpItemKindTypeParameter ctermfg=255 ctermbg=73 guifg=#eeeeee guibg=#5fafaf
