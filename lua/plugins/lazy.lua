@@ -56,6 +56,7 @@ require("lazy").setup({
 		end,
 		config = function()
 			local cmp = require('cmp')
+			local types = require("cmp.types")
 			local lspconfig = require('lspconfig')
 			local cmp_nvim_lsp = require('cmp_nvim_lsp');
 			cmp_nvim_lsp.setup()
@@ -90,6 +91,12 @@ require("lazy").setup({
 				vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 			end
 
+			-- display text completion at end of file
+			local function deprioritize_text(entry1, entry2)
+				if entry1:get_kind() == types.lsp.CompletionItemKind.Text then return false end
+				if entry2:get_kind() == types.lsp.CompletionItemKind.Text then return true end
+			end
+
 			lspconfig['pylsp'].setup {
 				on_attach = on_attach,
 				settings = {
@@ -111,6 +118,15 @@ require("lazy").setup({
 				sources = cmp.config.sources(
 					{
 						{
+							name = 'ultisnips'
+						},
+						{
+							name = 'nvim_lsp'
+						},
+						{
+							name = 'nvim_lsp_signature_help'
+						},
+						{
 							name = 'buffer',
 							option = {
 								keyword_length = 5,
@@ -125,15 +141,6 @@ require("lazy").setup({
 									return vim.tbl_keys(bufs)
 								end
 							}
-						},
-						{
-							name = 'ultisnips'
-						},
-						{
-							name = 'nvim_lsp'
-						},
-						{
-							name = 'nvim_lsp_signature_help'
 						},
 					},
 					{
@@ -172,6 +179,22 @@ require("lazy").setup({
 				experimental = {
 					ghost_text = true,
 					-- native_menu = true,
+				},
+				sorting = {
+					priority_weight = 2,
+					comparators = {
+						deprioritize_text,
+						cmp.config.compare.offset,
+						cmp.config.compare.exact,
+						-- cmp.config.compare.scopes,
+						cmp.config.compare.score,
+						cmp.config.compare.recently_used,
+						cmp.config.compare.locality,
+						cmp.config.compare.kind,
+						-- cmp.config.compare.sort_text,
+						cmp.config.compare.length,
+						cmp.config.compare.order,
+					},
 				},
 			})
 
