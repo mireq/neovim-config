@@ -205,7 +205,6 @@ require("lazy").setup({
 		"FelikZ/ctrlp-py-matcher",
 		keys = {
 			{"<C-p>", "<cmd>CtrlP<CR>", desc="CtrlP"},
-			{"<F3>", "<cmd>CtrlPBuffer<CR>", desc="CtrlP-buffers"},
 		},
 		dependencies = {
 			'kien/ctrlp.vim',
@@ -363,5 +362,11 @@ require("lazy").setup({
 		'tpope/vim-fugitive',
 		event = 'InsertEnter',
 		cmd = {'Git'},
+	},
+	{
+		"mireq/vim-bufferlist",
+		keys = {
+			{"<F3>", "<cmd>call BufferList()<CR>", desc="Buffer list"},
+		},
 	},
 }, {install={colorscheme={"mirec"}}})
