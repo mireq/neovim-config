@@ -18,6 +18,7 @@ require("lazy").setup({
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-nvim-lsp-signature-help',
 			'neovim/nvim-lspconfig',
+			'onsails/lspkind.nvim',
 			'quangnguyen30192/cmp-nvim-ultisnips',
 			'SirVer/ultisnips',
 			'honza/vim-snippets',
@@ -147,24 +148,21 @@ require("lazy").setup({
 					end,
 				},
 				window = {
-					-- completion = cmp.config.window.bordered(),
-					-- documentation = cmp.config.window.bordered(),
+					completion = {
+						--winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+						col_offset = -3,
+						side_padding = 0,
+					}
 				},
 				mapping = cmp.mapping.preset.insert(),
 				formatting = {
+					fields = { "kind", "abbr", "menu" },
 					format = function(entry, vim_item)
-						-- Kind icons
-						vim_item.kind = string.format('%s %s', '', vim_item.kind) -- This concatonates the icons with the name of the item kind
-						-- Source
-						vim_item.menu = ({
-							buffer = "[Buffer]",
-							nvim_lsp = "[LSP]",
-							luasnip = "[LuaSnip]",
-							nvim_lua = "[Lua]",
-							latex_symbols = "[LaTeX]",
-							path = "[Path]",
-						})[entry.source.name]
-						return vim_item
+						local kind = require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+						local strings = vim.split(kind.kind, "%s", { trimempty = true })
+						kind.kind = " " .. (strings[1] or "") .. " "
+						kind.menu = "    (" .. (strings[2] or "") .. ")"
+						return kind
 					end
 				},
 				view = {

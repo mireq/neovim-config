@@ -48,7 +48,7 @@ hi NonText         ctermfg=104   guifg=#8787d7
 hi Normal          ctermfg=252   ctermbg=16    guifg=#d0d0d0 guibg=#000000
 hi Number          ctermfg=111   guifg=#87afff
 hi Operator        ctermfg=153   guifg=#afd7ff gui=bold cterm=bold
-hi Pmenu           ctermfg=231   ctermbg=240   guifg=#ffffff guibg=#585858
+hi Pmenu           ctermfg=251   ctermbg=236   guifg=#c6c6c6 guibg=#303030
 hi PmenuSel        ctermfg=0     ctermbg=156   guifg=#000000 guibg=#afff87
 hi PreCondit       ctermfg=157   guifg=#afffaf gui=bold cterm=bold
 hi PreProc         ctermfg=156   guifg=#d7ff87
@@ -152,3 +152,10 @@ hi IndentBlanklineSpaceIndent1      ctermfg=242 ctermbg=16    guifg=#6c6c6c guib
 hi IndentBlanklineSpaceIndent2      ctermfg=242 ctermbg=232   guifg=#6c6c6c guibg=#080808
 hi IndentBlanklineIndent1           ctermfg=242 ctermbg=16    guifg=#6c6c6c guibg=#000000
 hi IndentBlanklineIndent2           ctermfg=242 ctermbg=232   guifg=#6c6c6c guibg=#080808
+
+hi CmpItemMenu ctermfg=120 cterm=italic guifg=#87ff87 gui=italic
+
+hi CmpItemAbbrMatch cterm=bold ctermfg=231 gui=bold guifg=#ffffff
+hi CmpItemAbbrMatchFuzzy cterm=bold ctermfg=231 gui=bold guifg=#ffffff
+hi CmpItemMenu cterm=italic gui=italic
+hi CmpItemAbbrDeprecated ctermfg=244 guifg=#808080
