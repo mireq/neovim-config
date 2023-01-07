@@ -3,6 +3,7 @@ vim.g.python_recommended_style = 0
 vim.g.pyindent_open_paren = 'shiftwidth()'
 vim.g.pyindent_continue = 'shiftwidth()'
 vim.g.pyindent_close_paren = '-shiftwidth()'
+-- vim.g.pyindent_disable_parentheses_indenting = 1
 -- let g:rst_style=0
 -- autocmd BufReadPre,BufNewFile,BufEnter *.py if exists('b:pymode_rope_project_root') | let g:pymode_rope_project_root=b:pymode_rope_project_root | else | let f=expand("%:p:h") . ";" | let rope_dir=finddir(".ropeproject", f) | if rope_dir == "" || rope_dir == expand("$HOME/.ropeproject") | let b:pymode_rope_project_root="" | else | let rope_absdir=fnamemodify(rope_dir, ':p:h:h') | let b:pymode_rope_project_root=rope_absdir | endif | let g:pymode_rope_project_root=b:pymode_rope_project_root | endif
 
