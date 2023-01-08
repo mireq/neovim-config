@@ -12,8 +12,8 @@ local function create_termbuf()
 		vim.fn.termopen(vim.env.SHELL)
 
 		api.nvim_buf_set_option(termbuf, 'buflisted', false)
-		api.nvim_win_set_option(0, 'relativenumber', false)
-		api.nvim_win_set_option(0, 'number', false)
+		vim.opt_local.relativenumber = false
+		vim.opt_local.number = false
 
 		api.nvim_set_current_buf(current_buf)
 	end
