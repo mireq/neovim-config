@@ -47,6 +47,15 @@ end
 vim.keymap.set('i', '{<CR>', insert_parentheses('{', '}'))
 vim.keymap.set('i', '[<CR>', insert_parentheses('[', ']'))
 vim.keymap.set('i', '(<CR>', insert_parentheses('(', ')'))
+vim.keymap.set('i', '"<Tab>', function()
+	local win = vim.api.nvim_get_current_win()
+	local cursor = vim.api.nvim_win_get_cursor(win)
+	local current_buf = vim.api.nvim_get_current_buf()
+	vim.api.nvim_buf_set_text(current_buf, cursor[1]-1, cursor[2], cursor[1]-1, cursor[2], {'"'})
+	vim.api.nvim_win_set_cursor(win, {cursor[1], cursor[2] + 1})
+	local keys = vim.api.nvim_replace_termcodes("<Tab>", true, false, true)
+	vim.api.nvim_feedkeys(keys, 'i', false)
+end)
 --
 -- " Disable delimitmate for file types
 -- let delimitMate_excluded_ft = "mail,txt,htmldjango"
