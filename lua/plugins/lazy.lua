@@ -355,8 +355,11 @@ require("lazy").setup({
 		filetype = {'glsl'}
 	},
 	{
-		'Raimondi/delimitMate',
+		'windwp/nvim-autopairs',
 		event = 'InsertEnter',
+		config = function()
+			require("nvim-autopairs").setup {}
+		end
 	},
 	{
 		'tpope/vim-fugitive',
