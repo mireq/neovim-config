@@ -50,6 +50,8 @@ hi Number          ctermfg=111   guifg=#87afff
 hi Operator        ctermfg=153   guifg=#afd7ff gui=bold cterm=bold
 hi Pmenu           ctermfg=248   ctermbg=235   guifg=#a8a8a8 guibg=#262626
 hi PmenuSel        ctermfg=0     ctermbg=156   guifg=#000000 guibg=#afff87
+hi PmenuSbar       ctermfg=248   ctermbg=237   guifg=#a8a8a8 guibg=#3a3a3a
+hi PmenuThumb      ctermfg=248   ctermbg=156   guifg=#a8a8a8 guibg=#afff87
 hi PreCondit       ctermfg=157   guifg=#afffaf gui=bold cterm=bold
 hi PreProc         ctermfg=156   guifg=#d7ff87
 hi Question        ctermfg=231   guifg=#ffffff gui=bold cterm=bold
