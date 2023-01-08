@@ -54,8 +54,7 @@ local function ignore_autopairs(char)
 		local cursor = vim.api.nvim_win_get_cursor(win)
 		local current_buf = vim.api.nvim_get_current_buf()
 		vim.api.nvim_buf_set_text(current_buf, cursor[1]-1, cursor[2], cursor[1]-1, cursor[2], {char})
-		vim.api.nvim_win_set_cursor(win, {cursor[1], cursor[2] + 1})
-		local keys = vim.api.nvim_replace_termcodes("<Tab>", true, false, true)
+		local keys = vim.api.nvim_replace_termcodes("<Right><Tab>", true, false, true)
 		vim.api.nvim_feedkeys(keys, 'i', false)
 	end
 end
