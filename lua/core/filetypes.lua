@@ -146,3 +146,9 @@ vim.api.nvim_create_autocmd({"BufWritePre"}, {
 		end
 	end
 })
+
+vim.api.nvim_create_autocmd({"TermOpen"}, {
+	callback = function(ev)
+		vim.keymap.set('n', '<C-q>', '<cmd>tabclose<CR>', { buffer = ev.buf })
+	end
+})
