@@ -118,7 +118,7 @@ setlocal efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 })
 -- autocmd BufReadPre,BufNewFile,BufEnter *.py if exists('b:pymode_rope_project_root') | let g:pymode_rope_project_root=b:pymode_rope_project_root | else | let f=expand("%:p:h") . ";" | let rope_dir=finddir(".ropeproject", f) | if rope_dir == "" || rope_dir == expand("$HOME/.ropeproject") | let b:pymode_rope_project_root="" | else | let rope_absdir=fnamemodify(rope_dir, ':p:h:h') | let b:pymode_rope_project_root=rope_absdir | endif | let g:pymode_rope_project_root=b:pymode_rope_project_root | endif
 vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
-	pattern = {'*.jinja'},
+	pattern = {'*.jinja', '*.html'},
 	callback = function()
 		vim.bo.filetype = "htmldjango"
 	end
