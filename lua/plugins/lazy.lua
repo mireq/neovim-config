@@ -415,6 +415,7 @@ require("lazy").setup({
 						"--line-number",
 						"--column",
 						"--smart-case",
+						"--no-ignore-vcs",
 					},
 					prompt_prefix = "   ",
 					selection_caret = "  ",
