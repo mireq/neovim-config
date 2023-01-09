@@ -60,6 +60,7 @@ require("lazy").setup({
 			local lspconfig = require('lspconfig')
 			local cmp_nvim_lsp = require('cmp_nvim_lsp');
 			cmp_nvim_lsp.setup()
+			local capabiliies = cmp_nvim_lsp.default_capabilities();
 
 
 			local opts = { noremap=true, silent=true }
@@ -99,6 +100,10 @@ require("lazy").setup({
 
 			lspconfig['pylsp'].setup {
 				on_attach = on_attach,
+				capabilities = capabilities,
+				flags = {
+					debounce_text_changes = 500
+				},
 				settings = {
 					pylsp = {
 						plugins = {
@@ -205,6 +210,16 @@ require("lazy").setup({
 			})
 
 			vim.api.nvim_exec_autocmds("FileType", { group = 'lspconfig', modeline = false })
+
+			vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+				vim.lsp.diagnostic.on_publish_diagnostics, {
+					signs = true,
+					underline = false,
+					virtual_text = true,
+					show_diagnostic_autocmds = {'InsertLeave', 'TextChanged'},
+					diagnostic_delay = 1000
+				}
+			)
 
 			vim.cmd("au! UltiSnips_AutoTrigger")
 		end,
