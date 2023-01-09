@@ -152,3 +152,10 @@ vim.api.nvim_create_autocmd({"TermOpen"}, {
 		vim.keymap.set('n', '<C-q>', '<cmd>tabclose<CR>', { buffer = ev.buf })
 	end
 })
+vim.api.nvim_create_autocmd({"TermClose"}, {
+	callback = function(ev)
+		if ev.status == nil then
+			vim.api.nvim_buf_delete(ev.buf, {});
+		end
+	end
+})
