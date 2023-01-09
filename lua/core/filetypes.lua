@@ -154,7 +154,7 @@ vim.api.nvim_create_autocmd({"TermOpen"}, {
 })
 vim.api.nvim_create_autocmd({"TermClose"}, {
 	callback = function(ev)
-		if ev.status == nil and ev.buf ~= nil and vim.api.nvim_buf_is_valid(ev.buf) then
+		if ev.status == nil and ev.buf ~= nil and vim.api.nvim_buf_is_valid(ev.buf) and vim.api.nvim_buf_is_loaded(ev.buf) then
 			vim.api.nvim_buf_delete(ev.buf, {});
 		end
 	end
