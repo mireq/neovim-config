@@ -13,7 +13,8 @@ hi Character       ctermfg=181   guifg=#d7afaf gui=bold cterm=bold
 hi ColorColumn     ctermbg=233   guibg=#080808
 hi Comment         ctermfg=8     guifg=#7f7f7f
 hi Conditional     ctermfg=229   guifg=#ffffaf gui=bold cterm=bold
-hi Conceal         ctermfg=120   ctermbg=16   guifg=#87ff87 guibg=#000000
+hi clear Conceal
+hi Conceal         ctermfg=120   guifg=#87ff87
 hi Constant        ctermfg=181   guifg=#d7afaf gui=bold cterm=bold
 hi Cursor          ctermfg=0     ctermbg=145   guifg=#000000 guibg=#afafaf
 hi CursorColumn    ctermbg=232   guibg=#080808 cterm=none
@@ -195,3 +196,15 @@ hi CmpItemKindEnumMember ctermfg=255 ctermbg=61 guifg=#eeeeee guibg=#5f5faf
 hi CmpItemKindInterface ctermfg=255 ctermbg=66 guifg=#eeeeee guibg=#5f8787
 hi CmpItemKindColor ctermfg=255 ctermbg=66 guifg=#eeeeee guibg=#5f8787
 hi CmpItemKindTypeParameter ctermfg=255 ctermbg=66 guifg=#eeeeee guibg=#5f8787
+
+hi TelescopeInvisible ctermfg=233 ctermbg=233
+hi TelescopeInvisible2 ctermfg=235 ctermbg=235
+hi TelescopeNormal ctermfg=252  ctermbg=233 guifg=#d0d0d0 guibg=#121212
+hi TelescopePromptBorder ctermfg=31 ctermbg=31
+hi link TelescopeResultsBorder TelescopeInvisible
+hi link TelescopePreviewBorder TelescopeInvisible2
+hi TelescopePromptTitle ctermfg=255 ctermbg=31
+hi TelescopePromptNormal ctermfg=255 ctermbg=31 cterm=bold
+hi TelescopePromptCounter ctermfg=255 ctermbg=31
+hi TelescopePreviewTitle ctermfg=255 ctermbg=235
+hi TelescopePreviewNormal ctermbg=235
