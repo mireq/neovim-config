@@ -13,7 +13,7 @@ hi Character       ctermfg=181   guifg=#d7afaf gui=bold cterm=bold
 hi ColorColumn     ctermbg=233   guibg=#080808
 hi Comment         ctermfg=8     guifg=#7f7f7f
 hi Conditional     ctermfg=229   guifg=#ffffaf gui=bold cterm=bold
-hi Conceal         ctermfg=120   ctermbg=233   guifg=#87ff87 guibg=#121212
+hi Conceal         ctermfg=120   ctermbg=16   guifg=#87ff87 guibg=#000000
 hi Constant        ctermfg=181   guifg=#d7afaf gui=bold cterm=bold
 hi Cursor          ctermfg=0     ctermbg=145   guifg=#000000 guibg=#afafaf
 hi CursorColumn    ctermbg=232   guibg=#080808 cterm=none
@@ -31,7 +31,7 @@ hi ErrorMsg        ctermfg=0     ctermbg=6     guifg=#000000 guibg=#00cdcd
 hi Exception       ctermfg=123   guifg=#87ffff cterm=underline
 hi Float           ctermfg=219   guifg=#ffafff
 hi FoldColumn      ctermfg=181   ctermbg=235   guifg=#d7afaf guibg=#262626
-hi Folded          ctermfg=181   ctermbg=233   guifg=#d7afaf guibg=#121212
+hi Folded          ctermfg=181   ctermbg=16    guifg=#d7afaf guibg=#000000
 hi Function        ctermfg=228   guifg=#ffff87
 hi Identifier      ctermfg=153   guifg=#afd7ff gui=bold cterm=bold
 hi phpMethodsVar   ctermfg=151   guifg=#afd7af gui=NONE cterm=NONE
@@ -41,7 +41,7 @@ hi Keyword         ctermfg=227   guifg=#ffff5f gui=bold cterm=bold
 hi Label           ctermfg=229   guifg=#ffffaf gui=bold,underline cterm=bold,underline
 hi LineNr          ctermfg=244   ctermbg=234   guifg=#808080 guibg=#1c1c1c
 hi Macro           ctermfg=157   guifg=#afffaf gui=bold cterm=bold
-hi MatchParen      ctermfg=233   ctermbg=192   guifg=#121212 guibg=#d7ff87 cterm=NONE,bold gui=NONE,bold
+hi MatchParen      ctermfg=16    ctermbg=192   guifg=#000000 guibg=#d7ff87 cterm=NONE,bold gui=NONE,bold
 hi ModeMsg         ctermfg=181   guifg=#d7afaf gui=bold cterm=bold
 hi MoreMsg         ctermfg=231   guifg=#ffffff gui=bold cterm=bold
 hi NonText         ctermfg=104   guifg=#8787d7
@@ -56,7 +56,7 @@ hi PreCondit       ctermfg=157   guifg=#afffaf gui=bold cterm=bold
 hi PreProc         ctermfg=156   guifg=#d7ff87
 hi Question        ctermfg=231   guifg=#ffffff gui=bold cterm=bold
 hi Repeat          ctermfg=222   guifg=#ffd787 gui=bold cterm=bold
-hi Search          ctermfg=227   ctermbg=233   guifg=#ffff5f guibg=#121212 cterm=bold,reverse gui=bold,reverse
+hi Search          ctermfg=227   ctermbg=16    guifg=#ffff5f guibg=#000000 cterm=bold,reverse gui=bold,reverse
 hi SignColumn      ctermfg=8     ctermbg=233   guifg=#7f7f7f guibg=#262626
 hi SpecialChar     ctermfg=181   guifg=#d7afaf gui=bold cterm=bold
 hi SpecialComment  ctermfg=181   guifg=#d7afaf gui=bold cterm=bold
@@ -77,7 +77,7 @@ hi Todo            ctermfg=231   ctermbg=0     guifg=#ffffff guibg=#000000 cterm
 hi Typedef         ctermfg=206   guifg=#ff5fd7 gui=bold,underline cterm=bold,underline
 hi Type            ctermfg=153   guifg=#afd7ff gui=NONE
 hi Underlined      ctermfg=81    guifg=#5fd7ff term=underline cterm=underline
-hi VertSplit       ctermfg=236   ctermbg=16   guifg=#303030 guibg=#000000
+hi VertSplit       ctermfg=236   ctermbg=16    guifg=#303030 guibg=#000000
 hi Visual          ctermfg=210   ctermbg=238   guifg=#ff8787 guibg=#303030
 hi VisualNOS       ctermfg=234   ctermbg=210   guifg=#1c1c1c guibg=#ff8787 cterm=bold,underline gui=bold,underline
 hi WarningMsg      ctermfg=231   ctermbg=234   guifg=#ffffff guibg=#1c1c1c cterm=bold gui=bold
@@ -87,8 +87,8 @@ hi Whitespace      ctermfg=242   guifg=#6c6c6c
 hi OverLength      ctermbg=237   guibg=#3a3a3a
 hi WarnLength      ctermbg=235   guibg=#262626
 
-hi BufferSelected  ctermfg=227   ctermbg=233   guifg=#ffff5f guibg=#121212 cterm=bold,reverse gui=bold,reverse
-hi BufferNormal    ctermfg=252   ctermbg=233   guifg=#d0d0d0 guibg=#121212
+hi BufferSelected  ctermfg=227   ctermbg=16   guifg=#ffff5f guibg=#000000 cterm=bold,reverse gui=bold,reverse
+hi BufferNormal    ctermfg=252   ctermbg=16   guifg=#d0d0d0 guibg=#000000
 
 hi QtObject        ctermfg=120   guifg=#87ff87
 
@@ -128,7 +128,7 @@ hi link diffFile Conceal
 
 "hi Attribute       ctermfg=153   guifg=#afd7ff gui=NONE
 hi Attribute       ctermfg=158   guifg=#afffd7
-hi CallClass       ctermfg=120   ctermbg=233   guifg=#87ff87 guibg=#121212
+hi CallClass       ctermfg=120   guifg=#87ff87
 hi CallStaticClass ctermfg=231 guifg=#ffffff cterm=bold gui=bold
 hi CallFunction    ctermfg=153   guifg=#afd7ff gui=NONE
 hi CallPrivateFunction ctermfg=204   guifg=#ff5787
