@@ -104,6 +104,12 @@ require("lazy").setup({
 				flags = {
 					debounce_text_changes = 500
 				},
+				root_dir = function(fname)
+					local root_files = {
+						'.ropeproject',
+					}
+					return lspconfig.util.root_pattern(unpack(root_files))(fname) or lspconfig.util.find_git_ancestor(fname)
+				end,
 				settings = {
 					pylsp = {
 						plugins = {
