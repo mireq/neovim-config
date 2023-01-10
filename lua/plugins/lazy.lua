@@ -107,14 +107,16 @@ require("lazy").setup({
 				settings = {
 					pylsp = {
 						plugins = {
-							pylint = { enabled = true, args = {'--init-hook="try: import pylint_venv\nexcept ImportError: pass\nelse: pylint_venv.inithook()"'} },
+							--pylint = { enabled = true, args = {'--init-hook="try: import pylint_venv\nexcept ImportError: pass\nelse: pylint_venv.inithook()"', "aaa"} },
+							pylint = { enabled = true, args = {'--init-hook="__import__(\'pylint_venv\').inithook()"'} },
 							autopep8 = { enabled = false },
 							mccabe = { enabled = false },
 							preload = { enabled = false },
 							pyflakes = { enabled = false },
 							pycodestyle = { enabled = false },
 							yapf = { enabled = false },
-						}
+						},
+
 					}
 				}
 			}
@@ -210,6 +212,7 @@ require("lazy").setup({
 			})
 
 			vim.api.nvim_exec_autocmds("FileType", { group = 'lspconfig', modeline = false })
+			--vim.lsp.set_log_level("debug")
 
 			vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 				vim.lsp.diagnostic.on_publish_diagnostics, {
