@@ -146,16 +146,3 @@ vim.api.nvim_create_autocmd({"BufWritePre"}, {
 		end
 	end
 })
-
-vim.api.nvim_create_autocmd({"TermOpen"}, {
-	callback = function(ev)
-		vim.keymap.set('n', '<C-q>', '<cmd>tabclose<CR>', { buffer = ev.buf })
-	end
-})
-vim.api.nvim_create_autocmd({"TermClose"}, {
-	callback = function(ev)
-		if ev.status == nil and ev.buf ~= nil and vim.api.nvim_buf_is_valid(ev.buf) and vim.api.nvim_buf_is_loaded(ev.buf) then
-			vim.api.nvim_buf_delete(ev.buf, {});
-		end
-	end
-})

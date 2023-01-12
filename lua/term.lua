@@ -16,6 +16,8 @@ local function create_termbuf()
 		vim.opt_local.number = false
 
 		api.nvim_set_current_buf(current_buf)
+
+		vim.keymap.set('n', '<C-q>', '<cmd>tabclose<CR>', { buffer = termbuf })
 	end
 end
 
@@ -30,6 +32,14 @@ local function toggle()
 		api.nvim_feedkeys('i', 'n', true)
 	end
 end
+
+vim.api.nvim_create_autocmd({"TermClose"}, {
+	callback = function(ev)
+		if ev.status == nil and ev.buf ~= nil and ev.buf == termbuf and vim.api.nvim_buf_is_valid(ev.buf) and vim.api.nvim_buf_is_loaded(ev.buf) then
+			vim.api.nvim_buf_delete(ev.buf, {});
+		end
+	end
+})
 
 return {
 	toggle = toggle
