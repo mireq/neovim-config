@@ -164,5 +164,3 @@ opt.smartindent = true
 opt.cmdheight = 0
 
 g.c_no_curly_error = 1
-
-vim.cmd('colorscheme mirec')
