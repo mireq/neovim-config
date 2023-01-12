@@ -413,6 +413,7 @@ require("lazy").setup({
 		keys = {
 			{"<leader>fg", "<cmd>Telescope live_grep<cr>", desc="Telescope live_grep"},
 		},
+		cmd = {'Telescope'},
 		config = function()
 			require('telescope').setup({
 				defaults = {
