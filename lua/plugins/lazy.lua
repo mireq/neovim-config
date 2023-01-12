@@ -469,4 +469,17 @@ require("lazy").setup({
 			})
 		end
 	},
+	{
+		'akinsho/toggleterm.nvim',
+		cmd = {'ToggleTerm', 'TermExec'},
+		config = function()
+			require("toggleterm").setup({
+				open_mapping = [[<F2>]],
+				direction = 'tab',
+				on_create = function(t)
+					vim.keymap.set('n', '<C-q>', '<Cmd>exe v:count1 . "ToggleTerm"<CR>', { buffer = t.bufnr })
+				end,
+			})
+		end
+	},
 }, {install={colorscheme={"mirec"}}})

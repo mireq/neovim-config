@@ -19,6 +19,7 @@
   "plenary.nvim": { "branch": "master", "commit": "9d81624fbcedd3dd43b38d7e13a1e7b3f873d8cd" },
   "po.vim--Jelenak": { "branch": "master", "commit": "7e86f0a854a34dc4f33e3b675a3c847e89e8492c" },
   "telescope.nvim": { "branch": "master", "commit": "04af51dbfb17c2afa0b8d82b0e842e0638201ca9" },
+  "toggleterm.nvim": { "branch": "main", "commit": "528d6375745dc3c5db6ab7d5fba0ddbdec5bf4e0" },
   "ultisnips": { "branch": "master", "commit": "e99fdf15cd55a4a8e0cb0a80a6810c1867a5c401" },
   "undotree": { "branch": "master", "commit": "1a23ea84bd02c34f50d8e10a8b4bfc89597ffe4e" },
   "vim-bufferlist": { "branch": "master", "commit": "a894a0d9b97bcde96b9334f4f0a398efd66d3c26" },

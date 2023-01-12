@@ -1,4 +1,4 @@
-local term = require("term")
+--local term = require("term")
 local cmd = vim.cmd
 
 -- Disable help
@@ -88,9 +88,9 @@ vim.api.nvim_set_keymap('', '<F9>', ':make -j 2<CR>', {})
 -- => Terminal
 -- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-vim.keymap.set('n', '<F2>', term.toggle, {silent=true})
+vim.keymap.set('n', '<F2>', '<Cmd>ToggleTerm<Cr>', {silent=true})
 vim.keymap.set('t', '<C-w>', '<C-\\><C-n>', {silent=true})
-vim.keymap.set('t', '<C-q>', '<C-\\><C-n>:lua require("term").toggle()<CR>', {silent=true})
+vim.keymap.set('t', '<C-q>', '<Cmd>exe v:count1 . "ToggleTerm"<CR>', {})
 
 -- Save with ctrl+s
 vim.keymap.set('n', '<C-S>', function() cmd("w") end)
