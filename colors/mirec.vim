@@ -79,7 +79,7 @@ hi Typedef         ctermfg=206   guifg=#ff5fd7 gui=bold,underline cterm=bold,und
 hi Type            ctermfg=153   guifg=#afd7ff gui=NONE
 hi Underlined      ctermfg=81    guifg=#5fd7ff term=underline cterm=underline
 hi VertSplit       ctermfg=236   ctermbg=16    guifg=#303030 guibg=#000000
-hi Visual          ctermfg=210   ctermbg=238   guifg=#ff8787 guibg=#303030
+hi Visual          ctermfg=210   ctermbg=236   guifg=#ff8787 guibg=#303030
 hi VisualNOS       ctermfg=234   ctermbg=210   guifg=#1c1c1c guibg=#ff8787 cterm=bold,underline gui=bold,underline
 hi WarningMsg      ctermfg=231   ctermbg=234   guifg=#ffffff guibg=#1c1c1c cterm=bold gui=bold
 hi WildMenu        ctermfg=0     ctermbg=181   guifg=#000000 guibg=#d7afaf
@@ -201,10 +201,12 @@ hi TelescopeInvisible ctermfg=233 ctermbg=233
 hi TelescopeInvisible2 ctermfg=235 ctermbg=235
 hi TelescopeNormal ctermfg=252  ctermbg=233 guifg=#d0d0d0 guibg=#121212
 hi TelescopePromptBorder ctermfg=31 ctermbg=31
-hi link TelescopeResultsBorder TelescopeInvisible
-hi link TelescopePreviewBorder TelescopeInvisible2
+hi link TelescopeResultsBorder TelescopeInvisible2
+hi link TelescopePreviewBorder TelescopeInvisible
 hi TelescopePromptTitle ctermfg=255 ctermbg=31
 hi TelescopePromptNormal ctermfg=255 ctermbg=31 cterm=bold
 hi TelescopePromptCounter ctermfg=255 ctermbg=31
-hi TelescopePreviewTitle ctermfg=255 ctermbg=235
-hi TelescopePreviewNormal ctermbg=235
+hi TelescopePreviewTitle ctermfg=255 ctermbg=233
+hi TelescopeResultsNormal ctermbg=235
+hi TelescopePreviewNormal ctermbg=233
+hi TelescopeResultsTitle ctermfg=255 ctermbg=235
