@@ -400,7 +400,7 @@ require("lazy").setup({
 		cmd = {'Git'},
 	},
 	{
-		"mireq/vim-bufferlist",
+		"roblillack/vim-bufferlist",
 		keys = {
 			{"<F3>", "<cmd>call BufferList()<CR>", desc="Buffer list"},
 		},
