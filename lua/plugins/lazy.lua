@@ -482,4 +482,7 @@ require("lazy").setup({
 			})
 		end
 	},
+	{
+		dir = vim.fn.stdpath("config") .. "/pack/colors/opt/mirec",
+	},
 }, {install={colorscheme={"mirec"}}})
