@@ -226,7 +226,7 @@ require("lazy").setup({
 					signs = true,
 					underline = false,
 					virtual_text = true,
-					show_diagnostic_autocmds = {'InsertLeave', 'TextChanged'},
+					show_diagnostic_autocmds = {'PostSave'},
 					diagnostic_delay = 1000
 				}
 			)
