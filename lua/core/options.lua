@@ -88,7 +88,8 @@ opt.number = true
 opt.conceallevel = 2
 
 -- Show title in terminal window
-opt.title = true
+opt.title = false
+opt.titlestring = [[%f %h%m%r%w %{v:progname}]]
 --
 -- Show matching brackets
 opt.showmatch = true
