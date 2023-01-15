@@ -443,8 +443,8 @@ require("lazy").setup({
 						vertical = {
 							mirror = false,
 						},
-						width = 0.87,
-						height = 0.80,
+						width = 0.94,
+						height = 0.90,
 						preview_cutoff = 120,
 					},
 					results_title = false,
