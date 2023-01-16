@@ -79,6 +79,15 @@ endfunc
 command! -range=% ReformatHTML <line1>,<line2>call ReformatHTML()
 ]])
 
+vim.cmd([[
+func! EscapeHTML() range
+	silent execute "silent! :'<,'>s/&/\\&amp;/g"
+	silent execute "silent! :'<,'>s/</\\&lt;/g"
+	silent execute "silent! :'<,'>s/>/\\&gt;/g"
+endfunc
+command! -range=% EscapeHTML <line1>,<line2>call EscapeHTML()
+]])
+
 -- C / C++
 
 vim.api.nvim_create_autocmd({"Syntax"}, {
