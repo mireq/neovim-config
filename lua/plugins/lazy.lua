@@ -234,6 +234,7 @@ require("lazy").setup({
 			)
 
 			vim.cmd("au! UltiSnips_AutoTrigger")
+			vim.cmd("autocmd BufLeave * call UltiSnips#LeavingBuffer()")
 		end,
 	},
 	{
