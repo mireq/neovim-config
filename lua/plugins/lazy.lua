@@ -87,6 +87,7 @@ require("lazy").setup({
 				vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
 				vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
 				vim.keymap.set('n', '<space>ca', function() vim.cmd("CodeActionMenu") end, bufopts)
+				--vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
 				vim.keymap.set('n', '<C-c>ro', function() vim.lsp.buf.code_action({ apply = true, context = { only = {"source.organizeImports"} } }) end, bufopts)
 				vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
 				vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
@@ -219,7 +220,7 @@ require("lazy").setup({
 			})
 
 			vim.api.nvim_exec_autocmds("FileType", { group = 'lspconfig', modeline = false })
-			--vim.lsp.set_log_level("debug")
+			vim.lsp.set_log_level("debug")
 
 			vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 				vim.lsp.diagnostic.on_publish_diagnostics, {
