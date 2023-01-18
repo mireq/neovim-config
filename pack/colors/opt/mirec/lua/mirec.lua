@@ -14,7 +14,7 @@ local colorscheme = {
 	{"Cursor", {ctermfg=16, ctermbg=145}},
 	{"CursorColumn", {ctermbg=232}},
 	{"CursorLine", {}},
-	{"CursorLineNr", {ctermfg=255, ctermbg=125, cterm={bold=true}}},
+	{"CursorLineNr", {ctermfg=255, ctermbg=125, cterm={bold=true, nocombine=true}}},
 	{"Debug", {ctermfg=181, cterm={bold=true}}},
 	{"Define", {ctermfg=157, cterm={bold=true}}},
 	{"Delimiter", {ctermfg=193}},
