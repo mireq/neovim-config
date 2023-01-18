@@ -220,6 +220,7 @@ require("lazy").setup({
 			})
 
 			vim.api.nvim_exec_autocmds("FileType", { group = 'lspconfig', modeline = false })
+			vim.diagnostic.config({update_in_insert = false })
 			vim.lsp.set_log_level("debug")
 
 			vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
