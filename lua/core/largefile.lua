@@ -17,9 +17,6 @@ vim.api.nvim_create_autocmd({"BufReadPre"}, {
 				vim.bo.bufhidden = 'unload'
 				vim.bo.buftype = 'nowrite'
 				vim.bo.undolevels = -1
-				vim.cmd('NoMatchParen')
-			else
-				vim.cmd('DoMatchParen')
 			end
 		end
 	end
