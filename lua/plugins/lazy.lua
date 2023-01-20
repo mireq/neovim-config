@@ -114,8 +114,6 @@ require("lazy").setup({
 				settings = {
 					pylsp = {
 						plugins = {
-							--pylint = { enabled = true, args = {'--init-hook="try: import pylint_venv\nexcept ImportError: pass\nelse: pylint_venv.inithook()"', "aaa"} },
-							--pylint = { enabled = true, args = {'--init-hook="__import__(\'pylint_venv\').inithook()"'} },
 							pylint = { enabled = true },
 							autopep8 = { enabled = false },
 							mccabe = { enabled = false },
