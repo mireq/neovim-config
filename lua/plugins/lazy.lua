@@ -143,12 +143,15 @@ require("lazy").setup({
 							name = 'buffer',
 							option = {
 								keyword_length = 5,
+								max_indexed_line_length = 1024,
 								get_bufnrs = function()
 									local bufs = {}
 									for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-										local byte_size = vim.api.nvim_buf_get_offset(bufnr, vim.api.nvim_buf_line_count(bufnr))
-										if byte_size < 1024 * 1024 then
-											bufs[bufnr] = true
+										if vim.fn.buflisted(bufnr) and vim.fn.getbufvar(bufnr, '&buftype', 'ERROR') ~= 'terminal' then
+											local byte_size = vim.api.nvim_buf_get_offset(bufnr, vim.api.nvim_buf_line_count(bufnr))
+											if byte_size < 1024 * 1024 then
+												bufs[bufnr] = true
+											end
 										end
 									end
 									return vim.tbl_keys(bufs)
