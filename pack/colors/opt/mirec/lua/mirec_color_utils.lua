@@ -278,7 +278,7 @@ M.setup_colorscheme = function(colorscheme, name, background)
 		end
 		if colors.cterm ~= nil then
 			for key, val in pairs(colors.cterm) do
-				if key == "bold" or key == "italic" then
+				if key == "bold" or key == "italic" or key == "reverse" or key == "underline" then
 					colors[key] = val
 				end
 			end
