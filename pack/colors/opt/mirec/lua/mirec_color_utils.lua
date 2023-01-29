@@ -271,10 +271,10 @@ M.setup_colorscheme = function(colorscheme, name, background)
 		local name = highlight_definition[1];
 		local colors = highlight_definition[2];
 		if colors.ctermfg ~= nil then
-			colors.fg = M.C_256[colors.ctermfg - 1]
+			colors.fg = M.C_256[colors.ctermfg + 1]
 		end
 		if colors.ctermbg ~= nil then
-			colors.bg = M.C_256[colors.ctermbg - 1]
+			colors.bg = M.C_256[colors.ctermbg + 1]
 		end
 		if colors.cterm ~= nil then
 			for key, val in pairs(colors.cterm) do
