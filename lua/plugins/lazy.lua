@@ -267,8 +267,8 @@ require("lazy").setup({
 			{"<F7>", "<cmd>UndotreeToggle<CR>", desc="UndoTree"},
 		},
 		config = function()
-			--let g:ctrlp_use_caching = 0
 			vim.g.undotree_RelativeTimestamp = 1
+			vim.g.undotree_SetFocusWhenToggle = 1
 		end
 	},
 	{
