@@ -401,7 +401,7 @@ require("lazy").setup({
 	{
 		'tpope/vim-fugitive',
 		event = 'InsertEnter',
-		cmd = {'Git'},
+		cmd = {'Git', 'Gdiffsplit'},
 	},
 	{
 		"roblillack/vim-bufferlist",
