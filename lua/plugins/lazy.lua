@@ -414,10 +414,11 @@ require("lazy").setup({
 		dependencies = {
 			'nvim-lua/plenary.nvim'
 		},
-		keys = {
-			{"<leader>fg", "<cmd>Telescope live_grep<cr>", desc="Telescope live_grep"},
-		},
 		cmd = {'Telescope'},
+		init = function()
+			vim.keymap.set('n', '<leader>fg', "<Cmd>Telescope live_grep<CR>", {})
+			vim.keymap.set('n', '<leader>ff', "<Cmd>Telescope find_files<CR>", {})
+		end,
 		config = function()
 			require('telescope').setup({
 				defaults = {
