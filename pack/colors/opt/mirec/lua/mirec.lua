@@ -4,7 +4,7 @@ local color_utils = require("mirec_color_utils")
 
 
 local colorscheme = {
-	{"Boolean", {ctermfg=251, cterm={bold=true}}},
+	{"Boolean", {ctermfg=231, cterm={bold=true}}},
 	{"Character", {ctermfg=181, cterm={bold=true}}},
 	{"ColorColumn", {ctermbg=233}},
 	{"Comment", {ctermfg=8}},
@@ -21,7 +21,7 @@ local colorscheme = {
 	{"DiffAdd", {ctermbg=22}},
 	{"DiffChange", {ctermbg=24}},
 	{"DiffDelete", {ctermfg=234, ctermbg=88}},
-	{"DiffText", {ctermfg=251, ctermbg=31, cterm={bold=true}}},
+	{"DiffText", {ctermfg=231, ctermbg=31, cterm={bold=true}}},
 	{"Directory", {ctermfg=231, cterm={bold=true}}},
 	{"Error", {ctermfg=231, ctermbg=9}},
 	{"ErrorMsg", {ctermfg=16, ctermbg=6}},
