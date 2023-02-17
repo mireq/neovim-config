@@ -294,12 +294,29 @@ require("lazy").setup({
 					}
 				},
 				sections = {
-					lualine_a = {'mode'},
-					lualine_b = {'branch', {'diagnostics', colored=true}},
+					lualine_a = {'mode',},
+					lualine_b = {
+						{
+							function()
+								local starts = vim.fn.line("v")
+								local ends = vim.fn.line(".")
+								local count = starts <= ends and ends - starts + 1 or starts - ends + 1
+								local wc = vim.fn.wordcount()
+								return count .. ":" .. wc["visual_chars"]
+							end,
+							color = { fg = '#eba200', bg = '#875f00', gui='bold' },
+							separator = { left = '', right = '' },
+							cond = function()
+								return vim.fn.mode():find("[Vv]") ~= nil
+							end,
+						},
+						'branch',
+						{'diagnostics', colored=true}
+					},
 					lualine_c = {{'filename', path=1}},
 					lualine_x = {'encoding', 'fileformat', 'filetype'},
 					lualine_y = {'progress'},
-					lualine_z = {'location'}
+					lualine_z = {'location'},
 				},
 				inactive_sections = {
 					lualine_a = {},
