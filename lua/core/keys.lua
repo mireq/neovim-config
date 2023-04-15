@@ -7,6 +7,7 @@ vim.keymap.set('', '<F1>', '')
 -- Navigation with C-up / C-down
 vim.keymap.set('', '<C-j>', 'gj')
 vim.keymap.set('', '<C-k>', 'gk')
+vim.keymap.set('i', '<C-e>', '<C-o>$')
 --
 -- Remap home
 vim.keymap.set('', '<Home>', '^')
@@ -91,6 +92,8 @@ vim.api.nvim_set_keymap('', '<F9>', ':make -j 2<CR>', {})
 vim.keymap.set('n', '<F2>', '<Cmd>ToggleTerm<Cr>', {silent=true})
 vim.keymap.set('t', '<C-w>', '<C-\\><C-n>', {silent=true})
 vim.keymap.set('t', '<C-q>', '<Cmd>exe v:count1 . "ToggleTerm"<CR>', {})
+vim.keymap.set('t', '<C-PageUp>', '<C-\\><C-n><PageUp>', {silent=true})
+vim.keymap.set('t', '<C-PageDown>', '<C-\\><C-n><PageDown>', {silent=true})
 
 -- Save with ctrl+s
 vim.keymap.set('n', '<C-S>', function() cmd("w") end)
