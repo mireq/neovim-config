@@ -7,7 +7,7 @@ vim.keymap.set('', '<F1>', '')
 -- Navigation with C-up / C-down
 vim.keymap.set('', '<C-j>', 'gj')
 vim.keymap.set('', '<C-k>', 'gk')
-vim.keymap.set('i', '<C-e>', '<C-o>$')
+vim.keymap.set('i', '<C-l>', '<C-o>$')
 --
 -- Remap home
 vim.keymap.set('', '<Home>', '^')
