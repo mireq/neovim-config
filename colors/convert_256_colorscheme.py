@@ -47,7 +47,7 @@ class TextLine:
 		if m:
 			self.__name = m.group(1)
 			self.__attributes = self.getAttributes(m.group(2))
-	
+
 	def setNameWidth(self, width):
 		self.__nameWidth = width
 
