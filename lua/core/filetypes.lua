@@ -142,6 +142,16 @@ vim.api.nvim_create_autocmd({"FileType"}, {
 })
 
 
+vim.api.nvim_create_autocmd({"FileType"}, {
+	pattern = {'php'},
+	callback = function(ev)
+		vim.opt_local.smartindent = true
+		vim.opt_local.indentexpr = nil
+	end
+})
+
+
+
 vim.api.nvim_create_autocmd({"BufWritePre"}, {
 	callback = function(ev)
 		local dir = vim.fn.expand('<afile>:p:h')
