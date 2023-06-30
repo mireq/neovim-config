@@ -73,7 +73,7 @@ vim.keymap.set('v', '(', '<ESC>`>a)<ESC>`<i(<ESC>`>lv`<l')
 vim.keymap.set('v', '[', '<ESC>`>a]<ESC>`<i[<ESC>`>lv`<l')
 vim.keymap.set('v', '{', '<ESC>`>a}<ESC>`<i{<ESC>`>lv`<l')
 vim.keymap.set('v', '\'', '<ESC>`>a\'<ESC>`<i\'<ESC>`>lv`<l')
-vim.keymap.set('v', '"', '<ESC>`>a"<ESC>`<i"<ESC>`>lv`<l')
+vim.keymap.set('v', '\\"', '<ESC>`>a"<ESC>`<i"<ESC>`>lv`<l')
 vim.keymap.set('v', ';', '<ESC>`>a“<ESC>`<i„<ESC>`>lv`<l')
 
 -- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
