@@ -187,7 +187,37 @@ require("lazy").setup({
 				formatting = {
 					fields = { "kind", "abbr", "menu" },
 					format = function(entry, vim_item)
-						local kind = require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+						local kind = require("lspkind").cmp_format({
+							mode = "symbol_text",
+							maxwidth = 50,
+							symbol_map = {
+								Text = "",
+								Method = "",
+								Function = "",
+								Constructor = "",
+								Field = "ﰠ",
+								Variable = "",
+								Class = "ﴯ",
+								Interface = "",
+								Module = "",
+								Property = "ﰠ",
+								Unit = "塞",
+								Value = "",
+								Enum = "",
+								Keyword = "",
+								Snippet = "",
+								Color = "",
+								File = "",
+								Reference = "",
+								Folder = "",
+								EnumMember = "",
+								Constant = "",
+								Struct = "פּ",
+								Event = "",
+								Operator = "±",
+								TypeParameter = "",
+							}
+						})(entry, vim_item)
 						local strings = vim.split(kind.kind, "%s", { trimempty = true })
 						kind.kind = " " .. (strings[1] or "") .. " "
 						--kind.kind = '▍' -- instead of symbol
@@ -202,6 +232,10 @@ require("lazy").setup({
 					ghost_text = true,
 					-- native_menu = true,
 				},
+				--performance = {
+				--	debounce = 300,
+				--	throttle = 150
+				--},
 				sorting = {
 					priority_weight = 2,
 					comparators = {
@@ -222,7 +256,7 @@ require("lazy").setup({
 
 			vim.api.nvim_exec_autocmds("FileType", { group = 'lspconfig', modeline = false })
 			vim.diagnostic.config({update_in_insert = false })
-			vim.lsp.set_log_level("debug")
+			--vim.lsp.set_log_level("debug")
 
 			vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 				vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -449,7 +483,8 @@ require("lazy").setup({
 						"--column",
 						"--smart-case",
 					},
-					prompt_prefix = "   ",
+					--prompt_prefix = "   ",
+					prompt_prefix = "  ",
 					selection_caret = "",
 					entry_prefix = "",
 					initial_mode = "insert",
@@ -506,5 +541,13 @@ require("lazy").setup({
 	},
 	{
 		dir = vim.fn.stdpath("config") .. "/pack/colors/opt/mirec",
+	},
+	'nvim-lua/plenary.nvim',
+	{
+		'echasnovski/mini.nvim',
+		version = false,
+		config = function()
+			require('mini.align').setup()
+		end
 	},
 }, {install={colorscheme={"mirec"}}})
