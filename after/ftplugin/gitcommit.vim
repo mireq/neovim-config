@@ -34,7 +34,7 @@ nnoremap <buffer> i i<C-r>=<sid>commit_type()<CR>
 
 fun! s:commit_type()
 	if col('.') == 1 && line('.') == 1
-		call complete(1, ['fix: ', 'feat: ', 'refactor: ', 'docs: ', 'test: '])
+		call complete(1, ['build: ', 'bump: ', 'ci: ', 'docs: ', 'feat: ', 'fix: ', 'perf: ', 'refactor: ', 'revert: ', 'style: ', 'test: '])
 	endif
 	return ''
 endfun
