@@ -23,6 +23,9 @@ opt.visualbell = false
 -- Auto jump to first error
 opt.cf = true
 
+-- Allow move cursor outside text
+opt.virtualedit = 'onemore,block'
+
 -- Enable : in keywords
 opt.iskeyword = '@,~,48-57,_,192-255'
 
@@ -78,7 +81,7 @@ opt.completeopt = 'menuone,menu'
 -- " => Display
 -- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 opt.textwidth = 80
-opt.colorcolumn = '80'
+--opt.colorcolumn = '80'
 opt.wrap = true
 
 -- Enable line number display
