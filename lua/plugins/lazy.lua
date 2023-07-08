@@ -11,7 +11,7 @@ require("lazy").setup({
 	},
 	{
 		'hrsh7th/nvim-cmp',
-		event = 'InsertEnter',
+		--event = 'InsertEnter',
 		dependencies = {
 			'hrsh7th/cmp-nvim-lsp',
 			'hrsh7th/cmp-buffer',
@@ -114,7 +114,7 @@ require("lazy").setup({
 				settings = {
 					pylsp = {
 						plugins = {
-							pylint = { enabled = true },
+							pylint = { enabled = true, args={'--init-hook="exec(\'try: import pylint_venv\\nexcept ImportError: pass\\nelse: pylint_venv.inithook()\')"'} },
 							autopep8 = { enabled = false },
 							mccabe = { enabled = false },
 							preload = { enabled = false },
