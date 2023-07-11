@@ -50,3 +50,11 @@ syntax region comment start=/{{/ end=/}}/
 syntax region comment start=/{#/ end=/#}/
 syntax match Title /{%\s*\(end\)\?trans[^%]*%}/
 ]], {})
+
+
+vim.api.nvim_create_user_command('ReloadColorscheme', [[
+TSDisable highlight
+TSEnable highlight
+exec 'lua require("plenary.reload").reload_module("mirec", true)'
+colorscheme mirec
+]], {})
