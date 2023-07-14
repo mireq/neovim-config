@@ -469,6 +469,7 @@ require("lazy").setup({
 		init = function()
 			vim.keymap.set('n', '<leader>fg', "<Cmd>Telescope live_grep<CR>", {})
 			vim.keymap.set('n', '<leader>ff', "<Cmd>Telescope find_files<CR>", {})
+			vim.keymap.set('n', '<C-f>', "<Cmd>Telescope live_grep<CR>", {})
 		end,
 		config = function()
 			require('telescope').setup({
