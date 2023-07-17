@@ -1,11 +1,9 @@
 ;; extends
 
 ((identifier) @variable.class
- (#lua-match? @variable.class "^[A-Z].*[a-z]"))
-
-(call
-  function: (identifier) @function.class_construct
- (#lua-match? @function.class_construct "^[A-Z].*[a-z]"))
+	(#lua-match? @variable.class "^[A-Z].*[a-z]")
+	(#not-has-parent? @variable.class call class_definition)
+)
 
 (call
   function: (attribute
@@ -15,6 +13,9 @@
   function: (attribute
               attribute: (identifier) @function.call_private)
             (#lua-match? @function.call_private "^__.*"))
+(call
+  function: (identifier) @function.class_construct
+ (#lua-match? @function.class_construct "^[A-Z].*[a-z]"))
 
 (call
   function: (attribute
@@ -27,6 +28,14 @@
 (class_definition
   superclasses: (argument_list
                   (identifier) @definition.superclasses))
+
+(class_definition
+	superclasses: (
+		argument_list (attribute
+			attribute: (identifier) @definition.superclasses
+		)
+	)
+)
 
 ((class_definition
   body: (block
