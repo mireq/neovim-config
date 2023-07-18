@@ -165,3 +165,5 @@ vim.api.nvim_create_autocmd({"BufWritePre"}, {
 		end
 	end
 })
+
+vim.g.python3_host_prog = "/usr/bin/python3"
