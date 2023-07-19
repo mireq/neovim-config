@@ -125,7 +125,8 @@ local colorscheme = {
 
 
 	{"Attribute", {ctermfg=158}},
-	{"CallClass", {ctermfg=120}},
+	{"CallClass", {ctermfg=120, cterm={nocombine=true}}},
+	{"DefineClass", {ctermfg=228}},
 	{"CallStaticClass", {ctermfg=231, cterm={bold=true}}},
 	{"CallFunction", {ctermfg=153}},
 	{"CallPrivateFunction", {ctermfg=204}},
@@ -207,6 +208,25 @@ local colorscheme = {
 
 	{"TelescopeResultsBorder", {link="TelescopeInvisible2"}},
 	{"TelescopePreviewBorder", {link="TelescopeInvisible"}},
+
+	{"@variable.python", {link="Normal"}},
+	{"@variable.builtin.python", {link="Self"}},
+	{"@variable.class.python", {link="Title"}},
+	{"@constant.builtin.python", {link="Boolean"}},
+	{"@constant.python", {link="Title"}},
+	{"@exception.builtin.python", {link="Structure"}},
+	{"@function.builtin.python", {link="Function"}},
+	{"@function.call.python", {link="Normal"}},
+	{"@function.class_construct.python", {link="CallClass"}},
+	{"@function.call_private.python", {link="CallPrivateFunction"}},
+	{"@definition.import.python", {link="Normal"}},
+	{"@definition.superclasses.python", {link="Title"}},
+	{"@definition.decorator.python", {link="Function"}},
+	{"@definition.classname.python", {link="DefineClass"}},
+	{"@attribute.python", {link="Normal"}},
+	{"@field.python", {link="Attribute"}},
+	{"@property.python", {link="Normal"}},
+	{"@parameter.python", {link="Normal"}},
 };
 
 M.setup = function(config)
