@@ -93,10 +93,28 @@ require("lazy").setup({
 				vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 			end
 
+			local function get_kind_priority(kind)
+				local priority = 100
+				if kind == types.lsp.CompletionItemKind.Text then
+					priority = 0
+				end
+				if kind == types.lsp.CompletionItemKind.Snippet then
+					priority = 50
+				end
+				return priority
+			end
+
 			-- display text completion at end of file
-			local function deprioritize_text(entry1, entry2)
-				if entry1:get_kind() == types.lsp.CompletionItemKind.Text then return false end
-				if entry2:get_kind() == types.lsp.CompletionItemKind.Text then return true end
+			local function set_priority(entry1, entry2)
+				local entry_kind_1 = entry1:get_kind()
+				local entry_kind_2 = entry2:get_kind()
+				local entry1_priority = get_kind_priority(entry_kind_1)
+				local entry2_priority = get_kind_priority(entry_kind_2)
+				if entry1_priority == entry2_priority then
+					return nil
+				else
+					return entry1_priority > entry2_priority
+				end
 			end
 
 			lspconfig['pylsp'].setup {
@@ -126,7 +144,6 @@ require("lazy").setup({
 					}
 				}
 			}
-
 			cmp.setup({
 				sources = cmp.config.sources(
 					{
@@ -239,7 +256,7 @@ require("lazy").setup({
 				sorting = {
 					priority_weight = 2,
 					comparators = {
-						deprioritize_text,
+						set_priority,
 						cmp.config.compare.offset,
 						cmp.config.compare.exact,
 						-- cmp.config.compare.scopes,
@@ -596,6 +613,9 @@ require("lazy").setup({
 		},
 		---@param opts TSConfig
 		config = function(_, opts)
+			if opts == nil then
+				return
+			end
 			if type(opts.ensure_installed) == "table" then
 				---@type table<string, boolean>
 				local added = {}
