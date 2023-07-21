@@ -439,7 +439,7 @@ require("lazy").setup({
 			vim.g.javascript_conceal_function   = "∫"
 			vim.g.javascript_conceal_null       = "Ø"
 			vim.g.javascript_conceal_this       = "@"
-			vim.g.javascript_conceal_return     = "❱"
+			vim.g.javascript_conceal_return     = "❰"
 			vim.g.javascript_conceal_undefined  = "¿"
 			vim.g.javascript_conceal_NaN        = "Ṉ"
 			vim.g.javascript_conceal_prototype  = "¶"
