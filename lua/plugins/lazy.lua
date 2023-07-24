@@ -289,25 +289,25 @@ require("lazy").setup({
 			vim.cmd("autocmd BufLeave * call UltiSnips#LeavingBuffer()")
 		end,
 	},
-	{
-		"FelikZ/ctrlp-py-matcher",
-		keys = {
-			{"<C-p>", "<cmd>CtrlP<CR>", desc="CtrlP"},
-		},
-		dependencies = {
-			'kien/ctrlp.vim',
-		},
-		config = function()
-			--let g:ctrlp_use_caching = 0
-			vim.g.ctrlp_cache_dir = vim.env.HOME .. '/.cache/ctrlp'
-			vim.g.ctrlp_follow_symlinks = 1
-			vim.g.ctrlp_working_path_mode = 'raw'
-			vim.g.ctrlp_match_func = { match='pymatcher#PyMatch' }
-			if vim.fn.executable('ag') then
-				vim.g.ctrlp_user_command = 'ag %s --ignore-case --nogroup --nocolor --hidden --follow -U -p ~/.ignore -l -m 50000 -g ""'
-			end
-		end
-	},
+	--{
+	--	"FelikZ/ctrlp-py-matcher",
+	--	keys = {
+	--		{"<C-p>", "<cmd>CtrlP<CR>", desc="CtrlP"},
+	--	},
+	--	dependencies = {
+	--		'kien/ctrlp.vim',
+	--	},
+	--	config = function()
+	--		--let g:ctrlp_use_caching = 0
+	--		vim.g.ctrlp_cache_dir = vim.env.HOME .. '/.cache/ctrlp'
+	--		vim.g.ctrlp_follow_symlinks = 1
+	--		vim.g.ctrlp_working_path_mode = 'raw'
+	--		vim.g.ctrlp_match_func = { match='pymatcher#PyMatch' }
+	--		if vim.fn.executable('ag') then
+	--			vim.g.ctrlp_user_command = 'ag %s --ignore-case --nogroup --nocolor --hidden --follow -U -p ~/.ignore -l -m 50000 -g ""'
+	--		end
+	--	end
+	--},
 	{
 		dir = vim.fn.stdpath("config") .. "/pack/colors/opt/killor",
 		ft = 'python'
@@ -478,6 +478,10 @@ require("lazy").setup({
 		},
 	},
 	{
+		'nvim-telescope/telescope-fzf-native.nvim',
+		build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'i
+	},
+	{
 		'nvim-telescope/telescope.nvim',
 		dependencies = {
 			'nvim-lua/plenary.nvim'
@@ -487,6 +491,22 @@ require("lazy").setup({
 			vim.keymap.set('n', '<leader>fg', "<Cmd>Telescope live_grep<CR>", {})
 			vim.keymap.set('n', '<leader>ff', "<Cmd>Telescope find_files<CR>", {})
 			vim.keymap.set('n', '<C-j>', "<Cmd>Telescope live_grep<CR>", {})
+			vim.keymap.set('n', '<C-p>', function()
+				local opts = {
+					layout_config = {
+						prompt_position = 'bottom'
+					},
+					--previewer = false,
+					prompt_title = false,
+					border = false,
+				}
+				local current_file = vim.fn.expand("%")
+				if current_file ~= '' then
+					opts.file_ignore_patterns = { current_file }
+				end
+				local theme = require('telescope.themes').get_ivy(opts);
+				require'telescope.builtin'.find_files(theme)
+			end, {})
 		end,
 		config = function()
 			require('telescope').setup({
