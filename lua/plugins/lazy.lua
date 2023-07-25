@@ -479,7 +479,7 @@ require("lazy").setup({
 	},
 	{
 		'nvim-telescope/telescope-fzf-native.nvim',
-		build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'i
+		build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
 	},
 	{
 		'nvim-telescope/telescope.nvim',
@@ -504,6 +504,7 @@ require("lazy").setup({
 				if current_file ~= '' then
 					opts.file_ignore_patterns = { current_file }
 				end
+				opts.follow = true
 				local theme = require('telescope.themes').get_ivy(opts);
 				require'telescope.builtin'.find_files(theme)
 			end, {})
@@ -521,8 +522,8 @@ require("lazy").setup({
 						"--column",
 						"--smart-case",
 					},
-					--prompt_prefix = "   ",
-					prompt_prefix = "  ",
+					prompt_prefix = "   ",
+					--prompt_prefix = "  ",
 					selection_caret = "",
 					entry_prefix = "",
 					initial_mode = "insert",
@@ -557,11 +558,21 @@ require("lazy").setup({
 					buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
 					mappings = {
 						n = { ["q"] = require("telescope.actions").close },
+						i = { ["<ESC>"] = require("telescope.actions").close },
 					},
 				},
 
 				extensions_list = {"themes", "terms"},
+				extensions = {
+					fzf = {
+						fuzzy = true,
+						override_generic_sorter = true,
+						override_file_sorter = true,
+						case_mode = "smart_case",
+					}
+				},
 			})
+			require('telescope').load_extension('fzf')
 		end
 	},
 	{
