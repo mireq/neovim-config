@@ -144,6 +144,16 @@ require("lazy").setup({
 					}
 				}
 			}
+
+			lspconfig['volar'].setup {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				filetypes = {'typescript', 'vue'},
+				flags = {
+					debounce_text_changes = 500
+				},
+			}
+
 			cmp.setup({
 				sources = cmp.config.sources(
 					{
@@ -638,6 +648,7 @@ require("lazy").setup({
 			},
 			ensure_installed = {
 				"python",
+				"javascript",
 			},
 			incremental_selection = {
 				enable = false,
