@@ -649,6 +649,7 @@ require("lazy").setup({
 			ensure_installed = {
 				"python",
 				"javascript",
+				"lua",
 			},
 			incremental_selection = {
 				enable = false,
