@@ -702,4 +702,12 @@ require("lazy").setup({
 		end,
 		build = ":MasonUpdate" -- :MasonUpdate updates registry contents
 	},
+	{
+		"norcalli/nvim-colorizer.lua",
+		cmd = "ColorizerToggle",
+		config = function()
+			vim.cmd("set termguicolors")
+			require("colorizer").setup()
+		end,
+	},
 }, {install={colorscheme={"mirec"}}})
