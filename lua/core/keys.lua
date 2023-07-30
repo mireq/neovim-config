@@ -89,7 +89,7 @@ vim.api.nvim_set_keymap('', '<F9>', ':make -j 2<CR>', {})
 -- => Terminal
 -- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-vim.keymap.set('n', '<F2>', '<Cmd>ToggleTerm<Cr>', {silent=true})
+vim.keymap.set('n', '<F2>', '<Cmd>nohlsearch<Cr><Cmd>ToggleTerm<Cr>', {})
 vim.keymap.set('t', '<C-w>', '<C-\\><C-n>', {silent=true})
 vim.keymap.set('t', '<C-q>', '<Cmd>exe v:count1 . "ToggleTerm"<CR>', {})
 vim.keymap.set('t', '<C-PageUp>', '<C-\\><C-n><PageUp>', {silent=true})
