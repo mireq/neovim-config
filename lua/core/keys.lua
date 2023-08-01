@@ -8,8 +8,8 @@ vim.keymap.set('', '<F1>', '')
 vim.keymap.set('', '<C-j>', 'gj')
 vim.keymap.set('', '<C-k>', 'gk')
 vim.keymap.set('i', '<C-k>', '<C-o>$')
-vim.keymap.set('i', '<C-h>', '<C-o>h')
-vim.keymap.set('i', '<C-l>', '<C-o>l')
+vim.keymap.set('i', '<C-h>', '<left>')
+vim.keymap.set('i', '<C-l>', '<right>')
 vim.keymap.set('i', '<C-y>', '<BS>')
 --
 -- Remap home
