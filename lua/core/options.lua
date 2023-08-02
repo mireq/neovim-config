@@ -168,3 +168,27 @@ opt.smartindent = true
 -- opt.cmdheight = 0
 
 g.c_no_curly_error = 1
+
+vim.api.nvim_create_autocmd({"BufEnter", "WinEnter"}, {
+	callback = function(ev)
+		if (vim.bo.buftype == '') then
+			vim.opt_local.cursorline = true
+		end
+	end
+})
+
+--vim.api.nvim_create_autocmd({"BufEnter", "WinEnter"}, {
+--	callback = function(ev)
+--		if (vim.bo.buftype == '') then
+--			vim.opt_local.cursorline = true
+--		end
+--	end
+--})
+--
+--vim.api.nvim_create_autocmd({"BufLeave", "WinLeave"}, {
+--	callback = function()
+--		if (vim.bo.buftype == '') then
+--			vim.opt_local.cursorline = false
+--		end
+--	end
+--})
