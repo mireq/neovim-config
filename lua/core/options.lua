@@ -163,6 +163,9 @@ opt.shiftwidth = 3
 --
 -- Indent for language
 opt.smartindent = true
+--
+-- Don't add missing end line
+opt.fixendofline = false
 
 -- There is still problem with prompt after searching
 -- opt.cmdheight = 0
