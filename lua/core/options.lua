@@ -71,8 +71,9 @@ opt.undolevels = 2048
 opt.undoreload = 65538
 
 --
-opt.completeopt = 'menuone,menu'
---                 |       |
+opt.completeopt = 'menuone,menu,noselect'
+--                 |       |    |
+--                 |       |    + Don't select first option automatically
 --                 |       + Display popup
 --                 + Display when single option
 
