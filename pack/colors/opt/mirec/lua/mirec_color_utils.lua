@@ -67,4 +67,24 @@ M.setup_colorscheme = function(colorscheme, name, background)
 	end
 end
 
+M.highlight_colorscheme = function()
+	for color = 0, 255 do
+		local colorValue = tonumber(string.sub(M.C_256[color + 1], 2, 7), 16)
+		local b = colorValue % 256
+		colorValue = colorValue - b
+		colorValue = colorValue / 256
+		local g = colorValue % 256
+		colorValue = colorValue - g
+		colorValue = colorValue / 256
+		local r = colorValue % 256
+		local luminance = 0.299*r + 0.587*g + 0.114*b
+		local fg = 231 -- white
+		if luminance > 127 then
+			fg = 16
+		end
+		vim.api.nvim_set_hl(0, 'cterm_' .. color, {ctermbg=color, ctermfg=fg, nocombine=true, fg="#000000", cterm={bold=true, nocombine=true}})
+		vim.cmd.syntax('match cterm_' .. color ..  ' "\\(cterm\\(f\\|b\\)g=\\)\\@<=' .. color .. '"')
+	end
+end
+
 return M
