@@ -58,3 +58,10 @@ TSEnable highlight
 exec 'lua require("plenary.reload").reload_module("mirec", true)'
 colorscheme mirec
 ]], {})
+
+vim.api.nvim_create_user_command('HighlightColorscheme', [[
+TSDisable highlight
+TSEnable highlight
+exec 'lua require("plenary.reload").reload_module("mirec_color_utils", true)'
+lua require("mirec_color_utils").highlight_colorscheme()
+]], {})
