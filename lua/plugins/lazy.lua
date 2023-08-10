@@ -58,6 +58,7 @@ require("lazy").setup({
 			local cmp = require('cmp')
 			local types = require("cmp.types")
 			local lspconfig = require('lspconfig')
+			local lspconfig_util = require 'lspconfig.util'
 			local cmp_nvim_lsp = require('cmp_nvim_lsp');
 			cmp_nvim_lsp.setup()
 			local capabiliies = cmp_nvim_lsp.default_capabilities();
@@ -152,6 +153,7 @@ require("lazy").setup({
 				flags = {
 					debounce_text_changes = 500
 				},
+				root_dir = lspconfig_util.root_pattern 'package.json',
 			}
 
 			cmp.setup({
