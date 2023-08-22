@@ -28,9 +28,18 @@ local method_definition_query = tsq.parse(
 [
 (function_definition
 	name: (identifier) @name
-	parameters: (parameters
-		(parameter) @arg
-	)
+	parameters: (parameters [
+		(identifier) @arg
+		(default_parameter name: (identifier) @arg)
+		(dictionary_splat_pattern (identifier) @arg)
+		(list_splat_pattern (identifier) @arg)
+		(typed_parameter [
+			(identifier) @arg
+			(list_splat_pattern (identifier) @arg)
+			(dictionary_splat_pattern (identifier) @arg)
+		])
+		(typed_default_parameter name: (identifier) @arg)
+	])
 )
 ]
 ]]
@@ -49,9 +58,8 @@ local function get_current_python_method()
 	for _, match, _ in method_definition_query:iter_matches(root, bufnr) do
 		local lbegin, _, lend, _ = ts_utils.get_vim_range { match[1]:range() }
 		print(match[1]:range(), vim.inspect(match), vim.treesitter.get_node_text(match[1], bufnr), vim.treesitter.get_node_text(match[2], bufnr))
-		print(match[2]:named_child_count())
 		for id, node in pairs(match) do
-			print(id, node)
+			print(id, node, vim.treesitter.get_node_text(node, bufnr))
 		end
 		local name = vim.treesitter.get_node_text(match[1], bufnr)
 		print(name)
