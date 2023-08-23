@@ -29,7 +29,7 @@ require("lazy").setup({
 			vim.g.UltiSnipsSnippetDirectories = {vim.fn.stdpath("config") .. '/UltiSnips', 'UltiSnips'}
 			vim.g.UltiSnipsTriggerInVisualMode = 0
 			vim.cmd([[
-				function Ultisnips_get_current_python_class()
+				function! Ultisnips_get_current_python_class()
 					let l:retval = ""
 					let l:line_declaring_class = search('^class\s\+', 'bnW')
 					if l:line_declaring_class != 0
@@ -41,7 +41,7 @@ require("lazy").setup({
 					return l:retval
 				endfunction
 
-				function Ultisnips_get_current_python_method()
+				function! Ultisnips_get_current_python_method()
 					let l:retval = ""
 					let l:line_declaring_method = search('\s*def\s\+', 'bnW')
 					if l:line_declaring_method != 0
