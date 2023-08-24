@@ -45,6 +45,16 @@ local method_definition_query = tsq.parse(
 ]]
 )
 
+local class_query = tsq.parse(
+	"python",
+[[
+[
+(class_definition
+	name: (identifier) @name
+]
+]]
+)
+
 local function copy(args)
 	return args[1]
 end
@@ -55,9 +65,10 @@ local function get_current_python_method()
 	local syntax_tree = parser:parse()
 	local root = syntax_tree[1]:root()
 	local bufnr = vim.api.nvim_get_current_buf()
-	for _, match, _ in method_definition_query:iter_matches(root, bufnr) do
+	for _, match, _ in class_query:iter_matches(root, bufnr) do
 		local lbegin, _, lend, _ = ts_utils.get_vim_range { match[1]:range() }
-		print(match[1]:range(), vim.inspect(match), vim.treesitter.get_node_text(match[1], bufnr), vim.treesitter.get_node_text(match[2], bufnr))
+		print(lbegin, lend)
+		--print(match[1]:range(), vim.inspect(match), vim.treesitter.get_node_text(match[1], bufnr), vim.treesitter.get_node_text(match[2], bufnr))
 		for id, node in pairs(match) do
 			print(id, node, vim.treesitter.get_node_text(node, bufnr))
 		end
