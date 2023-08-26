@@ -22,55 +22,28 @@ local conds_expand = require("luasnip.extras.conditions.expand")
 local ts_utils = require("nvim-treesitter.ts_utils")
 local tsq = vim.treesitter.query
 
-local method_definition_query = tsq.parse(
-	"python",
-[[
-[
-(function_definition
-	name: (identifier) @name
-	parameters: (parameters [
-		(identifier) @arg
-		(default_parameter name: (identifier) @arg)
-		(dictionary_splat_pattern (identifier) @arg)
-		(list_splat_pattern (identifier) @arg)
-		(typed_parameter [
-			(identifier) @arg
-			(list_splat_pattern (identifier) @arg)
-			(dictionary_splat_pattern (identifier) @arg)
-		])
-		(typed_default_parameter name: (identifier) @arg)
-	])
-)
-]
-]]
-)
-
-local class_query = tsq.parse(
-	"python",
-[[
-[
-(class_definition
-	name: (identifier) @name
-)
-]
-]]
-)
 
 local function copy(args)
 	return args[1]
 end
 
 
-local function get_current_python_method(snip)
+local function get_call_super(snip)
 	local linenr = snip.env.TM_LINE_NUMBER
+	print(linenr)
+	print(snip)
 	local bufnr = vim.api.nvim_get_current_buf()
+	print(bufnr)
 	local node = ts_utils.get_node_at_cursor()
+	print(node)
+	print(vim.inspect(vim.api.nvim_win_get_cursor(0)))
 	local function_definition_node = nil
 	local class_definition_node = nil
 	local class_name = nil
 	local function_name = nil
 	local function_parameters = {}
 	while node ~= nil do
+		print(node:type())
 		if node:type() == 'function_definition' then
 			function_definition_node = node
 		end
@@ -90,65 +63,45 @@ local function get_current_python_method(snip)
 		local function_name_node = function_definition_node:field('name')[1]
 		function_name = vim.treesitter.get_node_text(function_name_node, bufnr)
 		local function_parameters_node = function_definition_node:field('parameters')[1]
-		local parameter_num = 1
 		for parameter in function_parameters_node:iter_children() do
-			parameter_num = parameter_num + 1
 			local name = nil
 			local parameter_type = parameter:type()
-			if parameter_type == 'identifier' then table.insert(function_parameters, vim.treesitter.get_node_text(parameter, bufnr))
+			if parameter_type == 'identifier' then
+				table.insert(function_parameters, vim.treesitter.get_node_text(parameter, bufnr))
+			elseif parameter_type == 'default_parameter' then
+				table.insert(function_parameters, vim.treesitter.get_node_text(parameter:field('name')[1], bufnr))
+			elseif parameter_type == 'typed_parameter' then
+				table.insert(function_parameters, vim.treesitter.get_node_text(parameter:named_child(0), bufnr))
+			elseif parameter_type == 'typed_default_parameter' then
+				table.insert(function_parameters, vim.treesitter.get_node_text(parameter:field('name')[1], bufnr))
+			elseif parameter_type == 'list_splat_pattern' then
+				table.insert(function_parameters, '*' .. vim.treesitter.get_node_text(parameter:named_child(0), bufnr))
+			elseif parameter_type == 'dictionary_splat_pattern' then
+				table.insert(function_parameters, '**' .. vim.treesitter.get_node_text(parameter:named_child(0), bufnr))
 			end
 		end
 	end
 
-	print(class_name, function_name, vim.inspect(function_parameters))
+	if function_parameters[1] == 'self' then
+		table.remove(function_parameters, 1)
+	end
 
-	--print(function_dfinition_node, class_definition_node)
-	--print(node:type())
-	--print(node:parent():parent():parent():type())
-	--local lang_tree = root_lang_tree:language_for_range{ line, col, line, col }
-	--local parser = vim.treesitter.get_parser(0, 'python')
-	--local syntax_tree = parser:parse()
-	--local root = syntax_tree[1]:root()
-	--local bufnr = vim.api.nvim_get_current_buf()
-	--for _, match, _ in class_query:iter_matches(root, bufnr) do
-	--	local lbegin, _, lend, _ = ts_utils.get_vim_range { match[1]:range() }
-	--	print("ok")
-	--	--print(match[1]:range(), vim.inspect(match), vim.treesitter.get_node_text(match[1], bufnr), vim.treesitter.get_node_text(match[2], bufnr))
-	--	--for id, node in pairs(match) do
-	--	--	print(id, node, vim.treesitter.get_node_text(node, bufnr))
-	--	--end
-	--	--local name = vim.treesitter.get_node_text(match[1], bufnr)
-	--	--print(name)
-	--end
-	return 'ok'
+	if function_name == nil then
+		return sn(nil, {})
+	end
+
+	return sn(nil, {
+		t(function_name .. '('),
+		i(1, table.concat(function_parameters, ', ')),
+		t(')')
+	})
 end
 
 
 
 ls.add_snippets("all", {
 	s('cs', {
-		f(function(_, snip) print(vim.inspect(snip.env)); return get_current_python_method(snip) end),
-		t('('),
-		i(0),
-		t(')')
+		t('super().'),
+		d(1, function(_, snip) return get_call_super(snip) end, {}),
 	})
-	---- trigger is `fn`, second argument to snippet-constructor are the nodes to insert into the buffer on expansion.
-	--s("fn", {
-	--	-- Simple static text.
-	--	t("//Parameters: "),
-	--	-- function, first parameter is the function, second the Placeholders
-	--	-- whose text it gets as input.
-	--	f(copy, 2),
-	--	t({ "", "function " }),
-	--	-- Placeholder/Insert.
-	--	i(1),
-	--	t("("),
-	--	-- Placeholder with initial text.
-	--	i(2, "int foo"),
-	--	-- Linebreak
-	--	t({ ") {", "\t" }),
-	--	-- Last Placeholder, exit Point of the snippet.
-	--	i(0),
-	--	t({ "", "}" }),
-	--})
 })
