@@ -51,6 +51,7 @@ local class_query = tsq.parse(
 [
 (class_definition
 	name: (identifier) @name
+)
 ]
 ]]
 )
@@ -60,21 +61,65 @@ local function copy(args)
 end
 
 
-local function get_current_python_method()
-	local parser = vim.treesitter.get_parser(0, 'python')
-	local syntax_tree = parser:parse()
-	local root = syntax_tree[1]:root()
+local function get_current_python_method(snip)
+	local linenr = snip.env.TM_LINE_NUMBER
 	local bufnr = vim.api.nvim_get_current_buf()
-	for _, match, _ in class_query:iter_matches(root, bufnr) do
-		local lbegin, _, lend, _ = ts_utils.get_vim_range { match[1]:range() }
-		print(lbegin, lend)
-		--print(match[1]:range(), vim.inspect(match), vim.treesitter.get_node_text(match[1], bufnr), vim.treesitter.get_node_text(match[2], bufnr))
-		for id, node in pairs(match) do
-			print(id, node, vim.treesitter.get_node_text(node, bufnr))
+	local node = ts_utils.get_node_at_cursor()
+	local function_definition_node = nil
+	local class_definition_node = nil
+	local class_name = nil
+	local function_name = nil
+	local function_parameters = {}
+	while node ~= nil do
+		if node:type() == 'function_definition' then
+			function_definition_node = node
 		end
-		local name = vim.treesitter.get_node_text(match[1], bufnr)
-		print(name)
+		if node:type() == 'class_definition' then
+			class_definition_node = node
+			break
+		end
+		node = node:parent()
 	end
+
+	if class_definition_node ~= nil then
+		local class_name_node = class_definition_node:field('name')[1]
+		class_name = vim.treesitter.get_node_text(class_name_node, bufnr)
+	end
+
+	if function_definition_node ~= nil then
+		local function_name_node = function_definition_node:field('name')[1]
+		function_name = vim.treesitter.get_node_text(function_name_node, bufnr)
+		local function_parameters_node = function_definition_node:field('parameters')[1]
+		local parameter_num = 1
+		for parameter in function_parameters_node:iter_children() do
+			parameter_num = parameter_num + 1
+			local name = nil
+			local parameter_type = parameter:type()
+			if parameter_type == 'identifier' then table.insert(function_parameters, vim.treesitter.get_node_text(parameter, bufnr))
+			end
+		end
+	end
+
+	print(class_name, function_name, vim.inspect(function_parameters))
+
+	--print(function_dfinition_node, class_definition_node)
+	--print(node:type())
+	--print(node:parent():parent():parent():type())
+	--local lang_tree = root_lang_tree:language_for_range{ line, col, line, col }
+	--local parser = vim.treesitter.get_parser(0, 'python')
+	--local syntax_tree = parser:parse()
+	--local root = syntax_tree[1]:root()
+	--local bufnr = vim.api.nvim_get_current_buf()
+	--for _, match, _ in class_query:iter_matches(root, bufnr) do
+	--	local lbegin, _, lend, _ = ts_utils.get_vim_range { match[1]:range() }
+	--	print("ok")
+	--	--print(match[1]:range(), vim.inspect(match), vim.treesitter.get_node_text(match[1], bufnr), vim.treesitter.get_node_text(match[2], bufnr))
+	--	--for id, node in pairs(match) do
+	--	--	print(id, node, vim.treesitter.get_node_text(node, bufnr))
+	--	--end
+	--	--local name = vim.treesitter.get_node_text(match[1], bufnr)
+	--	--print(name)
+	--end
 	return 'ok'
 end
 
@@ -82,7 +127,7 @@ end
 
 ls.add_snippets("all", {
 	s('cs', {
-		f(function(_, snip) return get_current_python_method() end),
+		f(function(_, snip) print(vim.inspect(snip.env)); return get_current_python_method(snip) end),
 		t('('),
 		i(0),
 		t(')')
