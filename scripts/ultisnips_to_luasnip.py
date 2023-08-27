@@ -57,17 +57,36 @@ class LSTextNode(LSToken):
 		return f'{self.__class__.__name__}({self.text})'
 
 
+def get_text_nodes_between(input, start, end):
+	if end is None:
+		end = (len(input) - 1, len(input[-1]) - 1)
+	text_nodes = []
+	for line_num in range(start[0], end[0] + 1):
+		col_start = None
+		col_end = None
+		if line_num == start[0]:
+			col_start = start[1]
+		if line_num == end[0]:
+			col_end = end[1]
+		text_fragment = input[line_num][col_start:col_end]
+		if text_fragment:
+			text_nodes.append(text_fragment)
+	return text_nodes
+
 
 def parse_snippet(snippet):
 	snippet_text = snippet._value
 	instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
 	tokens = tokenize(snippet._value, 0, Position(0, 0), __ALLOWED_TOKENS)
+	lines = snippet_text.splitlines()
+	print(lines)
 
-	last_token_end = 0
+	previous_token_end = (0, 0)
 	for token in tokens:
-		last_token_end = token.end
+		print(get_text_nodes_between(lines, previous_token_end, token.start))
+		previous_token_end = token.end
+	print(get_text_nodes_between(lines, previous_token_end, None))
 
-	print(last_token_end)
 
 	#match type(token):
 	#	case MirrorToken:
