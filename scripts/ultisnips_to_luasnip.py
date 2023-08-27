@@ -10,7 +10,9 @@ sys.path.append(str(Path.home().joinpath('.local/share/nvim/lazy/ultisnips/pytho
 
 def main():
 	from UltiSnips import UltiSnips_Manager
-	print(UltiSnips_Manager._snips("", True))
+	UltiSnips_Manager.get_buffer_filetypes = lambda: ['scss']
+	snippets = UltiSnips_Manager._snips("", True)
+	__import__('pprint').pprint(snippets)
 
 
 if __name__ == "__main__":
