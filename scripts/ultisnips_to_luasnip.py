@@ -7,7 +7,6 @@ from pathlib import Path
 
 
 SUPPORTED_OPTS = {'w'}
-SUPPORTED_OPTS = set()
 
 LOG_CONFIG = {
 	'version': 1,
@@ -35,6 +34,9 @@ VisualContent = namedtuple('VisualContent', ['text', 'mode'])
 
 def main():
 	from UltiSnips import UltiSnips_Manager
+	from UltiSnips.snippet.parsing.lexer import tokenize, Position
+	from UltiSnips.snippet.parsing.ulti_snips import __ALLOWED_TOKENS
+
 	UltiSnips_Manager.get_buffer_filetypes = lambda: ['scss']
 	snippets = UltiSnips_Manager._snips("", True)
 	for snippet in snippets:
@@ -44,6 +46,12 @@ def main():
 			for opt in unsupported_opts:
 				logger.error("Option %s no supported in snippet %s", opt, snippet.trigger)
 			continue
+
+		instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
+		from pprint import pprint
+		print(list(tokenize(snippet._value, 0, Position(0, 0), __ALLOWED_TOKENS)))
+		return
+
 		#instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
 		#print(instance.get_tabstops())
 		##print(instance.__dict__)
