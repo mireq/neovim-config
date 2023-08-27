@@ -5,6 +5,11 @@ import sys
 from collections import namedtuple
 from pathlib import Path
 
+from UltiSnips import UltiSnips_Manager
+from UltiSnips.snippet.parsing.lexer import tokenize, Position
+from UltiSnips.snippet.parsing.ulti_snips import __ALLOWED_TOKENS
+from UltiSnips.snippet.parsing.lexer import MirrorToken
+
 
 SUPPORTED_OPTS = {'w'}
 
@@ -32,11 +37,48 @@ sys.path.append(str(Path.home().joinpath('.local/share/nvim/lazy/ultisnips/pytho
 VisualContent = namedtuple('VisualContent', ['text', 'mode'])
 
 
-def main():
-	from UltiSnips import UltiSnips_Manager
-	from UltiSnips.snippet.parsing.lexer import tokenize, Position
-	from UltiSnips.snippet.parsing.ulti_snips import __ALLOWED_TOKENS
+class LSToken(object):
+	__slots__ = []
 
+	def __repr__(self):
+		return f'{self.__class__.__name__}()'
+
+	def __str__(self):
+		return repr(self)
+
+
+class LSTextNode(LSToken):
+	__slots__ = ['text']
+
+	def __init__(self, text):
+		self.text = text
+
+	def __repr__(self):
+		return f'{self.__class__.__name__}({self.text})'
+
+
+
+def parse_snippet(snippet):
+	snippet_text = snippet._value
+	instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
+	tokens = tokenize(snippet._value, 0, Position(0, 0), __ALLOWED_TOKENS)
+
+	last_token_end = 0
+	for token in tokens:
+		last_token_end = token.end
+
+	print(last_token_end)
+
+	#match type(token):
+	#	case MirrorToken:
+	#		print()
+
+	from pprint import pprint
+	print(list(tokenize(snippet._value, 0, Position(0, 0), __ALLOWED_TOKENS)))
+
+
+
+def main():
 	UltiSnips_Manager.get_buffer_filetypes = lambda: ['scss']
 	snippets = UltiSnips_Manager._snips("", True)
 	for snippet in snippets:
@@ -47,9 +89,7 @@ def main():
 				logger.error("Option %s no supported in snippet %s", opt, snippet.trigger)
 			continue
 
-		instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
-		from pprint import pprint
-		print(list(tokenize(snippet._value, 0, Position(0, 0), __ALLOWED_TOKENS)))
+		parse_snippet(snippet)
 		return
 
 		#instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
