@@ -8,7 +8,7 @@ from pathlib import Path
 from UltiSnips import UltiSnips_Manager
 from UltiSnips.snippet.parsing.lexer import tokenize, Position
 from UltiSnips.snippet.parsing.ulti_snips import __ALLOWED_TOKENS
-from UltiSnips.snippet.parsing.lexer import MirrorToken
+from UltiSnips.snippet.parsing.lexer import MirrorToken, EndOfTextToken, TabStopToken
 
 
 SUPPORTED_OPTS = {'w'}
@@ -68,6 +68,20 @@ class LSInsertNode(LSToken):
 		return f'{self.__class__.__name__}({self.number!r}, {self.default!r})'
 
 
+class LSCopyNode(LSToken):
+	__slots__ = ['number', 'default']
+
+	def __init__(self, number, default=''):
+		self.number = number
+
+	def __repr__(self):
+		return f'{self.__class__.__name__}({self.default!r})'
+
+
+class LSInsertOrCopyNode(LSInsertNode):
+	pass
+
+
 def get_text_nodes_between(input, start, end):
 	if end is None:
 		end = (len(input) - 1, len(input[-1]) - 1)
@@ -101,8 +115,14 @@ def parse_snippet(snippet):
 	for token in tokens:
 		token_list.extend(get_text_nodes_between(lines, previous_token_end, token.start))
 		match token:
+			case TabStopToken():
+				token_list.append(LSInsertNode(token.number, token.initial_text))
 			case MirrorToken():
-				token_list.append(LSInsertNode(token.number))
+				token_list.append(LSInsertOrCopyNode(token.number))
+			case EndOfTextToken():
+				pass
+			case _:
+				raise RuntimeError("Unknown token: %s" % token)
 		previous_token_end = token.end
 	token_list.extend(get_text_nodes_between(lines, previous_token_end, None))
 	print(token_list)
