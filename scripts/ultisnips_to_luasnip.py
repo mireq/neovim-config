@@ -54,7 +54,18 @@ class LSTextNode(LSToken):
 		self.text = text
 
 	def __repr__(self):
-		return f'{self.__class__.__name__}({self.text})'
+		return f'{self.__class__.__name__}({self.text!r})'
+
+
+class LSInsertNode(LSToken):
+	__slots__ = ['number', 'default']
+
+	def __init__(self, number, default=''):
+		self.number = number
+		self.default = default
+
+	def __repr__(self):
+		return f'{self.__class__.__name__}({self.number!r}, {self.default!r})'
 
 
 def get_text_nodes_between(input, start, end):
@@ -70,31 +81,31 @@ def get_text_nodes_between(input, start, end):
 			col_end = end[1]
 		text_fragment = input[line_num][col_start:col_end]
 		if text_fragment:
-			text_nodes.append(text_fragment)
-	return text_nodes
+			if text_fragment[-1:] == '\n':
+				if text_fragment[:-1]:
+					text_nodes.append(text_fragment[:-1])
+				text_nodes.append('\n')
+			else:
+				text_nodes.append(text_fragment)
+	return [LSTextNode(text) for text in text_nodes]
 
 
 def parse_snippet(snippet):
 	snippet_text = snippet._value
 	instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
 	tokens = tokenize(snippet._value, 0, Position(0, 0), __ALLOWED_TOKENS)
-	lines = snippet_text.splitlines()
-	print(lines)
+	lines = snippet_text.splitlines(keepends=True)
+	token_list = []
 
 	previous_token_end = (0, 0)
 	for token in tokens:
-		print(get_text_nodes_between(lines, previous_token_end, token.start))
+		token_list.extend(get_text_nodes_between(lines, previous_token_end, token.start))
+		match token:
+			case MirrorToken():
+				token_list.append(LSInsertNode(token.number))
 		previous_token_end = token.end
-	print(get_text_nodes_between(lines, previous_token_end, None))
-
-
-	#match type(token):
-	#	case MirrorToken:
-	#		print()
-
-	from pprint import pprint
-	print(list(tokenize(snippet._value, 0, Position(0, 0), __ALLOWED_TOKENS)))
-
+	token_list.extend(get_text_nodes_between(lines, previous_token_end, None))
+	print(token_list)
 
 
 def main():
