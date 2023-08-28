@@ -1,14 +1,14 @@
-#!/usr/bin/env -S nvim --headless -n -c "pyfile %" -c "q!"
+#!/usr/bin/env -S nvim --headless -es -n -c "pyfile %" -c "q!"
 # -*- coding: utf-8 -*-
 import logging.config
 import sys
 from collections import namedtuple
 from pathlib import Path
+from datetime import datetime
 
 from UltiSnips import UltiSnips_Manager
-from UltiSnips.snippet.parsing.lexer import tokenize, Position
+from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken
 from UltiSnips.snippet.parsing.ulti_snips import __ALLOWED_TOKENS
-from UltiSnips.snippet.parsing.lexer import MirrorToken, EndOfTextToken, TabStopToken
 
 
 SUPPORTED_OPTS = {'w'}
@@ -29,6 +29,34 @@ LOG_CONFIG = {
 		'handlers':('console',)
 	}
 }
+FILE_HEADER = """local ls = require("luasnip")
+local s = ls.snippet
+local sn = ls.snippet_node
+local isn = ls.indent_snippet_node
+local t = ls.text_node
+local i = ls.insert_node
+local f = ls.function_node
+local c = ls.choice_node
+local d = ls.dynamic_node
+local r = ls.restore_node
+local events = require("luasnip.util.events")
+local ai = require("luasnip.nodes.absolute_indexer")
+local extras = require("luasnip.extras")
+local l = extras.lambda
+local rep = extras.rep
+local p = extras.partial
+local m = extras.match
+local n = extras.nonempty
+local dl = extras.dynamic_lambda
+local fmt = require("luasnip.extras.fmt").fmt
+local fmta = require("luasnip.extras.fmt").fmta
+local conds = require("luasnip.extras.expand_conditions")
+local postfix = require("luasnip.extras.postfix").postfix
+local types = require("luasnip.util.types")
+local parse = require("luasnip.util.parser").parse_snippet
+local ms = ls.multi_snippet
+local k = require("luasnip.nodes.key_indexer").new_key
+"""
 logging.config.dictConfig(LOG_CONFIG)
 logger = logging.getLogger(__name__)
 
@@ -125,7 +153,7 @@ def parse_snippet(snippet):
 				raise RuntimeError("Unknown token: %s" % token)
 		previous_token_end = token.end
 	token_list.extend(get_text_nodes_between(lines, previous_token_end, None))
-	print(token_list)
+	return token_list
 
 
 def main():
@@ -140,7 +168,7 @@ def main():
 			continue
 
 		parse_snippet(snippet)
-		return
+		break
 
 		#instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
 		#print(instance.get_tabstops())
@@ -148,6 +176,9 @@ def main():
 		#from pprint import pprint
 		#pprint(instance.__dict__)
 		#return
+	sys.stdout.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py')
+	#sys.stderr.write('\n\n\n')
+	sys.stdout.write(FILE_HEADER)
 
 
 if __name__ == "__main__":
