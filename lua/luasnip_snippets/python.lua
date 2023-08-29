@@ -99,9 +99,10 @@ end
 
 
 
-ls.add_snippets("all", {
+ls.add_snippets("python", {
 	s('cs', {
 		t('super().'),
 		d(1, function(_, snip) return get_call_super(snip) end, {}),
-	})
+	--	f(copy, 2),
+	}),
 })
