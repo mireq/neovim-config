@@ -26,6 +26,7 @@ require("lazy").setup({
 		init = function()
 			vim.g.UltiSnipsExpandTrigger="<TAB>"
 			vim.g.UltiSnipsJumpForwardTrigger="<TAB>"
+			vim.g.UltiSnipsJumpBackwardTrigger="<S-TAB>"
 			vim.g.UltiSnipsSnippetDirectories = {vim.fn.stdpath("config") .. '/UltiSnips', 'UltiSnips'}
 			vim.g.UltiSnipsTriggerInVisualMode = 0
 			vim.cmd([[
