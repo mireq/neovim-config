@@ -1,5 +1,6 @@
-#!/usr/bin/env -S nvim --headless -es -n -c "pyfile %" -c "q!"
+#!/usr/bin/env -S nvim --headless -es -n -c "python import vim, pathlib, sys, importlib.util; vim.command('redir >> /dev/stdout'); path = pathlib.Path(vim.current.buffer.name); spec = importlib.util.spec_from_file_location(path.name, path); mod = importlib.util.module_from_spec(spec); sys.modules[path.name] = mod; spec.loader.exec_module(mod); mod.main(); vim.quit()"
 # -*- coding: utf-8 -*-
+
 import logging.config
 import sys
 from collections import namedtuple
