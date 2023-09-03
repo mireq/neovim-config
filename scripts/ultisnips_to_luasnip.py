@@ -1,11 +1,11 @@
-#!/usr/bin/env -S nvim --headless -es -n -c "python import vim, pathlib, sys, importlib.util; vim.command('redir >> /dev/stdout'); path = pathlib.Path(vim.current.buffer.name); spec = importlib.util.spec_from_file_location(path.name, path); mod = importlib.util.module_from_spec(spec); sys.modules[path.name] = mod; spec.loader.exec_module(mod); mod.main(); vim.quit()"
+#!/usr/bin/env -S nvim --headless -n -c "silent pyfile %" -c "q!"
 # -*- coding: utf-8 -*-
-
 import logging.config
 import sys
 from collections import namedtuple
 from pathlib import Path
 from datetime import datetime
+import vim
 
 from UltiSnips import UltiSnips_Manager
 from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken
@@ -158,6 +158,7 @@ def parse_snippet(snippet):
 
 
 def main():
+	vim.command('redir >> /dev/stdout')
 	UltiSnips_Manager.get_buffer_filetypes = lambda: ['scss']
 	snippets = UltiSnips_Manager._snips("", True)
 	for snippet in snippets:
@@ -178,8 +179,9 @@ def main():
 		#pprint(instance.__dict__)
 		#return
 	sys.stdout.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py')
-	#sys.stderr.write('\n\n\n')
+	sys.stdout.write('\n\n\n')
 	sys.stdout.write(FILE_HEADER)
+	vim.command('redir END')
 
 
 if __name__ == "__main__":
