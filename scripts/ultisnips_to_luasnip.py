@@ -170,7 +170,15 @@ def main():
 				logger.error("Option %s no supported in snippet %s", opt, snippet.trigger)
 			continue
 
-		parse_snippet(snippet)
+		try:
+			tokens = parse_snippet(snippet)
+		except Exception as e:
+			logger.exception("Parsing error")
+			continue
+
+		break
+
+
 
 		#instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
 		#print(instance.get_tabstops())
