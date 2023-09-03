@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import argparse
 import logging.config
+import re
 import sys
 from collections import namedtuple
 from datetime import datetime
@@ -58,6 +59,7 @@ local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
+
 """
 logging.config.dictConfig(LOG_CONFIG)
 logger = logging.getLogger(__name__)
@@ -65,6 +67,19 @@ logger = logging.getLogger(__name__)
 
 sys.path.append(str(Path.home().joinpath('.local/share/nvim/lazy/ultisnips/pythonx')))
 VisualContent = namedtuple('VisualContent', ['text', 'mode'])
+LUA_SPECIAL_CHAR_RX = re.compile(r'("|\'|\n)')
+
+
+def escape_char(match):
+	value = match.group(1)
+	if value == '\n':
+		return '\\n'
+	else:
+		return f'\\{value}'
+
+
+def escape_lua_string(text: str) -> str:
+	return f'"{LUA_SPECIAL_CHAR_RX.sub(escape_char, text)}"'
 
 
 class LSToken(object):
@@ -108,7 +123,7 @@ class LSCopyNode(LSToken):
 		return f'{self.__class__.__name__}({self.default!r})'
 
 
-class LSInsertOrCopyNode(LSInsertNode):
+class LSInsertOrCopyNode_(LSInsertNode):
 	pass
 
 
@@ -142,25 +157,48 @@ def parse_snippet(snippet):
 	lines = snippet_text.splitlines(keepends=True)
 	token_list = []
 
+	insert_nodes = {}
+	last_token_number = 0
+
 	previous_token_end = (0, 0)
 	for token in tokens:
 		token_list.extend(get_text_nodes_between(lines, previous_token_end, token.start))
 		match token:
 			case TabStopToken():
-				token_list.append(LSInsertNode(token.number, token.initial_text))
+				node = LSInsertNode(token.number, token.initial_text)
+				insert_nodes.setdefault(token.number, node)
+				token_list.append(node)
+				last_token_number = max(token.number, last_token_number)
 			case MirrorToken():
-				token_list.append(LSInsertOrCopyNode(token.number))
+				node = LSInsertOrCopyNode_(token.number)
+				insert_nodes.setdefault(token.number, node)
+				token_list.append(node)
+				last_token_number = max(token.number, last_token_number)
 			case EndOfTextToken():
 				pass
 			case _:
 				raise RuntimeError("Unknown token: %s" % token)
 		previous_token_end = token.end
 	token_list.extend(get_text_nodes_between(lines, previous_token_end, None))
+
+	insert_tokens = set(insert_nodes.values())
+	def transform_token(token):
+		if isinstance(token, LSInsertOrCopyNode_):
+			number = token.number or (last_token_number + 1)
+			if token in insert_tokens:
+				return LSInsertNode(number, token.default)
+			else:
+				return LSCopyNode(number)
+		return token
+
+	# replace zero tokens and copy or insert tokens
+	token_list = [transform_token(token) for token in token_list]
+
 	return token_list
 
 
 def main():
-	vim.command('redir >> /dev/stdout')
+	#vim.command('redir >> /dev/stdout')
 	args = vim.exec_lua('return vim.v.argv')[8:]
 
 	parser = argparse.ArgumentParser("Convert UltiSnips to luasnip snippets")
@@ -183,6 +221,7 @@ def main():
 			logger.exception("Parsing error")
 			continue
 
+		print(tokens)
 		break
 
 
@@ -193,10 +232,12 @@ def main():
 		#from pprint import pprint
 		#pprint(instance.__dict__)
 		#return
-	sys.stdout.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py')
-	sys.stdout.write('\n\n\n')
-	sys.stdout.write(FILE_HEADER)
-	vim.command('redir END')
+	with open(f'{args.filetype}.lua', 'w') as fp:
+		fp.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py\n\n')
+		fp.write(FILE_HEADER)
+		fp.write(f'ls.add_snippets({escape_lua_string(args.filetype)}, {{\n')
+		fp.write('})\n')
+	#vim.command('redir END')
 
 
 if __name__ == "__main__":
