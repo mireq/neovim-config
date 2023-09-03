@@ -122,7 +122,8 @@ def get_text_nodes_between(input, start, end):
 			col_start = start[1]
 		if line_num == end[0]:
 			col_end = end[1]
-		text_fragment = input[line_num][col_start:col_end]
+		current_line = input[line_num] if line_num < len(input) else ''
+		text_fragment = current_line[col_start:col_end]
 		if text_fragment:
 			if text_fragment[-1:] == '\n':
 				if text_fragment[:-1]:
@@ -170,7 +171,6 @@ def main():
 			continue
 
 		parse_snippet(snippet)
-		break
 
 		#instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
 		#print(instance.get_tabstops())
