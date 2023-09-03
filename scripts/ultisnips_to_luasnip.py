@@ -1,12 +1,13 @@
 #!/usr/bin/env -S nvim --headless -n -c "silent pyfile %" -c "q!"
 # -*- coding: utf-8 -*-
+import argparse
 import logging.config
 import sys
 from collections import namedtuple
-from pathlib import Path
 from datetime import datetime
-import vim
+from pathlib import Path
 
+import vim
 from UltiSnips import UltiSnips_Manager
 from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken
 from UltiSnips.snippet.parsing.ulti_snips import __ALLOWED_TOKENS
@@ -160,7 +161,13 @@ def parse_snippet(snippet):
 
 def main():
 	vim.command('redir >> /dev/stdout')
-	UltiSnips_Manager.get_buffer_filetypes = lambda: ['scss']
+	args = vim.exec_lua('return vim.v.argv')[8:]
+
+	parser = argparse.ArgumentParser("Convert UltiSnips to luasnip snippets")
+	parser.add_argument('filetype')
+	args = parser.parse_args(args)
+
+	UltiSnips_Manager.get_buffer_filetypes = lambda: [args.filetype]
 	snippets = UltiSnips_Manager._snips("", True)
 	for snippet in snippets:
 		opts = set(snippet._opts)
