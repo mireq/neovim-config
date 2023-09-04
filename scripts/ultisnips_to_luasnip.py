@@ -1,4 +1,4 @@
-#!/usr/bin/env -S nvim --headless -n -c "silent pyfile %" -c "q!"
+#!/usr/bin/env -S nvim --headless -n -c "pyfile %" -c "q!"
 # -*- coding: utf-8 -*-
 import argparse
 import logging.config
@@ -207,6 +207,7 @@ def main():
 
 	UltiSnips_Manager.get_buffer_filetypes = lambda: [args.filetype]
 	snippets = UltiSnips_Manager._snips("", True)
+	snippet_code = []
 	for snippet in snippets:
 		opts = set(snippet._opts)
 		unsupported_opts = opts - SUPPORTED_OPTS
@@ -221,7 +222,7 @@ def main():
 			logger.exception("Parsing error")
 			continue
 
-		print(tokens)
+		snippet_code.append(f'\ts({escape_lua_string(snippet.trigger)}\n\t),\n')
 		break
 
 
@@ -236,6 +237,7 @@ def main():
 		fp.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py\n\n')
 		fp.write(FILE_HEADER)
 		fp.write(f'ls.add_snippets({escape_lua_string(args.filetype)}, {{\n')
+		fp.write('\n'.join(snippet_code))
 		fp.write('})\n')
 	#vim.command('redir END')
 
