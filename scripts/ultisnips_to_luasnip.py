@@ -222,7 +222,7 @@ def main():
 			logger.exception("Parsing error")
 			continue
 
-		snippet_code.append(f'\ts({escape_lua_string(snippet.trigger)}\n\t),\n')
+		snippet_code.append(f'\ts({{trig = {escape_lua_string(snippet.trigger)}, descr = {escape_lua_string(snippet.description)}}}\n\t),\n')
 		break
 
 
