@@ -61,7 +61,11 @@ local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
+local cp = require("luasnip_snippets.snip_utils").cp
 
+"""
+SNIP_UTILS = """local ls = require("luasnip")
+local f = ls.function_node
 
 local function copy_helper(args)
 	return args[1]
@@ -71,7 +75,11 @@ local function cp(num)
 	return f(copy_helper, num)
 end
 
+return {
+	cp = cp
+}
 """
+
 logging.config.dictConfig(LOG_CONFIG)
 logger = logging.getLogger(__name__)
 
@@ -280,6 +288,9 @@ def main():
 
 		snippet_body = render_tokens(tokens)
 		snippet_code.append(f'\ts({{trig = {escape_lua_string(snippet.trigger)}, descr = {escape_lua_string(snippet.description)}}}, {{{snippet_body}\n\t}}),\n')
+
+	with open('snip_utils.lua', 'w') as fp:
+		fp.write(SNIP_UTILS)
 
 	with open(f'{args.filetype}.lua', 'w') as fp:
 		fp.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py\n\n')
