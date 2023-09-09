@@ -201,16 +201,29 @@ def parse_snippet(snippet):
 
 def render_tokens(tokens: List[LSToken]) -> str:
 	snippet_body = StringIO()
-	at_start = True
+	at_line_start = True
 	if tokens:
 		snippet_body.write(',')
-	for token in tokens:
-		if at_start:
+	num_tokens = len(tokens)
+	for i, token in enumerate(tokens):
+		last_token = i == num_tokens - 1
+		if at_line_start:
 			snippet_body.write('\n\t\t')
-			at_start = False
+			at_line_start = False
 		match token:
 			case LSTextNode():
-				snippet_body.write(f't({escape_lua_string(token.text)}), ')
+				snippet_body.write(f't({escape_lua_string(token.text)})')
+			case LSInsertNode():
+				if token.default:
+					snippet_body.write(f'i({token.number}, {escape_lua_string(token.default)})')
+				else:
+					snippet_body.write(f'i({token.number})')
+			case _:
+				raise RuntimeError("Unknown token: %s" % token)
+		if not last_token:
+			snippet_body.write(',')
+			if not at_line_start:
+				snippet_body.write(' ')
 
 	return snippet_body.getvalue()
 
