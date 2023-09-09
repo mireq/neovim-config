@@ -62,6 +62,14 @@ local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
 
+
+local function copy_helper(args)
+	return args[1]
+end
+
+local function cp(num)
+	return f(copy_helper, 2)
+end
 """
 logging.config.dictConfig(LOG_CONFIG)
 logger = logging.getLogger(__name__)
@@ -122,7 +130,7 @@ class LSCopyNode(LSToken):
 		self.number = number
 
 	def __repr__(self):
-		return f'{self.__class__.__name__}({self.default!r})'
+		return f'{self.__class__.__name__}({self.number})'
 
 
 class LSInsertOrCopyNode_(LSInsertNode):
@@ -213,11 +221,15 @@ def render_tokens(tokens: List[LSToken]) -> str:
 		match token:
 			case LSTextNode():
 				snippet_body.write(f't({escape_lua_string(token.text)})')
+				if token.text == '\n':
+					at_line_start = True
 			case LSInsertNode():
 				if token.default:
 					snippet_body.write(f'i({token.number}, {escape_lua_string(token.default)})')
 				else:
 					snippet_body.write(f'i({token.number})')
+			case LSCopyNode():
+				snippet_body.write(f'cp({token.number})')
 			case _:
 				raise RuntimeError("Unknown token: %s" % token)
 		if not last_token:
@@ -255,7 +267,6 @@ def main():
 
 		snippet_body = render_tokens(tokens)
 		snippet_code.append(f'\ts({{trig = {escape_lua_string(snippet.trigger)}, descr = {escape_lua_string(snippet.description)}}}{snippet_body}\n\t),\n')
-		break
 
 
 
