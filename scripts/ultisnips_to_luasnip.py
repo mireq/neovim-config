@@ -212,8 +212,6 @@ def parse_snippet(snippet):
 def render_tokens(tokens: List[LSToken]) -> str:
 	snippet_body = StringIO()
 	at_line_start = True
-	if tokens:
-		snippet_body.write(',')
 	num_tokens = len(tokens)
 	for i, token in enumerate(tokens):
 		last_token = i == num_tokens - 1
@@ -222,9 +220,11 @@ def render_tokens(tokens: List[LSToken]) -> str:
 			at_line_start = False
 		match token:
 			case LSTextNode():
-				snippet_body.write(f't({escape_lua_string(token.text)})')
 				if token.text == '\n':
 					at_line_start = True
+					snippet_body.write('t{"", ""}')
+				else:
+					snippet_body.write(f't{escape_lua_string(token.text)}')
 			case LSInsertNode():
 				if token.default:
 					snippet_body.write(f'i({token.number}, {escape_lua_string(token.default)})')
@@ -268,7 +268,7 @@ def main():
 			continue
 
 		snippet_body = render_tokens(tokens)
-		snippet_code.append(f'\ts({{trig = {escape_lua_string(snippet.trigger)}, descr = {escape_lua_string(snippet.description)}}}{snippet_body}\n\t),\n')
+		snippet_code.append(f'\ts({{trig = {escape_lua_string(snippet.trigger)}, descr = {escape_lua_string(snippet.description)}}}, {{{snippet_body}\n\t}}),\n')
 
 
 
