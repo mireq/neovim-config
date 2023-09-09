@@ -68,8 +68,9 @@ local function copy_helper(args)
 end
 
 local function cp(num)
-	return f(copy_helper, 2)
+	return f(copy_helper, num)
 end
+
 """
 logging.config.dictConfig(LOG_CONFIG)
 logger = logging.getLogger(__name__)
@@ -245,7 +246,6 @@ def render_tokens(tokens: List[LSToken]) -> str:
 
 
 def main():
-	#vim.command('redir >> /dev/stdout')
 	args = vim.exec_lua('return vim.v.argv')[8:]
 
 	parser = argparse.ArgumentParser("Convert UltiSnips to luasnip snippets")
@@ -255,7 +255,16 @@ def main():
 	UltiSnips_Manager.get_buffer_filetypes = lambda: [args.filetype]
 	snippets = UltiSnips_Manager._snips("", True)
 	snippet_code = []
+
+	included_filetypes = set()
+
 	for snippet in snippets:
+		filetype = snippet.location.rsplit(':', 1)[0].split('/')[-1].rsplit('.', 1)[0]
+
+		if filetype != args.filetype:
+			included_filetypes.add(filetype)
+			continue
+
 		opts = set(snippet._opts)
 		unsupported_opts = opts - SUPPORTED_OPTS
 		if unsupported_opts:
@@ -272,14 +281,6 @@ def main():
 		snippet_body = render_tokens(tokens)
 		snippet_code.append(f'\ts({{trig = {escape_lua_string(snippet.trigger)}, descr = {escape_lua_string(snippet.description)}}}, {{{snippet_body}\n\t}}),\n')
 
-
-
-		#instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
-		#print(instance.get_tabstops())
-		##print(instance.__dict__)
-		#from pprint import pprint
-		#pprint(instance.__dict__)
-		#return
 	with open(f'{args.filetype}.lua', 'w') as fp:
 		fp.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py\n\n')
 		fp.write(FILE_HEADER)
