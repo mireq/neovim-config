@@ -77,13 +77,15 @@ logger = logging.getLogger(__name__)
 
 sys.path.append(str(Path.home().joinpath('.local/share/nvim/lazy/ultisnips/pythonx')))
 VisualContent = namedtuple('VisualContent', ['text', 'mode'])
-LUA_SPECIAL_CHAR_RX = re.compile(r'("|\'|\n)')
+LUA_SPECIAL_CHAR_RX = re.compile(r'("|\'|\t|\n)')
 
 
 def escape_char(match):
 	value = match.group(1)
 	if value == '\n':
 		return '\\n'
+	elif value == '\t':
+		return '\\t'
 	else:
 		return f'\\{value}'
 
