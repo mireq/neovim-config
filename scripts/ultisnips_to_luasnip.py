@@ -201,6 +201,8 @@ def parse_snippet(snippet):
 				return LSInsertNode(number, token.default)
 			else:
 				return LSCopyNode(number)
+		elif isinstance(token, LSInsertNode):
+			return LSInsertNode(token.number or (last_token_number + 1), token.default)
 		return token
 
 	# replace zero tokens and copy or insert tokens
