@@ -4,9 +4,11 @@ import argparse
 import logging.config
 import re
 import sys
+from io import StringIO
 from collections import namedtuple
 from datetime import datetime
 from pathlib import Path
+from typing import List, Tuple, Optional
 
 import vim
 from UltiSnips import UltiSnips_Manager
@@ -127,7 +129,7 @@ class LSInsertOrCopyNode_(LSInsertNode):
 	pass
 
 
-def get_text_nodes_between(input, start, end):
+def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Optional[Tuple[int, int]]):
 	if end is None:
 		end = (len(input) - 1, len(input[-1]) - 1)
 	text_nodes = []
@@ -197,6 +199,22 @@ def parse_snippet(snippet):
 	return token_list
 
 
+def render_tokens(tokens: List[LSToken]) -> str:
+	snippet_body = StringIO()
+	at_start = True
+	if tokens:
+		snippet_body.write(',')
+	for token in tokens:
+		if at_start:
+			snippet_body.write('\n\t\t')
+			at_start = False
+		match token:
+			case LSTextNode():
+				snippet_body.write(f't({escape_lua_string(token.text)}), ')
+
+	return snippet_body.getvalue()
+
+
 def main():
 	#vim.command('redir >> /dev/stdout')
 	args = vim.exec_lua('return vim.v.argv')[8:]
@@ -219,10 +237,11 @@ def main():
 		try:
 			tokens = parse_snippet(snippet)
 		except Exception as e:
-			logger.exception("Parsing error")
+			logger.exception("Parsing error of snippet: %s", snippet.trigger)
 			continue
 
-		snippet_code.append(f'\ts({{trig = {escape_lua_string(snippet.trigger)}, descr = {escape_lua_string(snippet.description)}}}\n\t),\n')
+		snippet_body = render_tokens(tokens)
+		snippet_code.append(f'\ts({{trig = {escape_lua_string(snippet.trigger)}, descr = {escape_lua_string(snippet.description)}}}{snippet_body}\n\t),\n')
 		break
 
 
@@ -237,9 +256,8 @@ def main():
 		fp.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py\n\n')
 		fp.write(FILE_HEADER)
 		fp.write(f'ls.add_snippets({escape_lua_string(args.filetype)}, {{\n')
-		fp.write('\n'.join(snippet_code))
+		fp.write(''.join(snippet_code))
 		fp.write('})\n')
-	#vim.command('redir END')
 
 
 if __name__ == "__main__":
