@@ -267,7 +267,12 @@ def main():
 	filetype_mapping = {}
 	try:
 		with open('filetype_includes.txt', 'r') as fp:
-			pass
+			for line in fp:
+				line = line.strip()
+				if not line:
+					continue
+				line = line.split()
+				filetype_mapping[line[0]] = set(line[1:])
 	except FileNotFoundError:
 		pass
 
