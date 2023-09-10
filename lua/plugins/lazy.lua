@@ -1,3 +1,35 @@
+local snippet_engine = 'luasnip' -- luasnip or ultisnips
+
+
+local ultisnips_nvim_cmp_deps = {
+	'hrsh7th/cmp-nvim-lsp',
+	'hrsh7th/cmp-buffer',
+	'hrsh7th/cmp-path',
+	'hrsh7th/cmp-nvim-lsp-signature-help',
+	'neovim/nvim-lspconfig',
+	'onsails/lspkind.nvim',
+	'quangnguyen30192/cmp-nvim-ultisnips',
+	'SirVer/ultisnips',
+	'honza/vim-snippets',
+}
+local luasnip_nvim_cmp_deps = {
+	'hrsh7th/cmp-nvim-lsp',
+	'hrsh7th/cmp-buffer',
+	'hrsh7th/cmp-path',
+	'hrsh7th/cmp-nvim-lsp-signature-help',
+	'neovim/nvim-lspconfig',
+	'onsails/lspkind.nvim',
+	'L3MON4D3/LuaSnip',
+	'saadparwaiz1/cmp_luasnip'
+}
+local nvim_cmp_deps = nil;
+if snippet_engine == 'ultisnips' then
+	nvim_cmp_deps = ultisnips_nvim_cmp_deps
+else
+	nvim_cmp_deps = luasnip_nvim_cmp_deps
+end
+
+
 require("lazy").setup({
 	'gpanders/editorconfig.nvim',
 	{
@@ -12,48 +44,40 @@ require("lazy").setup({
 	{
 		'hrsh7th/nvim-cmp',
 		--event = 'InsertEnter',
-		dependencies = {
-			'hrsh7th/cmp-nvim-lsp',
-			'hrsh7th/cmp-buffer',
-			'hrsh7th/cmp-path',
-			'hrsh7th/cmp-nvim-lsp-signature-help',
-			'neovim/nvim-lspconfig',
-			'onsails/lspkind.nvim',
-			'quangnguyen30192/cmp-nvim-ultisnips',
-			'SirVer/ultisnips',
-			'honza/vim-snippets',
-		},
+		dependencies = nvim_cmp_deps,
 		init = function()
 			vim.g.UltiSnipsExpandTrigger="<TAB>"
 			vim.g.UltiSnipsJumpForwardTrigger="<TAB>"
 			vim.g.UltiSnipsJumpBackwardTrigger="<S-TAB>"
-			vim.g.UltiSnipsSnippetDirectories = {vim.fn.stdpath("config") .. '/UltiSnips', 'UltiSnips'}
 			vim.g.UltiSnipsTriggerInVisualMode = 0
-			vim.cmd([[
-				function! Ultisnips_get_current_python_class()
-					let l:retval = ""
-					let l:line_declaring_class = search('^class\s\+', 'bnW')
-					if l:line_declaring_class != 0
-						let l:nameline = getline(l:line_declaring_class)
-						let l:classend = matchend(l:nameline, '\s*class\s\+')
-						let l:classnameend = matchend(l:nameline, '\s*class\s\+[A-Za-z0-9_]\+')
-						let l:retval = strpart(l:nameline, l:classend, l:classnameend-l:classend)
-					endif
-					return l:retval
-				endfunction
+			vim.g.UltiSnipsSnippetDirectories = {vim.fn.stdpath("config") .. '/UltiSnips', 'UltiSnips'}
+			if snippet_engine == 'ultisnips' then
+				vim.cmd([[
+					function! Ultisnips_get_current_python_class()
+						let l:retval = ""
+						let l:line_declaring_class = search('^class\s\+', 'bnW')
+						if l:line_declaring_class != 0
+							let l:nameline = getline(l:line_declaring_class)
+							let l:classend = matchend(l:nameline, '\s*class\s\+')
+							let l:classnameend = matchend(l:nameline, '\s*class\s\+[A-Za-z0-9_]\+')
+							let l:retval = strpart(l:nameline, l:classend, l:classnameend-l:classend)
+						endif
+						return l:retval
+					endfunction
 
-				function! Ultisnips_get_current_python_method()
-					let l:retval = ""
-					let l:line_declaring_method = search('\s*def\s\+', 'bnW')
-					if l:line_declaring_method != 0
-						let l:nameline = getline(l:line_declaring_method)
-						let l:methodend = matchend(l:nameline, '\s*def\s\+')
-						let l:methodnameend = matchend(l:nameline, '\s*def\s\+[A-Za-z0-9_]\+')
-						let l:retval = strpart(l:nameline, l:methodend, l:methodnameend-l:methodend)
-					endif
-					return l:retval
-				endfunction
-			]])
+					function! Ultisnips_get_current_python_method()
+						let l:retval = ""
+						let l:line_declaring_method = search('\s*def\s\+', 'bnW')
+						if l:line_declaring_method != 0
+							let l:nameline = getline(l:line_declaring_method)
+							let l:methodend = matchend(l:nameline, '\s*def\s\+')
+							let l:methodnameend = matchend(l:nameline, '\s*def\s\+[A-Za-z0-9_]\+')
+							let l:retval = strpart(l:nameline, l:methodend, l:methodnameend-l:methodend)
+						endif
+						return l:retval
+					endfunction
+				]])
+			end
 		end,
 		config = function()
 			local cmp = require('cmp')
@@ -161,7 +185,7 @@ require("lazy").setup({
 				sources = cmp.config.sources(
 					{
 						{
-							name = 'ultisnips'
+							name = snippet_engine
 						},
 						{
 							name = 'nvim_lsp'
@@ -298,8 +322,10 @@ require("lazy").setup({
 				}
 			)
 
-			vim.cmd("au! UltiSnips_AutoTrigger")
-			vim.cmd("autocmd BufLeave * call UltiSnips#LeavingBuffer()")
+			if snippet_engine == 'ultisnips' then
+				vim.cmd("au! UltiSnips_AutoTrigger")
+				vim.cmd("autocmd BufLeave * call UltiSnips#LeavingBuffer()")
+			end
 		end,
 	},
 	--{
@@ -723,5 +749,27 @@ require("lazy").setup({
 			vim.cmd("set termguicolors")
 			require("colorizer").setup()
 		end,
+	},
+	{
+		"L3MON4D3/LuaSnip",
+		version = "2.*",
+		lazy = snippet_engine == 'ultisnips',
+		build = "make install_jsregexp",
+		dependencies = {
+			'nvim-treesitter/nvim-treesitter',
+		},
+		init = function()
+			local ls = require('luasnip')
+			ls.setup({
+				load_ft_func = require('luasnip_snippets.snip_utils').load_ft_func,
+				ft_func = require('luasnip_snippets.snip_utils').ft_func,
+			})
+			vim.keymap.set({"i"}, "<Tab>", function() if ls.expand_or_jumpable() then ls.expand_or_jump() else vim.api.nvim_input('<C-V><Tab>') end end, {silent = true})
+			--vim.keymap.set({"i", "s"}, "<Tab>", function() ls.jump(1) end, {silent = true})
+			--vim.cmd("snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>")
+			require("luasnip.loaders.from_lua").lazy_load({
+				paths = { "./lua/luasnip_snippets/" }
+			})
+		end
 	},
 }, {install={colorscheme={"mirec"}}})
