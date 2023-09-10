@@ -103,7 +103,22 @@ local function cp(num)
 end
 
 local function ft_func(num)
-	return {"scss", "css"}
+	local filetypes = vim.split(vim.bo.filetype, ".", true)
+	local visited_filetypes = {}
+	for _, filetype in ipairs(filetypes) do
+		visited_filetypes[filetype] = true
+	end
+	for _, filetype in ipairs(filetypes) do
+		if filetype_includes[filetype] ~= nil then
+			for _, included_filetype in ipairs(filetype_includes[filetype]) do
+				if visited_filetypes[included_filetype] == nil then
+					visited_filetypes[included_filetype] = true
+					table.insert(filetypes, included_filetype)
+				end
+			end
+		end
+	end
+	return filetypes
 end
 
 local load_ft_func = require("luasnip.extras.filetype_functions").extend_load_ft(filetype_includes)
