@@ -264,6 +264,13 @@ def main():
 	snippets = UltiSnips_Manager._snips("", True)
 	snippet_code = []
 
+	filetype_mapping = {}
+	try:
+		with open('filetype_includes.txt', 'r') as fp:
+			pass
+	except FileNotFoundError:
+		pass
+
 	included_filetypes = set()
 
 	for snippet in snippets:
@@ -298,6 +305,14 @@ def main():
 		fp.write(f'ls.add_snippets({escape_lua_string(args.filetype)}, {{\n')
 		fp.write(''.join(snippet_code))
 		fp.write('})\n')
+
+	filetype_mapping.setdefault(args.filetype, [])
+	filetype_mapping[args.filetype] = list(set(filetype_mapping[args.filetype]).union(included_filetypes))
+	with open('filetype_includes.txt', 'w') as fp:
+		for filetype, included_filetypes in filetype_mapping.items():
+			if not included_filetypes:
+				continue
+			fp.write(f'{filetype} {" ".join(included_filetypes)}\n')
 
 
 if __name__ == "__main__":
