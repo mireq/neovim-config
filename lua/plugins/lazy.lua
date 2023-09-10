@@ -45,40 +45,6 @@ require("lazy").setup({
 		'hrsh7th/nvim-cmp',
 		--event = 'InsertEnter',
 		dependencies = nvim_cmp_deps,
-		init = function()
-			vim.g.UltiSnipsExpandTrigger="<TAB>"
-			vim.g.UltiSnipsJumpForwardTrigger="<TAB>"
-			vim.g.UltiSnipsJumpBackwardTrigger="<S-TAB>"
-			vim.g.UltiSnipsTriggerInVisualMode = 0
-			vim.g.UltiSnipsSnippetDirectories = {vim.fn.stdpath("config") .. '/UltiSnips', 'UltiSnips'}
-			if snippet_engine == 'ultisnips' then
-				vim.cmd([[
-					function! Ultisnips_get_current_python_class()
-						let l:retval = ""
-						let l:line_declaring_class = search('^class\s\+', 'bnW')
-						if l:line_declaring_class != 0
-							let l:nameline = getline(l:line_declaring_class)
-							let l:classend = matchend(l:nameline, '\s*class\s\+')
-							let l:classnameend = matchend(l:nameline, '\s*class\s\+[A-Za-z0-9_]\+')
-							let l:retval = strpart(l:nameline, l:classend, l:classnameend-l:classend)
-						endif
-						return l:retval
-					endfunction
-
-					function! Ultisnips_get_current_python_method()
-						let l:retval = ""
-						let l:line_declaring_method = search('\s*def\s\+', 'bnW')
-						if l:line_declaring_method != 0
-							let l:nameline = getline(l:line_declaring_method)
-							let l:methodend = matchend(l:nameline, '\s*def\s\+')
-							let l:methodnameend = matchend(l:nameline, '\s*def\s\+[A-Za-z0-9_]\+')
-							let l:retval = strpart(l:nameline, l:methodend, l:methodnameend-l:methodend)
-						endif
-						return l:retval
-					endfunction
-				]])
-			end
-		end,
 		config = function()
 			local cmp = require('cmp')
 			local types = require("cmp.types")
@@ -749,6 +715,46 @@ require("lazy").setup({
 			vim.cmd("set termguicolors")
 			require("colorizer").setup()
 		end,
+	},
+	{
+		"honza/vim-snippets",
+		lazy = true
+	},
+	{
+		"SirVer/ultisnips",
+		lazy = snippet_engine ~= 'ultisnips',
+		init = function()
+			vim.g.UltiSnipsExpandTrigger="<TAB>"
+			vim.g.UltiSnipsJumpForwardTrigger="<TAB>"
+			vim.g.UltiSnipsJumpBackwardTrigger="<S-TAB>"
+			vim.g.UltiSnipsTriggerInVisualMode = 0
+			vim.g.UltiSnipsSnippetDirectories = {vim.fn.stdpath("config") .. '/UltiSnips', 'UltiSnips'}
+			vim.cmd([[
+				function! Ultisnips_get_current_python_class()
+					let l:retval = ""
+					let l:line_declaring_class = search('^class\s\+', 'bnW')
+					if l:line_declaring_class != 0
+						let l:nameline = getline(l:line_declaring_class)
+						let l:classend = matchend(l:nameline, '\s*class\s\+')
+						let l:classnameend = matchend(l:nameline, '\s*class\s\+[A-Za-z0-9_]\+')
+						let l:retval = strpart(l:nameline, l:classend, l:classnameend-l:classend)
+					endif
+					return l:retval
+				endfunction
+
+				function! Ultisnips_get_current_python_method()
+					let l:retval = ""
+					let l:line_declaring_method = search('\s*def\s\+', 'bnW')
+					if l:line_declaring_method != 0
+						let l:nameline = getline(l:line_declaring_method)
+						let l:methodend = matchend(l:nameline, '\s*def\s\+')
+						let l:methodnameend = matchend(l:nameline, '\s*def\s\+[A-Za-z0-9_]\+')
+						let l:retval = strpart(l:nameline, l:methodend, l:methodnameend-l:methodend)
+					endif
+					return l:retval
+				endfunction
+			]])
+		end
 	},
 	{
 		"L3MON4D3/LuaSnip",
