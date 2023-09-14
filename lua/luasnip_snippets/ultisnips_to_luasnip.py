@@ -11,6 +11,9 @@ from pathlib import Path
 from typing import List, Tuple, Optional
 
 import vim
+vim.command('Lazy load ultisnips')
+vim.command('Lazy load vim-snippets')
+
 from UltiSnips import UltiSnips_Manager
 from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken
 from UltiSnips.snippet.parsing.ulti_snips import __ALLOWED_TOKENS
