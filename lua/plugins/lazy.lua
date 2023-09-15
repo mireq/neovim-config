@@ -1,4 +1,4 @@
-local snippet_engine = 'luasnip' -- luasnip or ultisnips
+local snippet_engine = 'ultisnips' -- luasnip or ultisnips
 
 
 local ultisnips_nvim_cmp_deps = {
