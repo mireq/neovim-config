@@ -15,8 +15,12 @@ vim.command('Lazy load ultisnips')
 vim.command('Lazy load vim-snippets')
 
 from UltiSnips import UltiSnips_Manager
+from UltiSnips.snippet.parsing.base import tokenize_snippet_text
 from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken
-from UltiSnips.snippet.parsing.ulti_snips import __ALLOWED_TOKENS
+from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing
+from UltiSnips.snippet.parsing import snipmate as snipmate_parsing
+from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
+from UltiSnips.snippet.definition.snipmate import SnipMateSnippetDefinition
 
 
 SUPPORTED_OPTS = {'w'}
@@ -227,9 +231,19 @@ def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Option
 def parse_snippet(snippet):
 	snippet_text = snippet._value
 	instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
-	tokens = tokenize(snippet._value, 0, Position(0, 0), __ALLOWED_TOKENS)
+	if isinstance(snippet, SnipMateSnippetDefinition):
+		tokens = tokenize(snippet._value, 0, Position(0, 0), ulti_snips_parsing.__ALLOWED_TOKENS)
+	else:
+		tokens = tokenize(snippet._value, 0, Position(0, 0), snipmate_parsing.__ALLOWED_TOKENS)
 	lines = snippet_text.splitlines(keepends=True)
 	token_list = []
+
+	#if snippet.trigger == 'pac':
+	#	tokens = list(tokens)
+	#	tok = tokens[0]
+	#	subtokens = list(tokenize(tok.initial_text, '', tok.start, __ALLOWED_TOKENS))
+	#	print(subtokens)
+
 
 	insert_nodes = {}
 	last_token_number = 0
