@@ -228,13 +228,30 @@ def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Option
 	return [LSTextNode(text) for text in text_nodes]
 
 
+def do_tokenize(parent, text, allowed_tokens_in_text, allowed_tokens_in_tabstops, token_to_textobject):
+	allowed_tokens = allowed_tokens_in_tabstops if parent else allowed_tokens_in_tabstops
+	tokens = list(tokenize(text, '', Position(0, 0) if parent is None else parent.start, allowed_tokens))
+	for token in tokens:
+		if isinstance(token, TabStopToken):
+			token.child_tokens = do_tokenize(token, token.initial_text, allowed_tokens_in_text, allowed_tokens_in_tabstops, token_to_textobject)
+			print(token.child_tokens)
+		else:
+			klass = token_to_textobject.get(token.__class__, None)
+			if klass is not None:
+				print(klass)
+				#text_object = klass(parent, token)
+	return tokens
+
+
 def parse_snippet(snippet):
 	snippet_text = snippet._value
 	instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
 	if isinstance(snippet, SnipMateSnippetDefinition):
 		tokens = tokenize(snippet._value, 0, Position(0, 0), ulti_snips_parsing.__ALLOWED_TOKENS)
+		do_tokenize(None, snippet._value, snipmate_parsing.__ALLOWED_TOKENS, snipmate_parsing.__ALLOWED_TOKENS_IN_TABSTOPS, snipmate_parsing._TOKEN_TO_TEXTOBJECT)
 	else:
 		tokens = tokenize(snippet._value, 0, Position(0, 0), snipmate_parsing.__ALLOWED_TOKENS)
+		do_tokenize(None, snippet._value, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing._TOKEN_TO_TEXTOBJECT)
 	lines = snippet_text.splitlines(keepends=True)
 	token_list = []
 
