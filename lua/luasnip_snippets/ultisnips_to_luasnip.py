@@ -270,7 +270,7 @@ def transfrorm_tokens(tokens, lines):
 	token_list.extend(get_text_nodes_between(lines, previous_token_end, None))
 
 	insert_tokens = set(insert_nodes.values())
-	def transform_token(token):
+	def finalize_token(token):
 		if isinstance(token, LSInsertOrCopyNode_):
 			number = token.number or (last_token_number + 1)
 			if token in insert_tokens:
@@ -282,7 +282,7 @@ def transfrorm_tokens(tokens, lines):
 		return token
 
 	# replace zero tokens and copy or insert tokens
-	token_list = [transform_token(token) for token in token_list]
+	token_list = [finalize_token(token) for token in token_list]
 
 	return token_list
 
