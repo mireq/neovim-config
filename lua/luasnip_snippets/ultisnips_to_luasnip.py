@@ -68,7 +68,9 @@ local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
-local cp = require("luasnip_snippets.snip_utils").cp
+local su = require("luasnip_snippets.snip_utils")
+local cp = su.cp
+local jt = su.jt
 
 """
 
@@ -301,8 +303,8 @@ def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = 
 						else:
 							snippet_body.write(f'i({token.number}, {escape_lua_string(text_content)})')
 					else:
-						dynamic_node_content = ' .. '.join(token_to_dynamic_text(child) for child in token.children)
-						snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{ i(1, {{{dynamic_node_content}}}) }}) end, {{1}})')
+						dynamic_node_content = ', '.join(token_to_dynamic_text(child) for child in token.children)
+						snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}})) }}) end, {{1}})')
 				else:
 					snippet_body.write(f'i({token.number})')
 			case LSCopyNode():
