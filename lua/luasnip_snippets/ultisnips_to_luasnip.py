@@ -71,71 +71,6 @@ local k = require("luasnip.nodes.key_indexer").new_key
 local cp = require("luasnip_snippets.snip_utils").cp
 
 """
-SNIP_UTILS = """local ls = require("luasnip")
-local f = ls.function_node
-local rundir = debug.getinfo(1).source:match("@?(.*/)")
-
-
-local filetype_includes = {}
-local filetype_mapping_fp = io.open(rundir .. 'filetype_includes.txt')
-if filetype_mapping_fp ~= nil then
-	while true do
-		local line = filetype_mapping_fp:read('*line')
-		if line == nil then
-			break
-		end
-		filetype = nil
-		aliases = {}
-		for word in line:gmatch("%w+") do
-			if filetype == nil then
-				filetype = word
-			else
-				table.insert(aliases, word)
-			end
-		end
-		if filetype ~= nil then
-			filetype_includes[filetype] = aliases
-		end
-	end
-	filetype_mapping_fp:close()
-end
-
-
-local function copy_helper(args)
-	return args[1]
-end
-
-local function cp(num)
-	return f(copy_helper, num)
-end
-
-local function ft_func(num)
-	local filetypes = vim.split(vim.bo.filetype, ".", true)
-	local visited_filetypes = {}
-	for _, filetype in ipairs(filetypes) do
-		visited_filetypes[filetype] = true
-	end
-	for _, filetype in ipairs(filetypes) do
-		if filetype_includes[filetype] ~= nil then
-			for _, included_filetype in ipairs(filetype_includes[filetype]) do
-				if visited_filetypes[included_filetype] == nil then
-					visited_filetypes[included_filetype] = true
-					table.insert(filetypes, included_filetype)
-				end
-			end
-		end
-	end
-	return filetypes
-end
-
-local load_ft_func = require("luasnip.extras.filetype_functions").extend_load_ft(filetype_includes)
-
-return {
-	cp = cp,
-	ft_func = ft_func,
-	load_ft_func = load_ft_func,
-}
-"""
 
 logging.config.dictConfig(LOG_CONFIG)
 logger = logging.getLogger(__name__)
@@ -345,6 +280,7 @@ def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = 
 			case LSInsertNode():
 				if token.children:
 					dynamic_node_content = render_tokens(token.children, at_line_start=False)
+					print(dynamic_node_content)
 					snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{{dynamic_node_content}}}) end)')
 				else:
 					snippet_body.write(f'i({token.number})')
@@ -410,9 +346,6 @@ def main():
 
 		snippet_body = render_tokens(tokens, indent=2)
 		snippet_code.append(f'\ts({{trig = {escape_lua_string(snippet.trigger)}, descr = {escape_lua_string(snippet.description)}}}, {{{snippet_body}\n\t}}),\n')
-
-	with open('snip_utils.lua', 'w') as fp:
-		fp.write(SNIP_UTILS)
 
 	with open(f'{args.filetype}.lua', 'w') as fp:
 		fp.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py\n\n')
