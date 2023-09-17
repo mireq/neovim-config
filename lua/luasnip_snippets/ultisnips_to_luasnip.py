@@ -242,7 +242,7 @@ def do_tokenize(parent, text, allowed_tokens_in_text, allowed_tokens_in_tabstops
 	return tokens
 
 
-def transfrorm_tokens(tokens, lines):
+def transform_tokens(tokens, lines):
 	token_list = []
 	insert_nodes = {}
 
@@ -251,6 +251,7 @@ def transfrorm_tokens(tokens, lines):
 		token_list.extend(get_text_nodes_between(lines, previous_token_end, token.start))
 		match token:
 			case TabStopToken():
+				print(token.child_tokens)
 				node = LSInsertNode(token.number, token.initial_text)
 				insert_nodes.setdefault(token.number, node)
 				token_list.append(node)
@@ -296,7 +297,7 @@ def parse_snippet(snippet):
 	if snippet.trigger == 'class':
 		#tokens = tokenize(snippet._value, 0, Position(0, 0), snipmate_parsing.__ALLOWED_TOKENS)
 		print(list(tokens))
-		print(transfrorm_tokens(tokens, lines))
+		print(transform_tokens(tokens, lines))
 		print(snippet._value)
 
 	#if snippet.trigger == 'pac':
@@ -306,7 +307,7 @@ def parse_snippet(snippet):
 	#	print(subtokens)
 
 
-	return transfrorm_tokens(tokens, lines)
+	return transform_tokens(tokens, lines)
 
 
 def render_tokens(tokens: List[LSToken]) -> str:
