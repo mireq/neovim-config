@@ -181,14 +181,14 @@ class LSTextNode(LSToken):
 
 
 class LSInsertNode(LSToken):
-	__slots__ = ['number', 'default']
+	__slots__ = ['number', 'children']
 
-	def __init__(self, number, default=''):
+	def __init__(self, number, children=[]):
 		self.number = number
-		self.default = default
+		self.children = children
 
 	def __repr__(self):
-		return f'{self.__class__.__name__}({self.number!r}, {self.default!r})'
+		return f'{self.__class__.__name__}({self.number!r}, {self.children!r})'
 
 
 class LSCopyNode(LSToken):
@@ -201,8 +201,15 @@ class LSCopyNode(LSToken):
 		return f'{self.__class__.__name__}({self.number})'
 
 
-class LSInsertOrCopyNode_(LSInsertNode):
-	pass
+class LSInsertOrCopyNode_(LSToken):
+	__slots__ = ['number', 'children']
+
+	def __init__(self, number, children=[]):
+		self.number = number
+		self.children = children
+
+	def __repr__(self):
+		return f'{self.__class__.__name__}({self.number!r}, {self.children!r})'
 
 
 def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Optional[Tuple[int, int]]):
@@ -234,11 +241,16 @@ def do_tokenize(parent, text, allowed_tokens_in_text, allowed_tokens_in_tabstops
 	for token in tokens:
 		if isinstance(token, TabStopToken):
 			token.child_tokens = do_tokenize(token, token.initial_text, allowed_tokens_in_text, allowed_tokens_in_tabstops, token_to_textobject)
+			parent_start = token.start
+			for child in token.child_tokens:
+				child.start -= parent_start
+				child.end -= parent_start
 		else:
 			klass = token_to_textobject.get(token.__class__, None)
 			if klass is not None:
-				print(klass)
+				#print(klass)
 				#text_object = klass(parent, token)
+				pass
 	return tokens
 
 
@@ -251,8 +263,9 @@ def transform_tokens(tokens, lines):
 		token_list.extend(get_text_nodes_between(lines, previous_token_end, token.start))
 		match token:
 			case TabStopToken():
-				print(token.child_tokens)
-				node = LSInsertNode(token.number, token.initial_text)
+				child_lines = token.initial_text.splitlines(keepends=True) or ['']
+				child_tokens = transform_tokens(token.child_tokens, child_lines)
+				node = LSInsertNode(token.number, child_tokens)
 				insert_nodes.setdefault(token.number, node)
 				token_list.append(node)
 			case MirrorToken():
@@ -267,15 +280,19 @@ def transform_tokens(tokens, lines):
 		previous_token_end = token.end
 	token_list.extend(get_text_nodes_between(lines, previous_token_end, None))
 
-	insert_tokens = set(insert_nodes.values())
+	insert_tokens = set(token.number for token in insert_nodes.values())
 	def finalize_token(token):
-		if isinstance(token, LSInsertOrCopyNode_):
-			if token in insert_tokens:
-				return LSInsertNode(token.number, token.default)
+		if isinstance(token, LSInsertNode):
+			token = LSInsertNode(token.number, token.children)
+			insert_tokens.add(token.number)
+		elif isinstance(token, LSInsertOrCopyNode_):
+			if token.number in insert_tokens:
+				token = LSCopyNode(token.number)
 			else:
-				return LSCopyNode(token.number)
-		elif isinstance(token, LSInsertNode):
-			return LSInsertNode(token.number, token.default)
+				token = LSInsertNode(token.number, token.children)
+				insert_tokens.add(token.number)
+		if isinstance(token, LSInsertNode):
+			token.children = [finalize_token(child) for child in token.children]
 		return token
 
 	# replace zero tokens and copy or insert tokens
@@ -294,11 +311,11 @@ def parse_snippet(snippet):
 	else:
 		tokens = do_tokenize(None, snippet._value, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing._TOKEN_TO_TEXTOBJECT)
 
-	if snippet.trigger == 'class':
+	if snippet.trigger == 'forr':
 		#tokens = tokenize(snippet._value, 0, Position(0, 0), snipmate_parsing.__ALLOWED_TOKENS)
-		print(list(tokens))
-		print(transform_tokens(tokens, lines))
-		print(snippet._value)
+		#print(transform_tokens(tokens, lines))
+		#print(snippet._value)
+		pass
 
 	#if snippet.trigger == 'pac':
 	#	tokens = list(tokens)
@@ -310,14 +327,13 @@ def parse_snippet(snippet):
 	return transform_tokens(tokens, lines)
 
 
-def render_tokens(tokens: List[LSToken]) -> str:
+def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = True) -> str:
 	snippet_body = StringIO()
-	at_line_start = True
 	num_tokens = len(tokens)
 	for i, token in enumerate(tokens):
 		last_token = i == num_tokens - 1
 		if at_line_start:
-			snippet_body.write('\n\t\t')
+			snippet_body.write('\n' + ('\t' * indent))
 			at_line_start = False
 		match token:
 			case LSTextNode():
@@ -327,8 +343,9 @@ def render_tokens(tokens: List[LSToken]) -> str:
 				else:
 					snippet_body.write(f't{escape_lua_string(token.text)}')
 			case LSInsertNode():
-				if token.default:
-					snippet_body.write(f'i({token.number}, {escape_lua_string(token.default)})')
+				if token.children:
+					dynamic_node_content = render_tokens(token.children, at_line_start=False)
+					snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{{dynamic_node_content}}}) end)')
 				else:
 					snippet_body.write(f'i({token.number})')
 			case LSCopyNode():
@@ -369,6 +386,9 @@ def main():
 	included_filetypes = set()
 
 	for snippet in snippets:
+		if snippet.trigger != 'forr':
+			continue
+
 		filetype = snippet.location.rsplit(':', 1)[0].split('/')[-1].rsplit('.', 1)[0]
 
 		if filetype != args.filetype:
@@ -388,7 +408,7 @@ def main():
 			logger.exception("Parsing error of snippet: %s", snippet.trigger)
 			continue
 
-		snippet_body = render_tokens(tokens)
+		snippet_body = render_tokens(tokens, indent=2)
 		snippet_code.append(f'\ts({{trig = {escape_lua_string(snippet.trigger)}, descr = {escape_lua_string(snippet.description)}}}, {{{snippet_body}\n\t}}),\n')
 
 	with open('snip_utils.lua', 'w') as fp:
