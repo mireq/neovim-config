@@ -229,7 +229,7 @@ def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Option
 
 
 def do_tokenize(parent, text, allowed_tokens_in_text, allowed_tokens_in_tabstops, token_to_textobject):
-	allowed_tokens = allowed_tokens_in_tabstops if parent else allowed_tokens_in_tabstops
+	allowed_tokens = allowed_tokens_in_tabstops if parent else allowed_tokens_in_text
 	tokens = list(tokenize(text, '', Position(0, 0) if parent is None else parent.start, allowed_tokens))
 	for token in tokens:
 		if isinstance(token, TabStopToken):
@@ -252,7 +252,6 @@ def transfrorm_tokens(tokens, lines):
 		token_list.extend(get_text_nodes_between(lines, previous_token_end, token.start))
 		match token:
 			case TabStopToken():
-				print(token.child_tokens)
 				node = LSInsertNode(token.number, token.initial_text)
 				insert_nodes.setdefault(token.number, node)
 				token_list.append(node)
@@ -290,12 +289,19 @@ def transfrorm_tokens(tokens, lines):
 
 def parse_snippet(snippet):
 	snippet_text = snippet._value
+	lines = snippet_text.splitlines(keepends=True)
 	instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
+
 	if isinstance(snippet, SnipMateSnippetDefinition):
 		tokens = do_tokenize(None, snippet._value, snipmate_parsing.__ALLOWED_TOKENS, snipmate_parsing.__ALLOWED_TOKENS_IN_TABSTOPS, snipmate_parsing._TOKEN_TO_TEXTOBJECT)
 	else:
 		tokens = do_tokenize(None, snippet._value, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing._TOKEN_TO_TEXTOBJECT)
-	lines = snippet_text.splitlines(keepends=True)
+
+	if snippet.trigger == 'class':
+		#tokens = tokenize(snippet._value, 0, Position(0, 0), snipmate_parsing.__ALLOWED_TOKENS)
+		print(list(tokens))
+		print(transfrorm_tokens(tokens, lines))
+		print(snippet._value)
 
 	#if snippet.trigger == 'pac':
 	#	tokens = list(tokens)
