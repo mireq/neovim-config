@@ -262,6 +262,16 @@ def parse_snippet(snippet):
 	return transform_tokens(tokens, lines)
 
 
+def token_to_dynamic_text(token: LSToken):
+	match token:
+		case LSTextNode():
+			return escape_lua_string(token.text)
+		case LSCopyNode():
+			return f'args[1]'
+		case _:
+			raise RuntimeError("Token not allowed: %s" % token)
+
+
 def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = True) -> str:
 	snippet_body = StringIO()
 	num_tokens = len(tokens)
@@ -279,9 +289,20 @@ def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = 
 					snippet_body.write(f't{escape_lua_string(token.text)}')
 			case LSInsertNode():
 				if token.children:
-					dynamic_node_content = render_tokens(token.children, at_line_start=False)
-					print(dynamic_node_content)
-					snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{{dynamic_node_content}}}) end)')
+					#dynamic_node_content = render_tokens(token.children, at_line_start=False)
+					#print(dynamic_node_content)
+					#snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{{dynamic_node_content}}}) end)')
+					is_simple = all(isinstance(child, LSTextNode) for child in token.children)
+					if is_simple:
+						text_content = ''.join(child.text for child in token.children)
+						if '\n' in text_content:
+							text_content = ', '.join(escape_lua_string(line) for line in text_content.split('\n'))
+							snippet_body.write(f'i({token.number}, {{{text_content}}})')
+						else:
+							snippet_body.write(f'i({token.number}, {escape_lua_string(text_content)})')
+					else:
+						dynamic_node_content = ' .. '.join(token_to_dynamic_text(child) for child in token.children)
+						snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{ i(1, {{{dynamic_node_content}}}) }}) end, {{1}})')
 				else:
 					snippet_body.write(f'i({token.number})')
 			case LSCopyNode():
