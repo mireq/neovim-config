@@ -234,7 +234,6 @@ def do_tokenize(parent, text, allowed_tokens_in_text, allowed_tokens_in_tabstops
 	for token in tokens:
 		if isinstance(token, TabStopToken):
 			token.child_tokens = do_tokenize(token, token.initial_text, allowed_tokens_in_text, allowed_tokens_in_tabstops, token_to_textobject)
-			print(token.child_tokens)
 		else:
 			klass = token_to_textobject.get(token.__class__, None)
 			if klass is not None:
@@ -243,25 +242,8 @@ def do_tokenize(parent, text, allowed_tokens_in_text, allowed_tokens_in_tabstops
 	return tokens
 
 
-def parse_snippet(snippet):
-	snippet_text = snippet._value
-	instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
-	if isinstance(snippet, SnipMateSnippetDefinition):
-		tokens = tokenize(snippet._value, 0, Position(0, 0), ulti_snips_parsing.__ALLOWED_TOKENS)
-		do_tokenize(None, snippet._value, snipmate_parsing.__ALLOWED_TOKENS, snipmate_parsing.__ALLOWED_TOKENS_IN_TABSTOPS, snipmate_parsing._TOKEN_TO_TEXTOBJECT)
-	else:
-		tokens = tokenize(snippet._value, 0, Position(0, 0), snipmate_parsing.__ALLOWED_TOKENS)
-		do_tokenize(None, snippet._value, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing._TOKEN_TO_TEXTOBJECT)
-	lines = snippet_text.splitlines(keepends=True)
+def transfrorm_tokens(tokens, lines):
 	token_list = []
-
-	#if snippet.trigger == 'pac':
-	#	tokens = list(tokens)
-	#	tok = tokens[0]
-	#	subtokens = list(tokenize(tok.initial_text, '', tok.start, __ALLOWED_TOKENS))
-	#	print(subtokens)
-
-
 	insert_nodes = {}
 	last_token_number = 0
 
@@ -270,6 +252,7 @@ def parse_snippet(snippet):
 		token_list.extend(get_text_nodes_between(lines, previous_token_end, token.start))
 		match token:
 			case TabStopToken():
+				print(token.child_tokens)
 				node = LSInsertNode(token.number, token.initial_text)
 				insert_nodes.setdefault(token.number, node)
 				token_list.append(node)
@@ -302,6 +285,25 @@ def parse_snippet(snippet):
 	token_list = [transform_token(token) for token in token_list]
 
 	return token_list
+
+
+def parse_snippet(snippet):
+	snippet_text = snippet._value
+	instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
+	if isinstance(snippet, SnipMateSnippetDefinition):
+		tokens = do_tokenize(None, snippet._value, snipmate_parsing.__ALLOWED_TOKENS, snipmate_parsing.__ALLOWED_TOKENS_IN_TABSTOPS, snipmate_parsing._TOKEN_TO_TEXTOBJECT)
+	else:
+		tokens = do_tokenize(None, snippet._value, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing._TOKEN_TO_TEXTOBJECT)
+	lines = snippet_text.splitlines(keepends=True)
+
+	#if snippet.trigger == 'pac':
+	#	tokens = list(tokens)
+	#	tok = tokens[0]
+	#	subtokens = list(tokenize(tok.initial_text, '', tok.start, __ALLOWED_TOKENS))
+	#	print(subtokens)
+
+
+	return transfrorm_tokens(tokens, lines)
 
 
 def render_tokens(tokens: List[LSToken]) -> str:
