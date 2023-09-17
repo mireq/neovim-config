@@ -245,7 +245,6 @@ def do_tokenize(parent, text, allowed_tokens_in_text, allowed_tokens_in_tabstops
 def transfrorm_tokens(tokens, lines):
 	token_list = []
 	insert_nodes = {}
-	last_token_number = 0
 
 	previous_token_end = (0, 0)
 	for token in tokens:
@@ -255,12 +254,10 @@ def transfrorm_tokens(tokens, lines):
 				node = LSInsertNode(token.number, token.initial_text)
 				insert_nodes.setdefault(token.number, node)
 				token_list.append(node)
-				last_token_number = max(token.number, last_token_number)
 			case MirrorToken():
 				node = LSInsertOrCopyNode_(token.number)
 				insert_nodes.setdefault(token.number, node)
 				token_list.append(node)
-				last_token_number = max(token.number, last_token_number)
 			case EndOfTextToken():
 				pass
 			case _:
@@ -272,13 +269,12 @@ def transfrorm_tokens(tokens, lines):
 	insert_tokens = set(insert_nodes.values())
 	def finalize_token(token):
 		if isinstance(token, LSInsertOrCopyNode_):
-			number = token.number or (last_token_number + 1)
 			if token in insert_tokens:
-				return LSInsertNode(number, token.default)
+				return LSInsertNode(token.number, token.default)
 			else:
-				return LSCopyNode(number)
+				return LSCopyNode(token.number)
 		elif isinstance(token, LSInsertNode):
-			return LSInsertNode(token.number or (last_token_number + 1), token.default)
+			return LSInsertNode(token.number, token.default)
 		return token
 
 	# replace zero tokens and copy or insert tokens
