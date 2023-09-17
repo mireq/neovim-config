@@ -265,7 +265,8 @@ def transfrorm_tokens(tokens, lines):
 			case EndOfTextToken():
 				pass
 			case _:
-				raise RuntimeError("Unknown token: %s" % token)
+				snippet_text = '\n'.join(lines)
+				raise RuntimeError(f"Unknown token {token} in snippet: \n{snippet_text}")
 		previous_token_end = token.end
 	token_list.extend(get_text_nodes_between(lines, previous_token_end, None))
 
