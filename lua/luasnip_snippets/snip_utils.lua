@@ -32,8 +32,29 @@ local function copy_helper(args)
 	return args[1]
 end
 
+-- Copy node
 local function cp(num)
 	return f(copy_helper, num)
+end
+
+-- Join text
+local function jt(args)
+	local parts = {}
+	for i, part in ipairs(args) do
+		if type(part) == 'table' then
+			part = table.concat(part, '\n')
+		end
+		table.insert(parts, part)
+	end
+
+	local text = table.concat(parts)
+	local lines = {}
+
+	for line in text:gmatch("[^\r\n]+") do
+		table.insert(lines, line)
+	end
+
+	return lines
 end
 
 local function ft_func(num)
@@ -59,6 +80,7 @@ local load_ft_func = require("luasnip.extras.filetype_functions").extend_load_ft
 
 return {
 	cp = cp,
+	jt = jt,
 	ft_func = ft_func,
 	load_ft_func = load_ft_func,
 }
