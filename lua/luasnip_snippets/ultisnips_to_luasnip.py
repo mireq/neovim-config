@@ -264,12 +264,12 @@ def parse_snippet(snippet):
 	return transform_tokens(tokens, lines)
 
 
-def token_to_dynamic_text(token: LSToken):
+def token_to_dynamic_text(token: LSToken, related_nodes: dict[int, int]):
 	match token:
 		case LSTextNode():
 			return escape_lua_string(token.text)
 		case LSCopyNode():
-			return f'args[1]'
+			return f'args[{related_nodes[token.number]}]'
 		case _:
 			raise RuntimeError("Token not allowed: %s" % token)
 
@@ -303,8 +303,16 @@ def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = 
 						else:
 							snippet_body.write(f'i({token.number}, {escape_lua_string(text_content)})')
 					else:
-						dynamic_node_content = ', '.join(token_to_dynamic_text(child) for child in token.children)
-						snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}})) }}) end, {{1}})')
+						related_nodes = {}
+						for child in token.children:
+							if isinstance(child, LSCopyNode):
+								if not child.number in related_nodes:
+									related_nodes[child.number] = len(related_nodes) + 1
+						dynamic_node_content = ', '.join(token_to_dynamic_text(child, related_nodes) for child in token.children)
+						related_nodes_code = ''
+						if related_nodes:
+							related_nodes_code = f', {{{", ".join(str(v) for v in related_nodes.keys())}}}'
+						snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}})) }}) end{related_nodes_code})')
 				else:
 					snippet_body.write(f'i({token.number})')
 			case LSCopyNode():
