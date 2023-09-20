@@ -770,6 +770,9 @@ require("lazy").setup({
 				load_ft_func = require('luasnip_snippets.snip_utils').load_ft_func,
 				ft_func = require('luasnip_snippets.snip_utils').ft_func,
 			})
+			ls.config.set_config({
+				store_selection_keys = '<c-x>',
+			})
 			vim.keymap.set({"i"}, "<Tab>", function() if ls.expand_or_jumpable() then ls.expand_or_jump() else vim.api.nvim_input('<C-V><Tab>') end end, {silent = true})
 			--vim.keymap.set({"i", "s"}, "<Tab>", function() ls.jump(1) end, {silent = true})
 			--vim.cmd("snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>")
