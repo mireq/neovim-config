@@ -76,11 +76,18 @@ local function ft_func(num)
 	return filetypes
 end
 
+local function vis()
+	return f(function(_, snip)
+		return snip.env.TM_SELECTED_TEXT[1] or {}
+	end, {})
+end
+
 local load_ft_func = require("luasnip.extras.filetype_functions").extend_load_ft(filetype_includes)
 
 return {
 	cp = cp,
 	jt = jt,
+	vis = vis,
 	ft_func = ft_func,
 	load_ft_func = load_ft_func,
 }
