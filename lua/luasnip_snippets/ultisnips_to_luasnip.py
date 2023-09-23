@@ -16,7 +16,7 @@ vim.command('Lazy load vim-snippets')
 
 from UltiSnips import UltiSnips_Manager
 from UltiSnips.snippet.parsing.base import tokenize_snippet_text
-from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken
+from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken
 from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing
 from UltiSnips.snippet.parsing import snipmate as snipmate_parsing
 from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
@@ -149,6 +149,14 @@ class LSInsertOrCopyNode_(LSToken):
 		return f'{self.__class__.__name__}({self.number!r}, {self.children!r})'
 
 
+class LSVisualNode(LSToken):
+	def __init__(self):
+		pass
+
+	def __repr__(self):
+		return f'{self.__class__.__name__}()'
+
+
 def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Optional[Tuple[int, int]]):
 	if end is None:
 		end = (len(input) - 1, len(input[-1]) - 1)
@@ -209,6 +217,8 @@ def transform_tokens(tokens, lines):
 				node = LSInsertOrCopyNode_(token.number)
 				insert_nodes.setdefault(token.number, node)
 				token_list.append(node)
+			case VisualToken():
+				token_list.append(LSVisualNode())
 			case EndOfTextToken():
 				pass
 			case _:
@@ -270,6 +280,8 @@ def token_to_dynamic_text(token: LSToken, related_nodes: dict[int, int]):
 			return escape_lua_string(token.text)
 		case LSCopyNode():
 			return f'args[{related_nodes[token.number]}]'
+		case LSVisualNode():
+			return 'snip.env.TM_SELECTED_TEXT or {}'
 		case _:
 			raise RuntimeError("Token not allowed: %s" % token)
 
@@ -312,7 +324,7 @@ def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = 
 						related_nodes_code = ''
 						if related_nodes:
 							related_nodes_code = f', {{{", ".join(str(v) for v in related_nodes.keys())}}}'
-						snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}})) }}) end{related_nodes_code})')
+						snippet_body.write(f'd({token.number}, function(args, snip) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}})) }}) end{related_nodes_code})')
 				else:
 					snippet_body.write(f'i({token.number})')
 			case LSCopyNode():
@@ -353,7 +365,7 @@ def main():
 	included_filetypes = set()
 
 	for snippet in snippets:
-		if snippet.trigger != 'forr':
+		if snippet.trigger != 'try':
 			continue
 
 		filetype = snippet.location.rsplit(':', 1)[0].split('/')[-1].rsplit('.', 1)[0]
