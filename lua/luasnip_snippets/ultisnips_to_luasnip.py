@@ -2,25 +2,24 @@
 # -*- coding: utf-8 -*-
 import argparse
 import logging.config
+import operator
 import re
 import sys
-from io import StringIO
 from collections import namedtuple
 from datetime import datetime
+from io import StringIO
 from pathlib import Path
 from typing import List, Tuple, Optional
 
 import vim
+from UltiSnips import UltiSnips_Manager
+from UltiSnips.snippet.definition.snipmate import SnipMateSnippetDefinition
+from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing, snipmate as snipmate_parsing
+from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken
+
+
 vim.command('Lazy load ultisnips')
 vim.command('Lazy load vim-snippets')
-
-from UltiSnips import UltiSnips_Manager
-from UltiSnips.snippet.parsing.base import tokenize_snippet_text
-from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken
-from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing
-from UltiSnips.snippet.parsing import snipmate as snipmate_parsing
-from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
-from UltiSnips.snippet.definition.snipmate import SnipMateSnippetDefinition
 
 
 SUPPORTED_OPTS = {'w'}
@@ -81,6 +80,7 @@ logger = logging.getLogger(__name__)
 sys.path.append(str(Path.home().joinpath('.local/share/nvim/lazy/ultisnips/pythonx')))
 VisualContent = namedtuple('VisualContent', ['text', 'mode'])
 LUA_SPECIAL_CHAR_RX = re.compile(r'("|\'|\t|\n)')
+INDENT_RE = re.compile(r'^(\s*)')
 
 
 def escape_char(match):
@@ -281,7 +281,7 @@ def token_to_dynamic_text(token: LSToken, related_nodes: dict[int, int]):
 		case LSCopyNode():
 			return f'args[{related_nodes[token.number]}]'
 		case LSVisualNode():
-			return 'snip.env.TM_SELECTED_TEXT or {}'
+			return 'snip.env.LS_SELECT_DEDENT or {}'
 		case _:
 			raise RuntimeError("Token not allowed: %s" % token)
 
@@ -289,6 +289,7 @@ def token_to_dynamic_text(token: LSToken, related_nodes: dict[int, int]):
 def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = True) -> str:
 	snippet_body = StringIO()
 	num_tokens = len(tokens)
+	accumulated_text = ['\n']
 	for i, token in enumerate(tokens):
 		last_token = i == num_tokens - 1
 		if at_line_start:
@@ -296,6 +297,7 @@ def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = 
 			at_line_start = False
 		match token:
 			case LSTextNode():
+				accumulated_text.append(token.text)
 				if token.text == '\n':
 					at_line_start = True
 					snippet_body.write('t{"", ""}')
@@ -306,6 +308,9 @@ def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = 
 					#dynamic_node_content = render_tokens(token.children, at_line_start=False)
 					#print(dynamic_node_content)
 					#snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{{dynamic_node_content}}}) end)')
+
+					node_indent = INDENT_RE.match(''.join(accumulated_text[-operator.indexOf(reversed(accumulated_text), '\n'):])).group(1)
+
 					is_simple = all(isinstance(child, LSTextNode) for child in token.children)
 					if is_simple:
 						text_content = ''.join(child.text for child in token.children)
@@ -324,7 +329,7 @@ def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = 
 						related_nodes_code = ''
 						if related_nodes:
 							related_nodes_code = f', {{{", ".join(str(v) for v in related_nodes.keys())}}}'
-						snippet_body.write(f'd({token.number}, function(args, snip) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}})) }}) end{related_nodes_code})')
+						snippet_body.write(f'd({token.number}, function(args, snip) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}}, {escape_lua_string(node_indent)})) }}) end{related_nodes_code})')
 				else:
 					snippet_body.write(f'i({token.number})')
 			case LSCopyNode():

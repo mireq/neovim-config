@@ -1,4 +1,5 @@
 local ls = require("luasnip")
+local util = require("luasnip.util.util")
 local f = ls.function_node
 local rundir = debug.getinfo(1).source:match("@?(.*/)")
 
@@ -38,7 +39,7 @@ local function cp(num)
 end
 
 -- Join text
-local function jt(args)
+local function jt(args, indent)
 	local parts = {}
 	for i, part in ipairs(args) do
 		if type(part) == 'table' then
@@ -50,8 +51,14 @@ local function jt(args)
 	local text = table.concat(parts)
 	local lines = {}
 
+	local line_num = 1
 	for line in text:gmatch("[^\r\n]+") do
-		table.insert(lines, line)
+		if line_num == 1 then
+			table.insert(lines, line)
+		else
+			table.insert(lines, indent .. line)
+		end
+		line_num = line_num + 1
 	end
 
 	return lines
