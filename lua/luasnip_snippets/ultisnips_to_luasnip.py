@@ -1,25 +1,27 @@
 #!/usr/bin/env -S nvim --headless -n -c "pyfile %" -c "q!"
 # -*- coding: utf-8 -*-
-import argparse
-import logging.config
-import operator
-import re
-import sys
 from collections import namedtuple
 from datetime import datetime
 from io import StringIO
 from pathlib import Path
 from typing import List, Tuple, Optional
+import argparse
+import logging.config
+import operator
+import re
+import sys
 
 import vim
-from UltiSnips import UltiSnips_Manager
-from UltiSnips.snippet.definition.snipmate import SnipMateSnippetDefinition
-from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing, snipmate as snipmate_parsing
-from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken
-
-
 vim.command('Lazy load ultisnips')
 vim.command('Lazy load vim-snippets')
+
+from UltiSnips import UltiSnips_Manager
+from UltiSnips.snippet.parsing.base import tokenize_snippet_text
+from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken
+from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing
+from UltiSnips.snippet.parsing import snipmate as snipmate_parsing
+from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
+from UltiSnips.snippet.definition.snipmate import SnipMateSnippetDefinition
 
 
 SUPPORTED_OPTS = {'w'}
@@ -370,9 +372,6 @@ def main():
 	included_filetypes = set()
 
 	for snippet in snippets:
-		if snippet.trigger != 'try':
-			continue
-
 		filetype = snippet.location.rsplit(':', 1)[0].split('/')[-1].rsplit('.', 1)[0]
 
 		if filetype != args.filetype:
