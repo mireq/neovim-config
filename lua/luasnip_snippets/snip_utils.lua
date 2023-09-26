@@ -1,6 +1,7 @@
 local ls = require("luasnip")
 local util = require("luasnip.util.util")
 local f = ls.function_node
+local t = ls.text_node
 local rundir = debug.getinfo(1).source:match("@?(.*/)")
 
 
@@ -64,6 +65,9 @@ local function jt(args, indent)
 	return lines
 end
 
+-- New line
+local nl = t{"", ""}
+
 local function ft_func(num)
 	local filetypes = vim.split(vim.bo.filetype, ".", true)
 	local visited_filetypes = {}
@@ -94,6 +98,7 @@ local load_ft_func = require("luasnip.extras.filetype_functions").extend_load_ft
 return {
 	cp = cp,
 	jt = jt,
+	nl = nl,
 	vis = vis,
 	ft_func = ft_func,
 	load_ft_func = load_ft_func,
