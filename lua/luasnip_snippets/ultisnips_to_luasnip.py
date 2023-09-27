@@ -72,6 +72,7 @@ local k = require("luasnip.nodes.key_indexer").new_key
 local su = require("luasnip_snippets.snip_utils")
 local cp = su.cp
 local jt = su.jt
+local nl = su.nl
 
 """
 
@@ -302,7 +303,7 @@ def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = 
 				accumulated_text.append(token.text)
 				if token.text == '\n':
 					at_line_start = True
-					snippet_body.write('t{"", ""}')
+					snippet_body.write('nl')
 				else:
 					snippet_body.write(f't{escape_lua_string(token.text)}')
 			case LSInsertNode():
