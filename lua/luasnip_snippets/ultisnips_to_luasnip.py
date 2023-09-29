@@ -303,7 +303,7 @@ def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = 
 				accumulated_text.append(token.text)
 				if token.text == '\n':
 					at_line_start = True
-					snippet_body.write('nl')
+					snippet_body.write('nl()')
 				else:
 					snippet_body.write(f't{escape_lua_string(token.text)}')
 			case LSInsertNode():

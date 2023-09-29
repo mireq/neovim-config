@@ -66,7 +66,7 @@ local function jt(args, indent)
 end
 
 -- New line
-local nl = t{"", ""}
+local nl = function() return t{"", ""} end
 
 local function ft_func(num)
 	local filetypes = vim.split(vim.bo.filetype, ".", true)
