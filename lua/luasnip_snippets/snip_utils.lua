@@ -93,12 +93,77 @@ local function vis()
 	end, {})
 end
 
+local function split_at_whitespace(text)
+	local words = {}
+	local position = 1
+	for space in string.gmatch(text, '()%s') do
+		table.insert(words, string.sub(text, position, space - 1))
+		position = space + 1
+	end
+	table.insert(words, string.sub(text, position))
+
+	return words
+end
+
+function arrays_equal(a, b)
+	if #a ~= #b then
+		return false
+	end
+
+	for i = 1, #a do
+		if a[i] ~= b[i] then
+			return false
+		end
+	end
+
+	return true
+end
+
+function str_strip(s, chars)
+	return string.gsub(s, '^[%s]*(.-)[%s]*$', '%1')
+end
+
+
+local function words_for_line(trigger, before, num_words)
+	-- Gets the final 'num_words' words from 'before'.
+	-- If num_words is nil, then use the number of words in 'trigger'.
+	if num_words == nil then
+		num_words = #split_at_whitespace(trigger)
+	end
+
+	word_list = split_at_whitespace(before)
+	if #word_list <= num_words then
+		return str_strip(before)
+	else
+		
+	end
+end
+
+
+local function trig_engine(opts)
+	local function engine(trigger)
+		local function matcher(line_to_cursor, trigger)
+
+			if opts:find('w') ~= nil then
+				local trigger_words = split_at_whitespace(trigger)
+				local words = words_for_line(trigger, line_to_cursor)
+				print(words)
+			end
+
+			return nil
+		end
+		return matcher
+	end
+	return engine
+end
+
 local load_ft_func = require("luasnip.extras.filetype_functions").extend_load_ft(filetype_includes)
 
 return {
 	cp = cp,
 	jt = jt,
 	nl = nl,
+	te = trig_engine,
 	vis = vis,
 	ft_func = ft_func,
 	load_ft_func = load_ft_func,
