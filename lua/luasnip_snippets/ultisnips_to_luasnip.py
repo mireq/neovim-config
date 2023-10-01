@@ -395,8 +395,9 @@ def main():
 		snippet_body = render_tokens(tokens, indent=2)
 		snippet_attrs = [f'trig = {escape_lua_string(snippet.trigger)}']
 		if snippet.description:
-			snippet_attrs.append(f'descr = {escape_lua_string(snippet.description)}}}')
-		snippet_code.append(f'\ts({{{", ".join(snippet_attrs)}, {{{snippet_body}\n\t}}),\n')
+			snippet_attrs.append(f'descr = {escape_lua_string(snippet.description)}')
+		snippet_attrs.append(f'priority = {snippet.priority}}}')
+		snippet_code.append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
 
 	with open(f'{args.filetype}.lua', 'w') as fp:
 		fp.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py\n\n')
