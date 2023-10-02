@@ -135,8 +135,21 @@ local function words_for_line(trigger, before, num_words)
 	if #word_list <= num_words then
 		return str_strip(before)
 	else
-		
+		before_words = before
+		for i = 1, num_words do
+			local left = before_words:reverse():find(word_list[i]:reverse())
+			if left then
+				before_words = before_words:sub(1, #word_list[i] - left)
+			end
+		end
+		return str_strip(before:sub(#before_words + 1))
 	end
+end
+
+
+local function is_keyword_char(char)
+	local is_keyword = vim.fn.search("\\<" .. char .. "\\>", "nw")
+	return is_keyword ~= 0
 end
 
 
@@ -147,7 +160,18 @@ local function trig_engine(opts)
 			if opts:find('w') ~= nil then
 				local trigger_words = split_at_whitespace(trigger)
 				local words = words_for_line(trigger, line_to_cursor)
-				print(words)
+				local words_len = #trigger
+				local words_prefix = string.sub(words, 1, -words_len - 1)
+				local words_suffix = string.sub(words, -words_len)
+				local match = words_suffix == trigger
+				if match and #words_prefix > 0 then
+					match = vim.fn.match(string.sub(words_prefix, -1), '\\k') == -1
+				end
+
+				if match then
+					local begin = #line_to_cursor - line_to_cursor:reverse():find(trigger:reverse()) - #trigger
+					return trigger, {begin, begin + #trigger}
+				end
 			end
 
 			return nil
