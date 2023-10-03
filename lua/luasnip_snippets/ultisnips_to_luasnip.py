@@ -73,6 +73,7 @@ local su = require("luasnip_snippets.snip_utils")
 local cp = su.cp
 local jt = su.jt
 local nl = su.nl
+local te = su.te
 
 """
 
@@ -396,7 +397,8 @@ def main():
 		snippet_attrs = [f'trig = {escape_lua_string(snippet.trigger)}']
 		if snippet.description:
 			snippet_attrs.append(f'descr = {escape_lua_string(snippet.description)}')
-		snippet_attrs.append(f'priority = {snippet.priority}}}')
+		snippet_attrs.append(f'priority = {snippet.priority}')
+		snippet_attrs.append(f'trigEngine = te({escape_lua_string(snippet._opts)})')
 		snippet_code.append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
 
 	with open(f'{args.filetype}.lua', 'w') as fp:
