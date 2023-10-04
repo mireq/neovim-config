@@ -1,6 +1,7 @@
 #!/usr/bin/env -S nvim --headless -n -c "pyfile %" -c "q!"
 # -*- coding: utf-8 -*-
-from collections import namedtuple
+from collections import namedtuple, defaultdict
+from dataclasses import dataclass
 from datetime import datetime
 from io import StringIO
 from pathlib import Path
@@ -99,6 +100,12 @@ def escape_char(match):
 
 def escape_lua_string(text: str) -> str:
 	return f'"{LUA_SPECIAL_CHAR_RX.sub(escape_char, text)}"'
+
+
+@dataclass
+class CompiledSnippet:
+	attributes: str
+	code: str
 
 
 class LSToken(object):
@@ -357,7 +364,7 @@ def main():
 
 	UltiSnips_Manager.get_buffer_filetypes = lambda: [args.filetype]
 	snippets = UltiSnips_Manager._snips("", True)
-	snippet_code = []
+	snippet_code = defaultdict(list)
 
 	filetype_mapping = {}
 	try:
@@ -399,13 +406,24 @@ def main():
 			snippet_attrs.append(f'descr = {escape_lua_string(snippet.description)}')
 		snippet_attrs.append(f'priority = {snippet.priority}')
 		snippet_attrs.append(f'trigEngine = te({escape_lua_string(snippet._opts)})')
-		snippet_code.append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
+		snippet_code[snippet.trigger].append(CompiledSnippet(
+			attributes=", ".join(snippet_attrs),
+			code=snippet_body
+		))
+		#snippet_code[snippet.trigger].append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
 
 	with open(f'{args.filetype}.lua', 'w') as fp:
 		fp.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py\n\n')
 		fp.write(FILE_HEADER)
 		fp.write(f'ls.add_snippets({escape_lua_string(args.filetype)}, {{\n')
-		fp.write(''.join(snippet_code))
+		for snippet_list in snippet_code.values():
+			if len(snippet_list) == 1:
+				compiled_snippet = snippet_list[0]
+				fp.write(f'\ts({{{compiled_snippet.attributes}}}, {{{compiled_snippet.code}\n\t}}),\n')
+			else:
+				# TODO: choice node
+				pass
+		#fp.write(''.join(snippet_code))
 		fp.write('})\n')
 
 	filetype_mapping.setdefault(args.filetype, [])
