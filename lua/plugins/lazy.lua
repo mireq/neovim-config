@@ -147,6 +147,15 @@ require("lazy").setup({
 				root_dir = lspconfig_util.root_pattern 'package.json',
 			}
 
+			local insert_mapping = cmp.mapping.preset.insert({
+				['<C-u>'] = cmp.mapping.scroll_docs(-4),
+				['<C-d>'] = cmp.mapping.scroll_docs(4),
+				['<C-Space>'] = cmp.mapping.complete(),
+				--['<C-e>'] = cmp.mapping.abort(),
+				--['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+			})
+			insert_mapping['<C-E>'] = nil
+
 			cmp.setup({
 				sources = cmp.config.sources(
 					{
@@ -197,13 +206,7 @@ require("lazy").setup({
 						side_padding = 0,
 					}
 				},
-				mapping = cmp.mapping.preset.insert({
-					['<C-u>'] = cmp.mapping.scroll_docs(-4),
-					['<C-d>'] = cmp.mapping.scroll_docs(4),
-					['<C-Space>'] = cmp.mapping.complete(),
-					['<C-e>'] = cmp.mapping.abort(),
-					--['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-				}),
+				mapping = insert_mapping,
 				formatting = {
 					fields = { "kind", "abbr", "menu" },
 					format = function(entry, vim_item)
