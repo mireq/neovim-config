@@ -102,7 +102,7 @@ def escape_lua_string(text: str) -> str:
 	return f'"{LUA_SPECIAL_CHAR_RX.sub(escape_char, text)}"'
 
 
-class LSToken(object):
+class LSNode(object):
 	__slots__ = []
 
 	def __repr__(self):
@@ -112,7 +112,7 @@ class LSToken(object):
 		return repr(self)
 
 
-class LSTextNode(LSToken):
+class LSTextNode(LSNode):
 	__slots__ = ['text']
 
 	def __init__(self, text):
@@ -122,7 +122,7 @@ class LSTextNode(LSToken):
 		return f'{self.__class__.__name__}({self.text!r})'
 
 
-class LSInsertNode(LSToken):
+class LSInsertNode(LSNode):
 	__slots__ = ['number', 'children']
 
 	def __init__(self, number, children=[]):
@@ -133,7 +133,7 @@ class LSInsertNode(LSToken):
 		return f'{self.__class__.__name__}({self.number!r}, {self.children!r})'
 
 
-class LSCopyNode(LSToken):
+class LSCopyNode(LSNode):
 	__slots__ = ['number', 'default']
 
 	def __init__(self, number, default=''):
@@ -143,7 +143,7 @@ class LSCopyNode(LSToken):
 		return f'{self.__class__.__name__}({self.number})'
 
 
-class LSInsertOrCopyNode_(LSToken):
+class LSInsertOrCopyNode_(LSNode):
 	__slots__ = ['number', 'children']
 
 	def __init__(self, number, children=[]):
@@ -154,7 +154,7 @@ class LSInsertOrCopyNode_(LSToken):
 		return f'{self.__class__.__name__}({self.number!r}, {self.children!r})'
 
 
-class LSVisualNode(LSToken):
+class LSVisualNode(LSNode):
 	def __init__(self):
 		pass
 
@@ -165,7 +165,7 @@ class LSVisualNode(LSToken):
 @dataclass
 class ParsedSnippet:
 	attributes: str
-	tokens: list[LSToken]
+	tokens: list[LSNode]
 
 	def get_code(self, indent: int, replace_zero_placeholders: bool = False) -> str:
 		tokens = self.tokens
@@ -173,7 +173,7 @@ class ParsedSnippet:
 			tokens = self.__replace_zero_placeholders(tokens)
 		return render_tokens(tokens, indent)
 
-	def __replace_zero_placeholders(self, tokens: list[LSToken]):
+	def __replace_zero_placeholders(self, tokens: list[LSNode]):
 		max_placeholder = 0
 		for token in tokens:
 			if isinstance(token, (LSInsertNode, LSCopyNode)):
@@ -299,7 +299,7 @@ def parse_snippet(snippet):
 	return transform_tokens(tokens, lines)
 
 
-def token_to_dynamic_text(token: LSToken, related_nodes: dict[int, int]):
+def token_to_dynamic_text(token: LSNode, related_nodes: dict[int, int]):
 	match token:
 		case LSTextNode():
 			return escape_lua_string(token.text)
@@ -311,7 +311,7 @@ def token_to_dynamic_text(token: LSToken, related_nodes: dict[int, int]):
 			raise RuntimeError("Token not allowed: %s" % token)
 
 
-def render_tokens(tokens: List[LSToken], indent: int = 0, at_line_start: bool = True) -> str:
+def render_tokens(tokens: List[LSNode], indent: int = 0, at_line_start: bool = True) -> str:
 	snippet_body = StringIO()
 	num_tokens = len(tokens)
 	accumulated_text = ['\n']
