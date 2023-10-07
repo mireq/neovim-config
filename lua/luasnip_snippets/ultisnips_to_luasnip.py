@@ -417,12 +417,14 @@ def main():
 		fp.write(FILE_HEADER)
 		fp.write(f'ls.add_snippets({escape_lua_string(args.filetype)}, {{\n')
 		for snippet_list in snippet_code.values():
+			compiled_snippet = snippet_list[0]
 			if len(snippet_list) == 1:
-				compiled_snippet = snippet_list[0]
 				fp.write(f'\ts({{{compiled_snippet.attributes}}}, {{{compiled_snippet.code}\n\t}}),\n')
 			else:
-				# TODO: choice node
-				pass
+				snippet_choices = []
+				for compiled_snippet in snippet_list:
+					snippet_choices.append(f'{{{compiled_snippet.code}}}\n')
+				fp.write(f'\ts({{{compiled_snippet.attributes}}}, c(1, {{\n\t{",".join(snippet_choices)}\n\t}})),\n')
 		#fp.write(''.join(snippet_code))
 		fp.write('})\n')
 
