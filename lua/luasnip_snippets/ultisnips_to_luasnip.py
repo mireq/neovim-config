@@ -102,6 +102,11 @@ def escape_lua_string(text: str) -> str:
 	return f'"{LUA_SPECIAL_CHAR_RX.sub(escape_char, text)}"'
 
 
+def add_indent(text: str, count: int) -> str:
+	indent = '\t' * count
+	return ''.join([f'{indent}{line}' for line in text.splitlines(keepends=True)])
+
+
 @dataclass
 class CompiledSnippet:
 	attributes: str
@@ -423,8 +428,8 @@ def main():
 			else:
 				snippet_choices = []
 				for compiled_snippet in snippet_list:
-					snippet_choices.append(f'{{{compiled_snippet.code}}}\n')
-				fp.write(f'\ts({{{compiled_snippet.attributes}}}, c(1, {{\n\t{",".join(snippet_choices)}\n\t}})),\n')
+					snippet_choices.append(f'\t{{{compiled_snippet.code}\n\t}},\n')
+				fp.write(f'\ts({{{compiled_snippet.attributes}}}, c(1, {{\n{add_indent("".join(snippet_choices), 1)}\n\t}})),\n')
 		#fp.write(''.join(snippet_code))
 		fp.write('})\n')
 
