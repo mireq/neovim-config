@@ -167,8 +167,19 @@ class ParsedSnippet:
 	attributes: str
 	tokens: list[LSToken]
 
-	def get_code(self, indent: int) -> str:
-		return render_tokens(self.tokens, indent)
+	def get_code(self, indent: int, replace_zero_placeholders: bool = False) -> str:
+		tokens = self.tokens
+		if replace_zero_placeholders:
+			tokens = self.__replace_zero_placeholders(tokens)
+		return render_tokens(tokens, indent)
+
+	def __replace_zero_placeholders(self, tokens: list[LSToken]):
+		max_placeholder = 0
+		for token in tokens:
+			if isinstance(token, (LSInsertNode, LSCopyNode)):
+				max_placeholder = max(max_placeholder, token.number)
+		max_placeholder += 1
+		return [LSInsertNode(token.number or max_placeholder, token.children) if isinstance(token, LSInsertNode) else token for token in tokens]
 
 
 def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Optional[Tuple[int, int]]):
@@ -426,7 +437,7 @@ def main():
 			else:
 				snippet_choices = []
 				for parsed_snippet in snippet_list:
-					snippet_choices.append(f'\t\t{{{parsed_snippet.get_code(indent=3)}\n\t\t}},\n')
+					snippet_choices.append(f'\t\t{{{parsed_snippet.get_code(indent=3, replace_zero_placeholders=True)}\n\t\t}},\n')
 				fp.write(f'\ts({{{parsed_snippet.attributes}}}, c(1, {{\n{"".join(snippet_choices)}\t}})),\n')
 		#fp.write(''.join(snippet_code))
 		fp.write('})\n')
