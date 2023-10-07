@@ -102,17 +102,6 @@ def escape_lua_string(text: str) -> str:
 	return f'"{LUA_SPECIAL_CHAR_RX.sub(escape_char, text)}"'
 
 
-def add_indent(text: str, count: int) -> str:
-	indent = '\t' * count
-	return ''.join([f'{indent}{line}' for line in text.splitlines(keepends=True)])
-
-
-@dataclass
-class CompiledSnippet:
-	attributes: str
-	code: str
-
-
 class LSToken(object):
 	__slots__ = []
 
@@ -171,6 +160,15 @@ class LSVisualNode(LSToken):
 
 	def __repr__(self):
 		return f'{self.__class__.__name__}()'
+
+
+@dataclass
+class ParsedSnippet:
+	attributes: str
+	tokens: list[LSToken]
+
+	def get_code(self, indent: int) -> str:
+		return render_tokens(self.tokens, indent)
 
 
 def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Optional[Tuple[int, int]]):
@@ -405,15 +403,15 @@ def main():
 			logger.exception("Parsing error of snippet: %s", snippet.trigger)
 			continue
 
-		snippet_body = render_tokens(tokens, indent=2)
+		#snippet_body = render_tokens(tokens, indent=2)
 		snippet_attrs = [f'trig = {escape_lua_string(snippet.trigger)}']
 		if snippet.description:
 			snippet_attrs.append(f'descr = {escape_lua_string(snippet.description)}')
 		snippet_attrs.append(f'priority = {snippet.priority}')
 		snippet_attrs.append(f'trigEngine = te({escape_lua_string(snippet._opts)})')
-		snippet_code[snippet.trigger].append(CompiledSnippet(
+		snippet_code[snippet.trigger].append(ParsedSnippet(
 			attributes=", ".join(snippet_attrs),
-			code=snippet_body
+			tokens=tokens
 		))
 		#snippet_code[snippet.trigger].append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
 
@@ -422,14 +420,14 @@ def main():
 		fp.write(FILE_HEADER)
 		fp.write(f'ls.add_snippets({escape_lua_string(args.filetype)}, {{\n')
 		for snippet_list in snippet_code.values():
-			compiled_snippet = snippet_list[0]
+			parsed_snippet = snippet_list[0]
 			if len(snippet_list) == 1:
-				fp.write(f'\ts({{{compiled_snippet.attributes}}}, {{{compiled_snippet.code}\n\t}}),\n')
+				fp.write(f'\ts({{{parsed_snippet.attributes}}}, {{{parsed_snippet.get_code(indent=2)}\n\t}}),\n')
 			else:
 				snippet_choices = []
-				for compiled_snippet in snippet_list:
-					snippet_choices.append(f'\t{{{compiled_snippet.code}\n\t}},\n')
-				fp.write(f'\ts({{{compiled_snippet.attributes}}}, c(1, {{\n{add_indent("".join(snippet_choices), 1)}\n\t}})),\n')
+				for parsed_snippet in snippet_list:
+					snippet_choices.append(f'\t\t{{{parsed_snippet.get_code(indent=3)}\n\t\t}},\n')
+				fp.write(f'\ts({{{parsed_snippet.attributes}}}, c(1, {{\n{"".join(snippet_choices)}\t}})),\n')
 		#fp.write(''.join(snippet_code))
 		fp.write('})\n')
 
