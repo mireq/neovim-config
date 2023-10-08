@@ -18,7 +18,7 @@ vim.command('Lazy load vim-snippets')
 
 from UltiSnips import UltiSnips_Manager
 from UltiSnips.snippet.parsing.base import tokenize_snippet_text
-from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken
+from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken, PythonCodeToken
 from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing
 from UltiSnips.snippet.parsing import snipmate as snipmate_parsing
 from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
@@ -162,6 +162,16 @@ class LSVisualNode(LSNode):
 		return f'{self.__class__.__name__}()'
 
 
+class LSPythonCodeNode(LSNode):
+	__slots__ = ['code']
+
+	def __init__(self, code):
+		self.code = code
+
+	def __repr__(self):
+		return f'{self.__class__.__name__}({self.code!r})'
+
+
 @dataclass
 class ParsedSnippet:
 	attributes: str
@@ -246,6 +256,8 @@ def transform_tokens(tokens, lines):
 				token_list.append(LSVisualNode())
 			case EndOfTextToken():
 				pass
+			case PythonCodeToken():
+				token_list.append(LSPythonCodeNode(token.code))
 			case _:
 				snippet_text = '\n'.join(lines)
 				raise RuntimeError(f"Unknown token {token} in snippet: \n{snippet_text}")
