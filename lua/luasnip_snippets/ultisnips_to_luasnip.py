@@ -102,6 +102,11 @@ def escape_lua_string(text: str) -> str:
 	return f'"{LUA_SPECIAL_CHAR_RX.sub(escape_char, text)}"'
 
 
+class OrderedSet(dict):
+	def add(self, value: str):
+		self[value] = len(self)
+
+
 class LSNode(object):
 	__slots__ = []
 
@@ -406,7 +411,13 @@ def main():
 
 	included_filetypes = set()
 
+	globals = defaultdict(OrderedSet)
+
 	for snippet in snippets:
+		for global_type, global_codes in snippet._globals.items():
+			for global_code in global_codes:
+				globals[global_type].add(global_code)
+
 		filetype = snippet.location.rsplit(':', 1)[0].split('/')[-1].rsplit('.', 1)[0]
 
 		if filetype != args.filetype:
