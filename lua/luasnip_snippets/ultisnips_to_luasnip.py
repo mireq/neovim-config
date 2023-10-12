@@ -86,6 +86,9 @@ sys.path.append(str(Path.home().joinpath('.local/share/nvim/lazy/ultisnips/pytho
 VisualContent = namedtuple('VisualContent', ['text', 'mode'])
 LUA_SPECIAL_CHAR_RX = re.compile(r'("|\'|\t|\n)')
 INDENT_RE = re.compile(r'^(\s*)')
+KNOWN_LANGUAGES = {
+	'!p': 'python',
+}
 
 
 def escape_char(match):
@@ -411,12 +414,15 @@ def main():
 
 	included_filetypes = set()
 
-	globals = defaultdict(OrderedSet)
+	global_definitions = defaultdict(OrderedSet)
 
 	for snippet in snippets:
 		for global_type, global_codes in snippet._globals.items():
 			for global_code in global_codes:
-				globals[global_type].add(global_code)
+				if global_type in KNOWN_LANGUAGES:
+					global_definitions[KNOWN_LANGUAGES[global_type]].add(global_code)
+				else:
+					logger.error("Unknown code block %s", global_type)
 
 		filetype = snippet.location.rsplit(':', 1)[0].split('/')[-1].rsplit('.', 1)[0]
 
@@ -449,9 +455,17 @@ def main():
 		))
 		#snippet_code[snippet.trigger].append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
 
+	code_globals = {}
+	for language, global_list in global_definitions.items():
+		code_globals[language] = ', '.join(f'\t{escape_lua_string(code_block)}\n' for code_block in global_list)
+
 	with open(f'{args.filetype}.lua', 'w') as fp:
 		fp.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py\n\n')
 		fp.write(FILE_HEADER)
+		if code_globals:
+			fp.write('\n')
+			fp.write(''.join(f'local {language}_globals = {{\n{global_list}}}\n' for language, global_list in code_globals.items()))
+			fp.write('\n\n')
 		fp.write(f'ls.add_snippets({escape_lua_string(args.filetype)}, {{\n')
 		for snippet_list in snippet_code.values():
 			parsed_snippet = snippet_list[0]
