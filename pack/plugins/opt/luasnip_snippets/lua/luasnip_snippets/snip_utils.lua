@@ -196,14 +196,20 @@ local function load_python_helper()
 	end
 end
 
+local function call_python(python_function_name, opts)
+	load_python_helper()
+	vim.g.snip_utils_kwargs = opts
+	local result = vim.fn.py3eval('luasnip_snippets_python_helper.' .. python_function_name .. '(**(__import__("vim").vars.get("snip_utils_kwargs", {})))')
+	vim.g.snip_utils_kwargs = nil
+	return result
+end
+
 local function setup()
 	local module_path = script_path()
 	require("luasnip.loaders.from_lua").lazy_load({
 		paths = { module_path }
 	})
-	load_python_helper()
-	--vim.cmd('python3 import luasnip_snippets_python_helper')
-	--vim.fn.py3eval('luasnip_snippets_python_helper.hello()')
+	--call_python('hello')
 end
 
 return {
