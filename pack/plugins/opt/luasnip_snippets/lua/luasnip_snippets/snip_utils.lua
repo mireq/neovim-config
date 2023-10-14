@@ -29,6 +29,10 @@ if filetype_mapping_fp ~= nil then
 	filetype_mapping_fp:close()
 end
 
+local function script_path()
+	local str = debug.getinfo(2, "S").source:sub(2)
+	return str:match("(.*/)")
+end
 
 local function copy_helper(args)
 	return args[1]
@@ -183,6 +187,12 @@ end
 
 local load_ft_func = require("luasnip.extras.filetype_functions").extend_load_ft(filetype_includes)
 
+local function setup()
+	require("luasnip.loaders.from_lua").lazy_load({
+		paths = { script_path() }
+	})
+end
+
 return {
 	cp = cp,
 	jt = jt,
@@ -191,4 +201,5 @@ return {
 	vis = vis,
 	ft_func = ft_func,
 	load_ft_func = load_ft_func,
+	setup = setup,
 }
