@@ -4,6 +4,8 @@ local f = ls.function_node
 local t = ls.text_node
 local rundir = debug.getinfo(1).source:match("@?(.*/)")
 
+local python_helper_loaded = false
+
 
 local filetype_includes = {}
 local filetype_mapping_fp = io.open(rundir .. 'filetype_includes.txt')
@@ -187,10 +189,21 @@ end
 
 local load_ft_func = require("luasnip.extras.filetype_functions").extend_load_ft(filetype_includes)
 
+local function load_python_helper()
+	if not python_helper_loaded then
+		python_helper_loaded = true
+		vim.cmd('python3 import luasnip_snippets_python_helper')
+	end
+end
+
 local function setup()
+	local module_path = script_path()
 	require("luasnip.loaders.from_lua").lazy_load({
-		paths = { script_path() }
+		paths = { module_path }
 	})
+	load_python_helper()
+	--vim.cmd('python3 import luasnip_snippets_python_helper')
+	--vim.fn.py3eval('luasnip_snippets_python_helper.hello()')
 end
 
 return {
