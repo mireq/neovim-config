@@ -271,7 +271,6 @@ def transform_tokens(tokens, lines):
 				token_list.append(node)
 			case MirrorToken():
 				node = LSInsertOrCopyNode_(token.number)
-				insert_nodes.setdefault(token.number, node)
 				token_list.append(node)
 			case VisualToken():
 				token_list.append(LSVisualNode())
