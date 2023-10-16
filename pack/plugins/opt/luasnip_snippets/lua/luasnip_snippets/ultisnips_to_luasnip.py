@@ -337,6 +337,8 @@ def token_to_dynamic_text(token: LSNode, related_nodes: dict[int, int]):
 			return escape_lua_string(token.text)
 		case LSCopyNode():
 			return f'args[{related_nodes[token.number]}]'
+		#case LSInsertNode():
+		#	return escape_lua_string('ins')
 		case LSVisualNode():
 			return 'snip.env.LS_SELECT_DEDENT or {}'
 		case _:
@@ -502,3 +504,5 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
+# TODO rewrite dynamic node numbers from 0 to last + 1
