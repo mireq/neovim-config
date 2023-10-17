@@ -200,17 +200,29 @@ class ParsedSnippet:
 
 	def get_code(self, indent: int, replace_zero_placeholders: bool = False) -> str:
 		tokens = self.tokens
-		if replace_zero_placeholders:
-			tokens = self.__replace_zero_placeholders(tokens)
+		tokens = self.__replace_zero_placeholders(tokens, replace_zero_placeholders)
 		return render_tokens(tokens, indent)
 
-	def __replace_zero_placeholders(self, tokens: list[LSNode]):
+	def __replace_zero_placeholders(self, tokens: list[LSNode], force: bool):
 		max_placeholder = 0
 		for token in tokens:
 			if isinstance(token, (LSInsertNode, LSCopyNode)):
 				max_placeholder = max(max_placeholder, token.number)
 		max_placeholder += 1
-		return [LSInsertNode(token.number or max_placeholder, token.children) if isinstance(token, LSInsertNode) else token for token in tokens]
+
+		def replace_token(token):
+			if isinstance(token, LSInsertNode):
+				shouldd_replace = force
+				if not shouldd_replace and len(token.children) > 1 or (len(token.children) == 1 and not isinstance(token.children[0], LSTextNode)):
+					shouldd_replace = True
+				if shouldd_replace:
+					return LSInsertNode(token.number or max_placeholder, token.children)
+				else:
+					return token
+			else:
+				return token
+
+		return [replace_token(token) for token in tokens]
 
 
 def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Optional[Tuple[int, int]]):
