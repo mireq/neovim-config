@@ -349,8 +349,8 @@ def token_to_dynamic_text(token: LSNode, related_nodes: dict[int, int]):
 			return escape_lua_string(token.text)
 		case LSCopyNode():
 			return f'args[{related_nodes[token.number]}]'
-		#case LSInsertNode():
-		#	return escape_lua_string('ins')
+		case LSInsertNode():
+			return escape_lua_string('todo')
 		case LSVisualNode():
 			return 'snip.env.LS_SELECT_DEDENT or {}'
 		case _:
@@ -465,7 +465,7 @@ def main():
 
 		try:
 			tokens = parse_snippet(snippet)
-		except Exception as e:
+		except Exception:
 			logger.exception("Parsing error of snippet: %s", snippet.trigger)
 			continue
 
