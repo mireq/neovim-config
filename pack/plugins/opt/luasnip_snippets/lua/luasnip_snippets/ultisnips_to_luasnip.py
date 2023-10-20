@@ -197,6 +197,7 @@ class LSPythonCodeNode(LSNode):
 class ParsedSnippet:
 	attributes: str
 	tokens: list[LSNode]
+	snippet: UltiSnipsSnippetDefinition
 
 	def get_code(self, indent: int, replace_zero_placeholders: bool = False) -> str:
 		tokens = self.tokens
@@ -349,8 +350,8 @@ def token_to_dynamic_text(token: LSNode, related_nodes: dict[int, int]):
 			return escape_lua_string(token.text)
 		case LSCopyNode():
 			return f'args[{related_nodes[token.number]}]'
-		case LSInsertNode():
-			return escape_lua_string('todo')
+		#case LSInsertNode():
+		#	return escape_lua_string('todo')
 		case LSVisualNode():
 			return 'snip.env.LS_SELECT_DEDENT or {}'
 		case _:
@@ -477,7 +478,8 @@ def main():
 		snippet_attrs.append(f'trigEngine = te({escape_lua_string(snippet._opts)})')
 		snippet_code[snippet.trigger].append(ParsedSnippet(
 			attributes=", ".join(snippet_attrs),
-			tokens=tokens
+			tokens=tokens,
+			snippet=snippet
 		))
 		#snippet_code[snippet.trigger].append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
 
@@ -496,11 +498,19 @@ def main():
 		for snippet_list in snippet_code.values():
 			parsed_snippet = snippet_list[0]
 			if len(snippet_list) == 1:
-				fp.write(f'\ts({{{parsed_snippet.attributes}}}, {{{parsed_snippet.get_code(indent=2)}\n\t}}),\n')
+				try:
+					fp.write(f'\ts({{{parsed_snippet.attributes}}}, {{{parsed_snippet.get_code(indent=2)}\n\t}}),\n')
+				except Exception:
+					logger.error("Error in sniipet code:\n%s", parsed_snippet.snippet._value)
+					raise
 			else:
 				snippet_choices = []
 				for parsed_snippet in snippet_list:
-					snippet_choices.append(f'\t\t{{{parsed_snippet.get_code(indent=3, replace_zero_placeholders=True)}\n\t\t}},\n')
+					try:
+						snippet_choices.append(f'\t\t{{{parsed_snippet.get_code(indent=3, replace_zero_placeholders=True)}\n\t\t}},\n')
+					except Exception:
+						logger.error("Error in sniipet code:\n%s", parsed_snippet.snippet._value)
+						raise
 				fp.write(f'\ts({{{parsed_snippet.attributes}}}, c(1, {{\n{"".join(snippet_choices)}\t}})),\n')
 		#fp.write(''.join(snippet_code))
 		fp.write('})\n')
