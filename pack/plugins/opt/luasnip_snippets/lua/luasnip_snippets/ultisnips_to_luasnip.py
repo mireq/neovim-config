@@ -155,9 +155,9 @@ class LSInsertNode(LSNode):
 
 
 class LSCopyNode(LSNode):
-	__slots__ = ['number', 'default']
+	__slots__ = ['number']
 
-	def __init__(self, number, default=''):
+	def __init__(self, number):
 		self.number = number
 
 	def __repr__(self):
