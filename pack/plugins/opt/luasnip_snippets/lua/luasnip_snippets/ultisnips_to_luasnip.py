@@ -350,8 +350,11 @@ def token_to_dynamic_text(token: LSNode, related_nodes: dict[int, int]):
 			return escape_lua_string(token.text)
 		case LSCopyNode():
 			return f'args[{related_nodes[token.number]}]'
-		#case LSInsertNode():
-		#	return escape_lua_string('todo')
+		case LSInsertNode():
+			if token.children:
+				raise RuntimeError("Not implemented")
+			else:
+				return f'args[{related_nodes[token.number]}]'
 		case LSVisualNode():
 			return 'snip.env.LS_SELECT_DEDENT or {}'
 		case _:
@@ -394,7 +397,7 @@ def render_tokens(tokens: List[LSNode], indent: int = 0, at_line_start: bool = T
 					else:
 						related_nodes = {}
 						for child in token.children:
-							if isinstance(child, LSCopyNode):
+							if isinstance(child, LSCopyNode) or isinstance(child, LSInsertNode):
 								if not child.number in related_nodes:
 									related_nodes[child.number] = len(related_nodes) + 1
 						dynamic_node_content = ', '.join(token_to_dynamic_text(child, related_nodes) for child in token.children)
