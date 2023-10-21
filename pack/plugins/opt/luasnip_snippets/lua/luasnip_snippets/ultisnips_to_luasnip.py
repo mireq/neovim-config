@@ -268,9 +268,9 @@ def do_tokenize(parent, text, allowed_tokens_in_text, allowed_tokens_in_tabstops
 	return tokens
 
 
-def transform_tokens(tokens, lines):
+def transform_tokens(tokens, lines, insert_nodes = None):
 	token_list = []
-	insert_nodes = {}
+	insert_nodes = insert_nodes or {}
 
 	previous_token_end = (0, 0)
 	for token in tokens:
@@ -278,9 +278,12 @@ def transform_tokens(tokens, lines):
 		match token:
 			case TabStopToken():
 				child_lines = token.initial_text.splitlines(keepends=True) or ['']
-				child_tokens = transform_tokens(token.child_tokens, child_lines)
-				node = LSInsertNode(token.number, child_tokens)
-				insert_nodes.setdefault(token.number, node)
+				child_tokens = transform_tokens(token.child_tokens, child_lines, insert_nodes)
+				if token.number in insert_nodes and not child_tokens and token.initial_text == '':
+					node = LSCopyNode(token.number)
+				else:
+					node = LSInsertNode(token.number, child_tokens)
+					insert_nodes.setdefault(token.number, node)
 				token_list.append(node)
 			case MirrorToken():
 				node = LSInsertOrCopyNode_(token.number)
@@ -321,7 +324,7 @@ def transform_tokens(tokens, lines):
 def parse_snippet(snippet):
 	snippet_text = snippet._value
 	lines = snippet_text.splitlines(keepends=True)
-	instance = snippet.launch('', VisualContent('', 'v'), None, None, None)
+	snippet.launch('', VisualContent('', 'v'), None, None, None)
 
 	if isinstance(snippet, SnipMateSnippetDefinition):
 		tokens = do_tokenize(None, snippet._value, snipmate_parsing.__ALLOWED_TOKENS, snipmate_parsing.__ALLOWED_TOKENS_IN_TABSTOPS, snipmate_parsing._TOKEN_TO_TEXTOBJECT)
