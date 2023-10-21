@@ -41,12 +41,12 @@ local function copy_helper(args)
 end
 
 -- Copy node
-local function cp(num)
+local function copy(num)
 	return f(copy_helper, num)
 end
 
 -- Join text
-local function jt(args, indent)
+local function join_text(args, indent)
 	local parts = {}
 	for i, part in ipairs(args) do
 		if type(part) == 'table' then
@@ -72,7 +72,7 @@ local function jt(args, indent)
 end
 
 -- New line
-local nl = function() return t{"", ""} end
+local new_line = function() return t{"", ""} end
 
 local function ft_func(num)
 	local filetypes = vim.split(vim.bo.filetype, ".", true)
@@ -213,10 +213,10 @@ local function setup()
 end
 
 return {
-	cp = cp,
-	jt = jt,
-	nl = nl,
-	te = trig_engine,
+	copy = copy,
+	join_text = join_text,
+	new_line = new_line,
+	trig_engine = trig_engine,
 	vis = vis,
 	ft_func = ft_func,
 	load_ft_func = load_ft_func,

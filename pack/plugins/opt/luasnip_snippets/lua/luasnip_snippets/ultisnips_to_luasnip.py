@@ -71,10 +71,10 @@ local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
 local su = require("luasnip_snippets.snip_utils")
-local cp = su.cp
-local jt = su.jt
-local nl = su.nl
-local te = su.te
+local cp = su.copy
+local jt = su.join_text
+local nl = su.new_line
+local te = su.trig_engine
 
 """
 
