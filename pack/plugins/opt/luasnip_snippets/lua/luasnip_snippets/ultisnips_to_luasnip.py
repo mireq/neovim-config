@@ -491,7 +491,7 @@ def main():
 
 	code_globals = {}
 	for language, global_list in global_definitions.items():
-		code_globals[language] = ', '.join(f'\t{escape_lua_string(code_block)}\n' for code_block in global_list)
+		code_globals[language] = ', '.join(f'\t{escape_multiline_lua_sting(code_block)}\n' for code_block in global_list)
 
 	with open(f'{args.filetype}.lua', 'w') as fp:
 		fp.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py\n\n')
