@@ -141,11 +141,11 @@ local function words_for_line(trigger, before, num_words)
 	if #word_list <= num_words then
 		return str_strip(before)
 	else
-		before_words = before
+		local before_words = before:reverse()
 		for i = 1, num_words do
-			local left = before_words:reverse():find(word_list[i]:reverse())
+			local left = before_words:find(word_list[#word_list - i + 1]:reverse())
 			if left then
-				before_words = before_words:sub(1, #word_list[i] - left)
+				before_words = before_words:sub(#word_list[#word_list - i + 1] + left)
 			end
 		end
 		return str_strip(before:sub(#before_words + 1))
