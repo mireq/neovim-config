@@ -204,6 +204,10 @@ local function call_python(python_function_name, opts)
 	return result
 end
 
+local function code_python(node_code, global_code)
+	return {}
+end
+
 local function setup()
 	local module_path = script_path()
 	require("luasnip.loaders.from_lua").lazy_load({
@@ -221,4 +225,5 @@ return {
 	ft_func = ft_func,
 	load_ft_func = load_ft_func,
 	setup = setup,
+	code_python = code_python,
 }
