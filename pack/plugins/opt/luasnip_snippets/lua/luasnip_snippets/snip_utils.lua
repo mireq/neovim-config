@@ -204,8 +204,8 @@ local function call_python(python_function_name, opts)
 	return result
 end
 
-local function code_python(node_code, global_code)
-	return {}
+local function code_python(node_code, global_code, args, snip)
+	return {"python code"}
 end
 
 local function setup()

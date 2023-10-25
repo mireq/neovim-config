@@ -75,6 +75,7 @@ local cp = su.copy
 local jt = su.join_text
 local nl = su.new_line
 local te = su.trig_engine
+local c_py = su.code_python
 
 """
 
@@ -360,6 +361,8 @@ def token_to_dynamic_text(token: LSNode, related_nodes: dict[int, int]):
 				return f'args[{related_nodes[token.number]}]'
 		case LSVisualNode():
 			return 'snip.env.LS_SELECT_DEDENT or {}'
+		case LSPythonCodeNode():
+			return f'c_py({escape_lua_string(token.code)}, python_globals, args, snip)'
 		case _:
 			raise RuntimeError("Token not allowed: %s" % token)
 
@@ -532,5 +535,3 @@ def main():
 
 if __name__ == "__main__":
 	main()
-
-# TODO rewrite dynamic node numbers from 0 to last + 1
