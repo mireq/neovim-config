@@ -268,7 +268,10 @@ class SnippetUtil:
 		return buf
 
 
+def execute_code(node_code, global_code, args):
+	print(node_code, global_code, args)
+	return ['run']
 
-def hello():
-	print("hello called")
-	print(vim.vars.get('snip_utils_kwargs', {}))
+#def hello():
+#	print("hello called")
+#	print(vim.vars.get('snip_utils_kwargs', {}))
