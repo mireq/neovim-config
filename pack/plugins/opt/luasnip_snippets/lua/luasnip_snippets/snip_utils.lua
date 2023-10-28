@@ -162,6 +162,9 @@ end
 local function trig_engine(opts)
 	local function engine(trigger)
 		local function matcher(line_to_cursor, trigger)
+			if opts == '' then -- TODO: check if it's correct
+				opts = 'w'
+			end
 
 			if opts:find('w') ~= nil then
 				local trigger_words = split_at_whitespace(trigger)
