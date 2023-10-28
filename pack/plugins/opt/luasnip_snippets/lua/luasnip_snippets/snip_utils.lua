@@ -204,8 +204,11 @@ local function call_python(python_function_name, opts)
 	return result
 end
 
-local function code_python(node_code, global_code, args, snip)
-	return {"python code"}
+local function code_python(node_code, global_code, args, snip, indent)
+	-- local file = io.open("/tmp/snip.lua", "w")
+	-- file:write(vim.inspect(snip))
+	-- file:close()
+	return call_python("execute_code", {node_code=node_code, global_code=global_code, args=args, env=snip.env, indent=indent})
 end
 
 local function setup()
