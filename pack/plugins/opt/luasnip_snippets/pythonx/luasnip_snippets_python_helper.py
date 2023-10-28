@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-import vim
+import functools
+import os
 from collections import namedtuple
+
+import vim
 
 
 class VimBuffer:
@@ -101,15 +104,15 @@ class SnippetUtil:
 
 	"""
 
-	def __init__(self, initial_indent, vmode, vtext, context, parent):
+	def __init__(self, initial_indent, vmode, vtext, context, start, end):
 		self._ind = IndentUtil()
 		self._visual = _VisualContent(vmode, vtext)
 		self._initial_indent = self._ind.indent_to_spaces(initial_indent)
 		self._reset("")
 		self._context = context
-		self._start = parent.start
-		self._end = parent.end
-		self._parent = parent
+		self._start = start
+		self._end = end
+		#self._parent = parent
 
 	def _reset(self, cur):
 		"""Gets the snippet ready for another update.
@@ -268,10 +271,41 @@ class SnippetUtil:
 		return buf
 
 
-def execute_code(node_code, global_code, args):
-	print(node_code, global_code, args)
-	return ['run']
+@functools.cache
+def cached_compile(*args):
+	return compile(*args)
 
-#def hello():
-#	print("hello called")
-#	print(vim.vars.get('snip_utils_kwargs', {}))
+
+def execute_code(node_code, global_code, args, env, indent):
+	global_code = 'import re, os, vim, string, random\n' + '\n'.join(global_code or [])
+	codes = (
+		global_code,
+		node_code,
+	)
+	compiled_codes = (
+		cached_compile(global_code, '<exec-globals>', 'exec'),
+		cached_compile(node_code, '<exec-interpolation-code>', 'exec'),
+	)
+
+	text = '\n'.join(env.get('LS_SELECT_RAW', []))
+	context = None
+	start = (int(env['TM_LINE_NUMBER']), int(env['LS_CAPTURE_1']))
+	end = (int(env['TM_LINE_NUMBER']), int(env['LS_CAPTURE_2']))
+	snip = SnippetUtil(indent, vim.eval("visualmode()"), text, context, start, end)
+	path = vim.eval('expand("%")') or ""
+
+	locals = {
+		"fn": os.path.basename(path),
+		'cur': env['LS_TRIGGER'],
+		'res': env['LS_TRIGGER'],
+		'snip': snip,
+	}
+
+	for code, compiled_code in zip(codes, compiled_codes):
+		try:
+			exec(compiled_code, locals)
+		except Exception as exception:
+			exception.snippet_code = code
+
+	rv = str(snip.rv if snip._rv_changed else locals["res"])
+	return rv.splitlines()

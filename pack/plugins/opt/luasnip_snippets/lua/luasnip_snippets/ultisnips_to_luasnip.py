@@ -185,13 +185,14 @@ class LSVisualNode(LSNode):
 
 
 class LSPythonCodeNode(LSNode):
-	__slots__ = ['code']
+	__slots__ = ['code', 'indent']
 
-	def __init__(self, code):
+	def __init__(self, code, indent):
 		self.code = code
+		self.indent = indent
 
 	def __repr__(self):
-		return f'{self.__class__.__name__}({self.code!r})'
+		return f'{self.__class__.__name__}({self.code!r}, {self.indent!r})'
 
 
 @dataclass
@@ -294,7 +295,7 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 			case EndOfTextToken():
 				pass
 			case PythonCodeToken():
-				token_list.append(LSPythonCodeNode(token.code))
+				token_list.append(LSPythonCodeNode(token.code, token.indent))
 			case _:
 				snippet_text = '\n'.join(lines)
 				raise RuntimeError(f"Unknown token {token} in snippet: \n{snippet_text}")
@@ -363,7 +364,7 @@ def token_to_dynamic_text(token: LSNode, related_nodes: dict[int, int]):
 			return 'snip.env.LS_SELECT_DEDENT or {}'
 		case LSPythonCodeNode():
 			code = token.code.replace("\\`", "`")
-			return f'c_py({escape_lua_string(code)}, python_globals, args, snip)'
+			return f'c_py({escape_lua_string(code)}, python_globals, args, snip, {escape_lua_string(token.indent)})'
 		case _:
 			raise RuntimeError("Token not allowed: %s" % token)
 
