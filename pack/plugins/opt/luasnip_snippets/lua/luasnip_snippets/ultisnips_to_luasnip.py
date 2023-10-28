@@ -362,7 +362,8 @@ def token_to_dynamic_text(token: LSNode, related_nodes: dict[int, int]):
 		case LSVisualNode():
 			return 'snip.env.LS_SELECT_DEDENT or {}'
 		case LSPythonCodeNode():
-			return f'c_py({escape_lua_string(token.code)}, python_globals, args, snip)'
+			code = token.code.replace("\\`", "`")
+			return f'c_py({escape_lua_string(code)}, python_globals, args, snip)'
 		case _:
 			raise RuntimeError("Token not allowed: %s" % token)
 
@@ -456,7 +457,10 @@ def main():
 		for global_type, global_codes in snippet._globals.items():
 			for global_code in global_codes:
 				if global_type in KNOWN_LANGUAGES:
-					global_definitions[KNOWN_LANGUAGES[global_type]].add(global_code)
+					lang = KNOWN_LANGUAGES[global_type]
+					if lang == 'python':
+						global_code = global_code.replace('\r\n', '\n')
+					global_definitions[lang].add(global_code)
 				else:
 					logger.error("Unknown code block %s", global_type)
 
