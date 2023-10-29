@@ -417,6 +417,9 @@ def render_tokens(tokens: List[LSNode], indent: int = 0, at_line_start: bool = T
 					snippet_body.write(f'i({token.number})')
 			case LSCopyNode():
 				snippet_body.write(f'cp({token.number})')
+			case LSPythonCodeNode():
+				code = token.code.replace("\\`", "`")
+				snippet_body.write(f'f(function(args, snip) return c_py({escape_lua_string(code)}, python_globals, args, snip, {escape_lua_string(token.indent)}) end)')
 			case _:
 				raise RuntimeError("Unknown token: %s" % token)
 		if not last_token:
