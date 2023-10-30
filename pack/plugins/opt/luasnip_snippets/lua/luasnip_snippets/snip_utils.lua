@@ -143,7 +143,7 @@ local function words_for_line(trigger, before, num_words)
 	else
 		local before_words = before:reverse()
 		for i = 1, num_words do
-			local left = before_words:find(word_list[#word_list - i + 1]:reverse())
+			local left = before_words:find(word_list[#word_list - i + 1]:reverse(), 1, true)
 			if left then
 				before_words = before_words:sub(#word_list[#word_list - i + 1] + left)
 			end
@@ -178,7 +178,7 @@ local function trig_engine(opts)
 				end
 
 				if match then
-					local begin = #line_to_cursor - line_to_cursor:reverse():find(trigger:reverse()) - #trigger
+					local begin = #line_to_cursor - line_to_cursor:reverse():find(trigger:reverse(),1, true) - #trigger
 					return trigger, {begin, begin + #trigger}
 				end
 			end
