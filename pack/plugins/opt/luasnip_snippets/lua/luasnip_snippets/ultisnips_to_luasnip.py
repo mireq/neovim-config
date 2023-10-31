@@ -194,6 +194,11 @@ class LSPythonCodeNode(LSNode):
 	def __repr__(self):
 		return f'{self.__class__.__name__}({self.code!r}, {self.indent!r})'
 
+	@property
+	def lua_code(self) -> str:
+		code = self.code.replace("\\`", "`")
+		return f'c_py({escape_lua_string(code)}, python_globals, args, snip, {escape_lua_string(self.indent)})'
+
 
 @dataclass
 class ParsedSnippet:
@@ -363,8 +368,7 @@ def token_to_dynamic_text(token: LSNode, related_nodes: dict[int, int]):
 		case LSVisualNode():
 			return 'snip.env.LS_SELECT_DEDENT or {}'
 		case LSPythonCodeNode():
-			code = token.code.replace("\\`", "`")
-			return f'c_py({escape_lua_string(code)}, python_globals, args, snip, {escape_lua_string(token.indent)})'
+			return token.lua_code
 		case _:
 			raise RuntimeError("Token not allowed: %s" % token)
 
@@ -418,8 +422,7 @@ def render_tokens(tokens: List[LSNode], indent: int = 0, at_line_start: bool = T
 			case LSCopyNode():
 				snippet_body.write(f'cp({token.number})')
 			case LSPythonCodeNode():
-				code = token.code.replace("\\`", "`")
-				snippet_body.write(f'f(function(args, snip) return c_py({escape_lua_string(code)}, python_globals, args, snip, {escape_lua_string(token.indent)}) end)')
+				snippet_body.write(f'f(function(args, snip) return {token.lua_code} end)')
 			case _:
 				raise RuntimeError("Unknown token: %s" % token)
 		if not last_token:
