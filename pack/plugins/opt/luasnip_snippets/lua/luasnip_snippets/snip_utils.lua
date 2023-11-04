@@ -162,13 +162,13 @@ end
 local function trig_engine(opts)
 	local function engine(trigger)
 		local function matcher(line_to_cursor, trigger)
-			if opts == '' then -- TODO: check if it's correct
-				opts = 'w'
-			end
+			--local trigger_words = split_at_whitespace(trigger)
+			local words = words_for_line(trigger, line_to_cursor)
+			local matched = nil
+			local first_char = 0
+			local last_char = 0
 
 			if opts:find('w') ~= nil then
-				local trigger_words = split_at_whitespace(trigger)
-				local words = words_for_line(trigger, line_to_cursor)
 				local words_len = #trigger
 				local words_prefix = string.sub(words, 1, -words_len - 1)
 				local words_suffix = string.sub(words, -words_len)
@@ -178,12 +178,22 @@ local function trig_engine(opts)
 				end
 
 				if match then
-					local begin = #line_to_cursor - line_to_cursor:reverse():find(trigger:reverse(),1, true) - #trigger
-					return trigger, {begin, begin + #trigger}
+					matched = trigger
+					first_char = #line_to_cursor - line_to_cursor:reverse():find(trigger:reverse(),1, true) - #trigger
+					last_char = first_char + #trigger
+				end
+			else
+				local match = words == trigger
+				if match then
+					matched = trigger
+					first_char = #line_to_cursor - line_to_cursor:reverse():find(trigger:reverse(),1, true) - #trigger
+					last_char = first_char + #trigger
 				end
 			end
 
-			return nil
+			if matched ~= nil then
+				return matched, {first_char, last_char}
+			end
 		end
 		return matcher
 	end
