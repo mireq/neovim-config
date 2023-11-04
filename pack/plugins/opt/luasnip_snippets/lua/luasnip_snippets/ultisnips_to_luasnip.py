@@ -25,7 +25,7 @@ from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
 from UltiSnips.snippet.definition.snipmate import SnipMateSnippetDefinition
 
 
-SUPPORTED_OPTS = {'w'}
+SUPPORTED_OPTS = {'w', 'b'}
 
 LOG_CONFIG = {
 	'version': 1,

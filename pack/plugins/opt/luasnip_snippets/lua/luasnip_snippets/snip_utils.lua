@@ -179,15 +179,23 @@ local function trig_engine(opts)
 
 				if match then
 					matched = trigger
-					first_char = #line_to_cursor - line_to_cursor:reverse():find(trigger:reverse(),1, true) - #trigger
+					first_char = #line_to_cursor - line_to_cursor:reverse():find(trigger:reverse(), 1, true) - #trigger
 					last_char = first_char + #trigger
 				end
 			else
 				local match = words == trigger
 				if match then
 					matched = trigger
-					first_char = #line_to_cursor - line_to_cursor:reverse():find(trigger:reverse(),1, true) - #trigger
-					last_char = first_char + #trigger
+					last_char = #line_to_cursor - line_to_cursor:reverse():find(trigger:reverse(), 1, true) + 1
+					first_char = last_char - #trigger
+				end
+			end
+
+			-- only on beginning of line or only whitespace before trigger
+			if matched ~= nil and opts:find('b') ~= nil then
+				local content_before_trigger = line_to_cursor:sub(1, first_char)
+				if content_before_trigger:gsub("[%s\t]+", "") ~= '' then
+					return nil
 				end
 			end
 
