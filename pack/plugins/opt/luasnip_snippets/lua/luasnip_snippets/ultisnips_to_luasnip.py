@@ -210,7 +210,7 @@ class ParsedSnippet:
 	def get_code(self, indent: int, replace_zero_placeholders: bool = False) -> str:
 		tokens = self.tokens
 		tokens = self.__replace_zero_placeholders(tokens, replace_zero_placeholders)
-		return render_tokens(tokens, indent)
+		return self.render_tokens(tokens, indent)
 
 	@cached_property
 	def max_placeholder(self):
@@ -235,6 +235,65 @@ class ParsedSnippet:
 				return token
 
 		return [replace_token(token) for token in tokens]
+
+	def render_tokens(self, tokens: List[LSNode], indent: int = 0, at_line_start: bool = True) -> str:
+		snippet_body = StringIO()
+		num_tokens = len(tokens)
+		accumulated_text = ['\n']
+		for i, token in enumerate(tokens):
+			last_token = i == num_tokens - 1
+			if at_line_start:
+				snippet_body.write('\n' + ('\t' * indent))
+				at_line_start = False
+			match token:
+				case LSTextNode():
+					accumulated_text.append(token.text)
+					if token.text == '\n':
+						at_line_start = True
+						snippet_body.write('nl()')
+					else:
+						snippet_body.write(f't{escape_lua_string(token.text)}')
+				case LSInsertNode():
+					if token.children:
+						#dynamic_node_content = render_tokens(token.children, at_line_start=False)
+						#print(dynamic_node_content)
+						#snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{{dynamic_node_content}}}) end)')
+
+						node_indent = INDENT_RE.match(''.join(accumulated_text[-operator.indexOf(reversed(accumulated_text), '\n'):])).group(1)
+
+						is_simple = all(isinstance(child, LSTextNode) for child in token.children)
+						if is_simple:
+							text_content = ''.join(child.text for child in token.children)
+							if '\n' in text_content:
+								text_content = ', '.join(escape_lua_string(line) for line in text_content.split('\n'))
+								snippet_body.write(f'i({token.number}, {{{text_content}}})')
+							else:
+								snippet_body.write(f'i({token.number}, {escape_lua_string(text_content)})')
+						else:
+							related_nodes = {}
+							for child in token.children:
+								if isinstance(child, LSCopyNode) or isinstance(child, LSInsertNode):
+									if not child.number in related_nodes:
+										related_nodes[child.number] = len(related_nodes) + 1
+							dynamic_node_content = ', '.join(token_to_dynamic_text(child, related_nodes) for child in token.children)
+							related_nodes_code = ''
+							if related_nodes:
+								related_nodes_code = f', {{{", ".join(str(v) for v in related_nodes.keys())}}}'
+							snippet_body.write(f'd({token.number}, function(args, snip) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}}, {escape_lua_string(node_indent)})) }}) end{related_nodes_code})')
+					else:
+						snippet_body.write(f'i({token.number})')
+				case LSCopyNode():
+					snippet_body.write(f'cp({token.number})')
+				case LSPythonCodeNode():
+					snippet_body.write(f'f(function(args, snip) return {token.lua_code} end)')
+				case _:
+					raise RuntimeError("Unknown token: %s" % token)
+			if not last_token:
+				snippet_body.write(',')
+				if not at_line_start:
+					snippet_body.write(' ')
+
+		return snippet_body.getvalue()
 
 
 def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Optional[Tuple[int, int]]):
@@ -376,65 +435,6 @@ def token_to_dynamic_text(token: LSNode, related_nodes: dict[int, int]):
 		case _:
 			raise RuntimeError("Token not allowed: %s" % token)
 
-
-def render_tokens(tokens: List[LSNode], indent: int = 0, at_line_start: bool = True) -> str:
-	snippet_body = StringIO()
-	num_tokens = len(tokens)
-	accumulated_text = ['\n']
-	for i, token in enumerate(tokens):
-		last_token = i == num_tokens - 1
-		if at_line_start:
-			snippet_body.write('\n' + ('\t' * indent))
-			at_line_start = False
-		match token:
-			case LSTextNode():
-				accumulated_text.append(token.text)
-				if token.text == '\n':
-					at_line_start = True
-					snippet_body.write('nl()')
-				else:
-					snippet_body.write(f't{escape_lua_string(token.text)}')
-			case LSInsertNode():
-				if token.children:
-					#dynamic_node_content = render_tokens(token.children, at_line_start=False)
-					#print(dynamic_node_content)
-					#snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{{dynamic_node_content}}}) end)')
-
-					node_indent = INDENT_RE.match(''.join(accumulated_text[-operator.indexOf(reversed(accumulated_text), '\n'):])).group(1)
-
-					is_simple = all(isinstance(child, LSTextNode) for child in token.children)
-					if is_simple:
-						text_content = ''.join(child.text for child in token.children)
-						if '\n' in text_content:
-							text_content = ', '.join(escape_lua_string(line) for line in text_content.split('\n'))
-							snippet_body.write(f'i({token.number}, {{{text_content}}})')
-						else:
-							snippet_body.write(f'i({token.number}, {escape_lua_string(text_content)})')
-					else:
-						related_nodes = {}
-						for child in token.children:
-							if isinstance(child, LSCopyNode) or isinstance(child, LSInsertNode):
-								if not child.number in related_nodes:
-									related_nodes[child.number] = len(related_nodes) + 1
-						dynamic_node_content = ', '.join(token_to_dynamic_text(child, related_nodes) for child in token.children)
-						related_nodes_code = ''
-						if related_nodes:
-							related_nodes_code = f', {{{", ".join(str(v) for v in related_nodes.keys())}}}'
-						snippet_body.write(f'd({token.number}, function(args, snip) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}}, {escape_lua_string(node_indent)})) }}) end{related_nodes_code})')
-				else:
-					snippet_body.write(f'i({token.number})')
-			case LSCopyNode():
-				snippet_body.write(f'cp({token.number})')
-			case LSPythonCodeNode():
-				snippet_body.write(f'f(function(args, snip) return {token.lua_code} end)')
-			case _:
-				raise RuntimeError("Unknown token: %s" % token)
-		if not last_token:
-			snippet_body.write(',')
-			if not at_line_start:
-				snippet_body.write(' ')
-
-	return snippet_body.getvalue()
 
 
 def main():
