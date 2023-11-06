@@ -285,7 +285,8 @@ class ParsedSnippet:
 				case LSCopyNode():
 					snippet_body.write(f'cp({token.number})')
 				case LSPythonCodeNode():
-					snippet_body.write(f'f(function(args, snip) return {token.lua_code} end)')
+					related_nodes_code = f'{", ".join(str(i) for i in range(1, self.max_placeholder + 1))}'
+					snippet_body.write(f'f(function(args, snip) return {token.lua_code} end, {{{related_nodes_code}}})')
 				case _:
 					raise RuntimeError("Unknown token: %s" % token)
 			if not last_token:
