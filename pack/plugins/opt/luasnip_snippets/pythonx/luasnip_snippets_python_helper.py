@@ -294,7 +294,7 @@ def execute_code(node_code, global_code, args, env, indent):
 	snip = SnippetUtil(indent, vim.eval("visualmode()"), text, context, start, end)
 	path = vim.eval('expand("%")') or ""
 
-	locals = {
+	context = {
 		"fn": os.path.basename(path),
 		'cur': env['LS_TRIGGER'],
 		'res': env['LS_TRIGGER'],
@@ -303,9 +303,9 @@ def execute_code(node_code, global_code, args, env, indent):
 
 	for code, compiled_code in zip(codes, compiled_codes):
 		try:
-			exec(compiled_code, locals)
+			exec(compiled_code, context)
 		except Exception as exception:
 			exception.snippet_code = code
 
-	rv = str(snip.rv if snip._rv_changed else locals["res"])
+	rv = str(snip.rv if snip._rv_changed else context["res"])
 	return rv.splitlines()
