@@ -271,6 +271,27 @@ class SnippetUtil:
 		return buf
 
 
+class _Tabs:
+
+	"""Allows access to tabstop content via t[] inside of python code."""
+
+	def __init__(self, tabs):
+		self._tabs = tabs
+
+	def __getitem__(self, no):
+		tab_idx = int(no) - 1
+		current_text = ''
+		if tab_idx >= 0 and tab_idx < len(self._tabs):
+			current_text = self._tabs[tab_idx]
+		return current_text
+
+	def __setitem__(self, no, value):
+		tab_idx = int(no) - 1
+		if tab_idx >= 0 and tab_idx < len(self._tabs):
+			self._tabs[tab_idx] = value
+		return current_text
+
+
 @functools.cache
 def cached_compile(*args):
 	return compile(*args)
@@ -295,6 +316,7 @@ def execute_code(node_code, global_code, args, env, indent):
 	path = vim.eval('expand("%")') or ""
 
 	context = {
+		't': _Tabs(args)
 		"fn": os.path.basename(path),
 		'cur': env['LS_TRIGGER'],
 		'res': env['LS_TRIGGER'],
