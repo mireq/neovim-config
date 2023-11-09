@@ -316,7 +316,7 @@ def execute_code(node_code, global_code, args, env, indent):
 	path = vim.eval('expand("%")') or ""
 
 	context = {
-		't': _Tabs(args)
+		't': _Tabs(args),
 		"fn": os.path.basename(path),
 		'cur': env['LS_TRIGGER'],
 		'res': env['LS_TRIGGER'],
