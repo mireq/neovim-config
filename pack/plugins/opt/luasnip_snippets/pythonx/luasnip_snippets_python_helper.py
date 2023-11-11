@@ -297,7 +297,7 @@ def cached_compile(*args):
 	return compile(*args)
 
 
-def execute_code(node_code, global_code, args, env, indent):
+def execute_code(node_code, global_code, tabstops, env, indent):
 	global_code = 'import re, os, vim, string, random\n' + '\n'.join(global_code or [])
 	codes = (
 		global_code,
@@ -316,7 +316,7 @@ def execute_code(node_code, global_code, args, env, indent):
 	path = vim.eval('expand("%")') or ""
 
 	context = {
-		't': _Tabs(args),
+		't': _Tabs(['\n'.join(tab) for tab in tabstops]),
 		"fn": os.path.basename(path),
 		'cur': env['LS_TRIGGER'],
 		'res': env['LS_TRIGGER'],
