@@ -297,7 +297,15 @@ def cached_compile(*args):
 	return compile(*args)
 
 
-def execute_code(node_code, global_code, tabstops, env, indent):
+node_locals = {}
+
+
+def get_node_locals(node_id):
+	node_locals.setdefault(node_id, {})
+	return node_locals[node_id]
+
+
+def execute_code(node_id, node_code, global_code, tabstops, env, indent):
 	global_code = 'import re, os, vim, string, random\n' + '\n'.join(global_code or [])
 	codes = (
 		global_code,
@@ -315,19 +323,21 @@ def execute_code(node_code, global_code, tabstops, env, indent):
 	snip = SnippetUtil(indent, vim.eval("visualmode()"), text, context, start, end)
 	path = vim.eval('expand("%")') or ""
 
-	context = {
+	node_locals = get_node_locals(tuple(node_id))
+	node_locals.update({
 		't': _Tabs(['\n'.join(tab) for tab in tabstops]),
-		"fn": os.path.basename(path),
+		'fn': os.path.basename(path),
 		'cur': env['LS_TRIGGER'],
 		'res': env['LS_TRIGGER'],
 		'snip': snip,
-	}
+	})
 
 	for code, compiled_code in zip(codes, compiled_codes):
 		try:
-			exec(compiled_code, context)
+			exec(compiled_code, node_locals)
 		except Exception as exception:
 			exception.snippet_code = code
+			raise
 
-	rv = str(snip.rv if snip._rv_changed else context["res"])
+	rv = str(snip.rv if snip._rv_changed else node_locals["res"])
 	return rv.splitlines()

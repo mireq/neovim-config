@@ -195,15 +195,15 @@ class LSPythonCodeNode(LSNode):
 	def __repr__(self):
 		return f'{self.__class__.__name__}({self.code!r}, {self.indent!r})'
 
-	@property
-	def lua_code(self) -> str:
+	def get_lua_code(self, snippet: 'ParsedSnippet') -> str:
 		code = self.code.replace("\\`", "`")
-		return f'c_py({escape_lua_string(code)}, python_globals, args, snip, {escape_lua_string(self.indent)})'
+		return f'c_py({{{escape_lua_string(snippet.filetype)}, {escape_lua_string(snippet.snippet.trigger)}}}, {escape_lua_string(code)}, python_globals, args, snip, {escape_lua_string(self.indent)})'
 
 
 @dataclass
 class ParsedSnippet:
 	attributes: str
+	filetype: str
 	tokens: list[LSNode]
 	snippet: UltiSnipsSnippetDefinition
 
@@ -275,7 +275,7 @@ class ParsedSnippet:
 								if isinstance(child, LSCopyNode) or isinstance(child, LSInsertNode):
 									if not child.number in related_nodes:
 										related_nodes[child.number] = len(related_nodes) + 1
-							dynamic_node_content = ', '.join(token_to_dynamic_text(child, related_nodes) for child in token.children)
+							dynamic_node_content = ', '.join(self.token_to_dynamic_text(child, related_nodes) for child in token.children)
 							related_nodes_code = ''
 							if related_nodes:
 								related_nodes_code = f', {{{", ".join(str(v) for v in related_nodes.keys())}}}'
@@ -286,7 +286,7 @@ class ParsedSnippet:
 					snippet_body.write(f'cp({token.number})')
 				case LSPythonCodeNode():
 					related_nodes_code = f'{", ".join(str(i) for i in range(1, self.max_placeholder + 1))}'
-					snippet_body.write(f'f(function(args, snip) return {token.lua_code} end, {{{related_nodes_code}}})')
+					snippet_body.write(f'f(function(args, snip) return {token.get_lua_code(self)} end, {{{related_nodes_code}}})')
 				case _:
 					raise RuntimeError("Unknown token: %s" % token)
 			if not last_token:
@@ -295,6 +295,24 @@ class ParsedSnippet:
 					snippet_body.write(' ')
 
 		return snippet_body.getvalue()
+
+	def token_to_dynamic_text(self, token: LSNode, related_nodes: dict[int, int]):
+		match token:
+			case LSTextNode():
+				return escape_lua_string(token.text)
+			case LSCopyNode():
+				return f'args[{related_nodes[token.number]}]'
+			case LSInsertNode():
+				if token.children:
+					raise RuntimeError("Not implemented")
+				else:
+					return f'args[{related_nodes[token.number]}]'
+			case LSVisualNode():
+				return 'snip.env.LS_SELECT_DEDENT or {}'
+			case LSPythonCodeNode():
+				return token.get_lua_code(self)
+			case _:
+				raise RuntimeError("Token not allowed: %s" % token)
 
 
 def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Optional[Tuple[int, int]]):
@@ -418,25 +436,6 @@ def parse_snippet(snippet):
 	return transform_tokens(tokens, lines)
 
 
-def token_to_dynamic_text(token: LSNode, related_nodes: dict[int, int]):
-	match token:
-		case LSTextNode():
-			return escape_lua_string(token.text)
-		case LSCopyNode():
-			return f'args[{related_nodes[token.number]}]'
-		case LSInsertNode():
-			if token.children:
-				raise RuntimeError("Not implemented")
-			else:
-				return f'args[{related_nodes[token.number]}]'
-		case LSVisualNode():
-			return 'snip.env.LS_SELECT_DEDENT or {}'
-		case LSPythonCodeNode():
-			return token.lua_code
-		case _:
-			raise RuntimeError("Token not allowed: %s" % token)
-
-
 
 def main():
 	args = vim.exec_lua('return vim.v.argv')[8:]
@@ -503,6 +502,7 @@ def main():
 		snippet_attrs.append(f'trigEngine = te({escape_lua_string(snippet._opts)})')
 		snippet_code[snippet.trigger].append(ParsedSnippet(
 			attributes=", ".join(snippet_attrs),
+			filetype=args.filetype,
 			tokens=tokens,
 			snippet=snippet
 		))
