@@ -19,7 +19,7 @@ vim.command('Lazy load vim-snippets')
 
 from UltiSnips import UltiSnips_Manager
 from UltiSnips.snippet.parsing.base import tokenize_snippet_text
-from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken, PythonCodeToken
+from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken, PythonCodeToken, VimLCodeToken
 from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing
 from UltiSnips.snippet.parsing import snipmate as snipmate_parsing
 from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
@@ -185,7 +185,12 @@ class LSVisualNode(LSNode):
 		return f'{self.__class__.__name__}()'
 
 
-class LSPythonCodeNode(LSNode):
+class LSCodeNode(LSNode):
+	def get_lua_code(self, snippet: 'ParsedSnippet') -> str:
+		raise NotImplemented()
+
+
+class LSPythonCodeNode(LSCodeNode):
 	__slots__ = ['code', 'indent']
 
 	def __init__(self, code, indent):
@@ -198,6 +203,19 @@ class LSPythonCodeNode(LSNode):
 	def get_lua_code(self, snippet: 'ParsedSnippet') -> str:
 		code = self.code.replace("\\`", "`")
 		return f'c_py({{{escape_lua_string(snippet.filetype)}, {escape_lua_string(snippet.snippet.trigger)}}}, {escape_lua_string(code)}, python_globals, args, snip, {escape_lua_string(self.indent)})'
+
+
+class LSVimLCodeNode(LSCodeNode):
+	__slots__ = ['code']
+
+	def __init__(self, code):
+		self.code = code
+
+	def __repr__(self):
+		return f'{self.__class__.__name__}({self.code!r})'
+
+	def get_lua_code(self, snippet: 'ParsedSnippet') -> str:
+		return f'c_viml({escape_lua_string(self.code)})'
 
 
 @dataclass
@@ -284,7 +302,7 @@ class ParsedSnippet:
 						snippet_body.write(f'i({token.number})')
 				case LSCopyNode():
 					snippet_body.write(f'cp({token.number})')
-				case LSPythonCodeNode():
+				case LSCodeNode():
 					related_nodes_code = f'{", ".join(str(i) for i in range(1, self.max_placeholder + 1))}'
 					snippet_body.write(f'f(function(args, snip) return {token.get_lua_code(self)} end, {{{related_nodes_code}}})')
 				case _:
@@ -309,7 +327,7 @@ class ParsedSnippet:
 					return f'args[{related_nodes[token.number]}]'
 			case LSVisualNode():
 				return 'snip.env.LS_SELECT_DEDENT or {}'
-			case LSPythonCodeNode():
+			case LSCodeNode():
 				return token.get_lua_code(self)
 			case _:
 				raise RuntimeError("Token not allowed: %s" % token)
@@ -383,6 +401,8 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 				pass
 			case PythonCodeToken():
 				token_list.append(LSPythonCodeNode(token.code, token.indent))
+			case VimLCodeToken():
+				token_list.append(LSVimLCodeNode(token.code))
 			case _:
 				snippet_text = '\n'.join(lines)
 				raise RuntimeError(f"Unknown token {token} in snippet: \n{snippet_text}")
@@ -419,19 +439,6 @@ def parse_snippet(snippet):
 		tokens = do_tokenize(None, snippet._value, snipmate_parsing.__ALLOWED_TOKENS, snipmate_parsing.__ALLOWED_TOKENS_IN_TABSTOPS, snipmate_parsing._TOKEN_TO_TEXTOBJECT)
 	else:
 		tokens = do_tokenize(None, snippet._value, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing._TOKEN_TO_TEXTOBJECT)
-
-	if snippet.trigger == 'forr':
-		#tokens = tokenize(snippet._value, 0, Position(0, 0), snipmate_parsing.__ALLOWED_TOKENS)
-		#print(transform_tokens(tokens, lines))
-		#print(snippet._value)
-		pass
-
-	#if snippet.trigger == 'pac':
-	#	tokens = list(tokens)
-	#	tok = tokens[0]
-	#	subtokens = list(tokenize(tok.initial_text, '', tok.start, __ALLOWED_TOKENS))
-	#	print(subtokens)
-
 
 	return transform_tokens(tokens, lines)
 
