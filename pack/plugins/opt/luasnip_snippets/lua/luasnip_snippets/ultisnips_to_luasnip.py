@@ -322,7 +322,7 @@ class ParsedSnippet:
 				return f'args[{related_nodes[token.number]}]'
 			case LSInsertNode():
 				if token.children:
-					raise RuntimeError("Not implemented")
+					raise RuntimeError("Unsupported")
 				else:
 					return f'args[{related_nodes[token.number]}]'
 			case LSVisualNode():
@@ -533,16 +533,16 @@ def main():
 				try:
 					fp.write(f'\ts({{{parsed_snippet.attributes}}}, {{{parsed_snippet.get_code(indent=2)}\n\t}}),\n')
 				except Exception:
-					logger.error("Error in snippet '%s':\n%s", parsed_snippet.snippet.trigger, parsed_snippet.snippet._value)
-					raise
+					logger.exception("Error in snippet '%s':\n%s", parsed_snippet.snippet.trigger, parsed_snippet.snippet._value)
+					continue
 			else:
 				snippet_choices = []
 				for parsed_snippet in snippet_list:
 					try:
 						snippet_choices.append(f'\t\t{{{parsed_snippet.get_code(indent=3, replace_zero_placeholders=True)}\n\t\t}},\n')
 					except Exception:
-						logger.error("Error in snippet '%s':\n%s", parsed_snippet.snippet.trigger, parsed_snippet.snippet._value)
-						raise
+						logger.exception("Error in snippet '%s':\n%s", parsed_snippet.snippet.trigger, parsed_snippet.snippet._value)
+					continue
 				fp.write(f'\ts({{{parsed_snippet.attributes}}}, c(1, {{\n{"".join(snippet_choices)}\t}})),\n')
 		#fp.write(''.join(snippet_code))
 		fp.write('})\n')
