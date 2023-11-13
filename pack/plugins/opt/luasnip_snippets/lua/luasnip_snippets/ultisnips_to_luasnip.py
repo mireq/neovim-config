@@ -284,9 +284,9 @@ class ParsedSnippet:
 							text_content = ''.join(child.text for child in token.children)
 							if '\n' in text_content:
 								text_content = ', '.join(escape_lua_string(line) for line in text_content.split('\n'))
-								snippet_body.write(f'i({token.number}, {{{text_content}}})')
+								snippet_body.write(f'i({token.number}, {{{text_content}}}, {{key = "i{token.number}"}})')
 							else:
-								snippet_body.write(f'i({token.number}, {escape_lua_string(text_content)})')
+								snippet_body.write(f'i({token.number}, {escape_lua_string(text_content)}, {{key = "i{token.number}"}})')
 						else:
 							related_nodes = {}
 							for child in token.children:
@@ -297,9 +297,9 @@ class ParsedSnippet:
 							related_nodes_code = ''
 							if related_nodes:
 								related_nodes_code = f', {{{", ".join(str(v) for v in related_nodes.keys())}}}'
-							snippet_body.write(f'd({token.number}, function(args, snip) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}}, {escape_lua_string(node_indent)})) }}) end{related_nodes_code})')
+							snippet_body.write(f'd({token.number}, function(args, snip) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}}, {escape_lua_string(node_indent)}), {{key = "i{token.number}"}}) }}) end{related_nodes_code})')
 					else:
-						snippet_body.write(f'i({token.number})')
+						snippet_body.write(f'i({token.number}, "", {{key = "i{token.number}"}})')
 				case LSCopyNode():
 					snippet_body.write(f'cp({token.number})')
 				case LSCodeNode():
