@@ -155,6 +155,13 @@ class LSInsertNode(LSNode):
 	def __repr__(self):
 		return f'{self.__class__.__name__}({self.number!r}, {self.children!r})'
 
+	@property
+	def is_nested(self):
+		for child in self.children:
+			if isinstance(child, (LSInsertNode, LSCopyNode, LSInsertOrCopyNode_)):
+				return True
+		return False
+
 
 class LSCopyNode(LSNode):
 	__slots__ = ['number']
