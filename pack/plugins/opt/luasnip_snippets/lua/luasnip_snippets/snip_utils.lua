@@ -2,6 +2,7 @@ local ls = require("luasnip")
 local util = require("luasnip.util.util")
 local f = ls.function_node
 local t = ls.text_node
+local k = require("luasnip.nodes.key_indexer").new_key
 local rundir = debug.getinfo(1).source:match("@?(.*/)")
 
 local python_helper_loaded = false
@@ -42,7 +43,7 @@ end
 
 -- Copy node
 local function copy(num)
-	return f(copy_helper, num)
+	return f(copy_helper, k('i' .. num))
 end
 
 -- Join text
