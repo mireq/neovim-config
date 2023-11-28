@@ -283,6 +283,7 @@ class ParsedSnippet:
 						if token.is_nested: # nested nodes are not supported, unwrapping
 							dynamic_node_content = self.render_tokens(token.children, at_line_start=False)
 							snippet_body.write(dynamic_node_content)
+							snippet_body.write(", ")
 							continue
 						#print(dynamic_node_content)
 						#snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{{dynamic_node_content}}}) end)')
