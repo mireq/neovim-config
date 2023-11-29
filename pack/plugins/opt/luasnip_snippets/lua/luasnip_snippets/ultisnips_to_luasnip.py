@@ -420,6 +420,8 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 		previous_token_end = token.end
 	token_list.extend(get_text_nodes_between(lines, previous_token_end, None))
 
+	remove_nodes = set()
+
 	insert_tokens = set(token.number for token in insert_nodes.values())
 	def finalize_token(token):
 		if isinstance(token, LSInsertNode):
@@ -433,10 +435,16 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 				insert_tokens.add(token.number)
 		if isinstance(token, LSInsertNode):
 			token.children = [finalize_token(child) for child in token.children]
+			# nested nodes are not supported by luasnip
+			if token.is_nested:
+				remove_nodes.add(token.number)
 		return token
 
 	# replace zero tokens and copy or insert tokens
 	token_list = [finalize_token(token) for token in token_list]
+
+	if remove_nodes:
+		print("Nodes to remove", remove_nodes)
 
 	return token_list
 
