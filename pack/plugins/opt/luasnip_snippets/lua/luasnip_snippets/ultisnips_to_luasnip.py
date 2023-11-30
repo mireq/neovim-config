@@ -421,6 +421,7 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 	token_list.extend(get_text_nodes_between(lines, previous_token_end, None))
 
 	remove_nodes = set()
+	node_numbers = set()
 
 	insert_tokens = set(token.number for token in insert_nodes.values())
 	def finalize_token(token):
@@ -438,13 +439,20 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 			# nested nodes are not supported by luasnip
 			if token.is_nested:
 				remove_nodes.add(token.number)
+		if isinstance(token, (LSInsertNode, LSCopyNode)):
+			node_numbers.add(token.number)
 		return token
 
 	# replace zero tokens and copy or insert tokens
 	token_list = [finalize_token(token) for token in token_list]
 
 	if remove_nodes:
-		print("Nodes to remove", remove_nodes)
+		node_numbers.discard(0)
+		node_numbers = sorted(node_numbers - remove_nodes)
+		print(node_numbers)
+		remap = {node_numbers[new_number]: new_number + 1 for new_number in range(len(node_numbers))}
+		print(remap)
+
 
 	return token_list
 
