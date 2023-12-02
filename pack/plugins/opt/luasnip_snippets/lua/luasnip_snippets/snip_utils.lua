@@ -234,10 +234,11 @@ local function call_python(python_function_name, opts)
 end
 
 local function code_python(id, node_code, global_code, args, snip, indent)
-	-- local file = io.open("/tmp/snip.lua", "w")
-	-- file:write(vim.inspect(snip))
-	-- file:close()
 	return call_python("execute_code", {node_id=id, node_code=node_code, global_code=global_code, tabstops=args, env=snip.env, indent=indent})
+end
+
+local function code_viml(code)
+	return join_text({vim.api.nvim_eval(code), ''})
 end
 
 local function setup()
@@ -258,4 +259,5 @@ return {
 	load_ft_func = load_ft_func,
 	setup = setup,
 	code_python = code_python,
+	code_viml = code_viml,
 }

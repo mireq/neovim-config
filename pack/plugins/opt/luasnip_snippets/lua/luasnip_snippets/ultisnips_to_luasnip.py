@@ -77,6 +77,7 @@ local jt = su.join_text
 local nl = su.new_line
 local te = su.trig_engine
 local c_py = su.code_python
+local c_viml = su.code_viml
 
 """
 
