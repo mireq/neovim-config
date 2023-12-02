@@ -361,9 +361,9 @@ class ParsedSnippet:
 				raise RuntimeError("Token not allowed: %s" % token)
 
 
-def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Optional[Tuple[int, int]]):
+def get_text_nodes_between(content: List[str], start: Tuple[int, int], end: Optional[Tuple[int, int]]):
 	if end is None:
-		end = (len(input) - 1, len(input[-1]) - 1)
+		end = (len(content) - 1, len(content[-1]) - 1)
 	text_nodes = []
 	for line_num in range(start[0], end[0] + 1):
 		col_start = None
@@ -372,7 +372,7 @@ def get_text_nodes_between(input: List[str], start: Tuple[int, int], end: Option
 			col_start = start[1]
 		if line_num == end[0]:
 			col_end = end[1]
-		current_line = input[line_num] if line_num < len(input) else ''
+		current_line = content[line_num] if line_num < len(content) else ''
 		text_fragment = current_line[col_start:col_end]
 		if text_fragment:
 			if text_fragment[-1:] == '\n':
