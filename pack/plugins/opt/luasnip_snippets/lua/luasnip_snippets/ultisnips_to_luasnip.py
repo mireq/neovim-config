@@ -384,22 +384,20 @@ def get_text_nodes_between(content: List[str], start: Tuple[int, int], end: Opti
 	return [LSTextNode(text) for text in text_nodes]
 
 
-def do_tokenize(parent, text, allowed_tokens_in_text, allowed_tokens_in_tabstops, token_to_textobject):
+def do_tokenize(parent, text, allowed_tokens_in_text, allowed_tokens_in_tabstops, token_replacements):
 	allowed_tokens = allowed_tokens_in_tabstops if parent else allowed_tokens_in_text
 	tokens = list(tokenize(text, '', Position(0, 0) if parent is None else parent.start, allowed_tokens))
 	for token in tokens:
 		if isinstance(token, TabStopToken):
-			token.child_tokens = do_tokenize(token, token.initial_text, allowed_tokens_in_text, allowed_tokens_in_tabstops, token_to_textobject)
+			token.child_tokens = do_tokenize(token, token.initial_text, allowed_tokens_in_text, allowed_tokens_in_tabstops, token_replacements)
 			parent_start = token.start
 			for child in token.child_tokens:
 				child.start -= parent_start
 				child.end -= parent_start
 		else:
-			klass = token_to_textobject.get(token.__class__, None)
+			klass = token_replacements.get(token.__class__, None)
 			if klass is not None:
-				#print(klass)
-				#text_object = klass(parent, token)
-				pass
+				token.__class__ = klass
 	return tokens
 
 
@@ -489,9 +487,9 @@ def parse_snippet(snippet):
 	snippet.launch('', VisualContent('', 'v'), None, None, None)
 
 	if isinstance(snippet, SnipMateSnippetDefinition):
-		tokens = do_tokenize(None, snippet._value, snipmate_parsing.__ALLOWED_TOKENS, snipmate_parsing.__ALLOWED_TOKENS_IN_TABSTOPS, snipmate_parsing._TOKEN_TO_TEXTOBJECT)
+		tokens = do_tokenize(None, snippet._value, snipmate_parsing.__ALLOWED_TOKENS, snipmate_parsing.__ALLOWED_TOKENS_IN_TABSTOPS, {ShellCodeToken: VimLCodeToken})
 	else:
-		tokens = do_tokenize(None, snippet._value, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing._TOKEN_TO_TEXTOBJECT)
+		tokens = do_tokenize(None, snippet._value, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing.__ALLOWED_TOKENS, {})
 
 	return transform_tokens(tokens, lines)
 
