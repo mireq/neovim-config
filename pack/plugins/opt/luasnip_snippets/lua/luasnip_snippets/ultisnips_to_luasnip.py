@@ -88,7 +88,7 @@ logger = logging.getLogger(__name__)
 
 sys.path.append(str(Path.home().joinpath('.local/share/nvim/lazy/ultisnips/pythonx')))
 VisualContent = namedtuple('VisualContent', ['text', 'mode'])
-LUA_SPECIAL_CHAR_RX = re.compile(r'("|\'|\t|\n)')
+LUA_SPECIAL_CHAR_RX = re.compile(r'("|\'|\t|\n|\\)')
 INDENT_RE = re.compile(r'^([\t ]*)')
 KNOWN_LANGUAGES = {
 	'!p': 'python',
