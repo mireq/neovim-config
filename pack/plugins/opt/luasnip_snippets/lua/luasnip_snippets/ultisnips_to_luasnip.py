@@ -19,7 +19,7 @@ vim.command('Lazy load vim-snippets')
 
 from UltiSnips import UltiSnips_Manager
 from UltiSnips.snippet.parsing.base import tokenize_snippet_text
-from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken, PythonCodeToken, VimLCodeToken
+from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken, PythonCodeToken, VimLCodeToken, ShellCodeToken
 from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing
 from UltiSnips.snippet.parsing import snipmate as snipmate_parsing
 from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
@@ -78,6 +78,7 @@ local nl = su.new_line
 local te = su.trig_engine
 local c_py = su.code_python
 local c_viml = su.code_viml
+local c_shell = su.code_shell
 
 """
 
@@ -223,7 +224,22 @@ class LSVimLCodeNode(LSCodeNode):
 		return f'{self.__class__.__name__}({self.code!r})'
 
 	def get_lua_code(self, snippet: 'ParsedSnippet') -> str:
-		return f'c_viml({escape_lua_string(self.code)})'
+		code = self.code.replace("\\`", "`")
+		return f'c_viml({escape_lua_string(code)})'
+
+
+class LSShellCodeNode(LSCodeNode):
+	__slots__ = ['code']
+
+	def __init__(self, code):
+		self.code = code
+
+	def __repr__(self):
+		return f'{self.__class__.__name__}({self.code!r})'
+
+	def get_lua_code(self, snippet: 'ParsedSnippet') -> str:
+		code = self.code.replace("\\`", "`")
+		return f'c_shell({escape_lua_string(code)})'
 
 
 @dataclass
@@ -415,6 +431,8 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 				token_list.append(LSPythonCodeNode(token.code, token.indent))
 			case VimLCodeToken():
 				token_list.append(LSVimLCodeNode(token.code))
+			case ShellCodeToken():
+				token_list.append(LSShellCodeNode(token.code))
 			case _:
 				snippet_text = '\n'.join(lines)
 				raise RuntimeError(f"Unknown token {token} in snippet: \n{snippet_text}")

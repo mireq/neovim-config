@@ -1,3 +1,7 @@
+local lfs = require("lfs")
+local io = require("io")
+local os = require("os")
+
 local ls = require("luasnip")
 local util = require("luasnip.util.util")
 local f = ls.function_node
@@ -241,6 +245,31 @@ local function code_viml(code)
 	return join_text({vim.api.nvim_eval(code), ''})
 end
 
+-- Remove new line at end of the string
+local function chomp(string)
+	if string:sub(-1) == "\n" then
+		string = string:sub(1, -2)
+	end
+	if string:sub(-1) == "\r" then
+		string = string:sub(1, -2)
+	end
+	return string
+end
+
+
+local function run_shell_command(cmd)
+	local handle = io.popen(cmd, 'r')
+	local output = handle:read("*a")
+	handle:close()
+	return chomp(output)
+end
+
+
+local function code_shell(code)
+	return join_text({run_shell_command(code)})
+end
+
+
 local function setup()
 	local module_path = script_path()
 	require("luasnip.loaders.from_lua").lazy_load({
@@ -260,4 +289,5 @@ return {
 	setup = setup,
 	code_python = code_python,
 	code_viml = code_viml,
+	code_shell = code_shell,
 }
