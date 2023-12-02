@@ -1,6 +1,4 @@
-local lfs = require("lfs")
 local io = require("io")
-local os = require("os")
 
 local ls = require("luasnip")
 local util = require("luasnip.util.util")
