@@ -183,6 +183,13 @@ local function trig_engine(opts)
 					first_char = #line_to_cursor - line_to_cursor:reverse():find(trigger:reverse(), 1, true) - #trigger
 					last_char = first_char + #trigger
 				end
+			elseif opts:find("i") ~= nil then
+				local match = words:sub(-#trigger) == trigger
+				if match then
+					matched = trigger
+					last_char = #line_to_cursor
+					first_char = last_char - #trigger
+				end
 			else
 				local match = words == trigger
 				if match then
