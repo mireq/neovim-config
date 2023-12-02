@@ -455,7 +455,7 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 			if isinstance(token, LSInsertNode):
 				children = [remap_numbers(child) for child in token.children]
 				token = LSInsertNode(remap.get(token.number, token.number), children)
-			elif isinstance(token, LSCodeNode):
+			elif isinstance(token, LSCopyNode):
 				token = LSCopyNode(remap.get(token.number, token.number))
 			return token
 
