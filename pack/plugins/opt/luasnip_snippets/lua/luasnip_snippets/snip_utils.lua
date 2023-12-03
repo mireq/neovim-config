@@ -218,7 +218,12 @@ local function trig_engine(opts)
 	return engine
 end
 
-local load_ft_func = require("luasnip.extras.filetype_functions").extend_load_ft(filetype_includes)
+local load_ft_func_base = require("luasnip.extras.filetype_functions").extend_load_ft(filetype_includes)
+local function load_ft_func(bufnr)
+	local res = load_ft_func_base(bufnr)
+	vim.list_extend(res, filetype_includes['all'])
+	return res
+end
 
 local function load_python_helper()
 	if not python_helper_loaded then
