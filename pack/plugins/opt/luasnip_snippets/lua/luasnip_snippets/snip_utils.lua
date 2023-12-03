@@ -274,10 +274,15 @@ end
 
 
 local function setup()
+	local ls = require('luasnip')
 	local module_path = script_path()
 	require("luasnip.loaders.from_lua").lazy_load({
 		paths = { module_path }
 	})
+
+	for filetype, extends in pairs(filetype_includes) do
+		ls.filetype_extend(filetype, extends)
+	end
 end
 
 return {
