@@ -19,7 +19,7 @@ vim.command('Lazy load vim-snippets')
 
 from UltiSnips import UltiSnips_Manager
 from UltiSnips.snippet.parsing.base import tokenize_snippet_text
-from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken, PythonCodeToken, VimLCodeToken, ShellCodeToken
+from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken, PythonCodeToken, VimLCodeToken, ShellCodeToken, EscapeCharToken
 from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing
 from UltiSnips.snippet.parsing import snipmate as snipmate_parsing
 from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
@@ -431,6 +431,8 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 				token_list.append(LSVimLCodeNode(token.code))
 			case ShellCodeToken():
 				token_list.append(LSShellCodeNode(token.code))
+			case EscapeCharToken():
+				token_list.append(LSTextNode(token.initial_text))
 			case _:
 				snippet_text = '\n'.join(lines)
 				raise RuntimeError(f"Unknown token {token} in snippet: \n{snippet_text}")
@@ -523,6 +525,8 @@ def main():
 	global_definitions = defaultdict(OrderedSet)
 
 	for snippet in snippets:
+		if snippet.trigger != 'exit':
+			continue
 		for global_type, global_codes in snippet._globals.items():
 			for global_code in global_codes:
 				if global_type in KNOWN_LANGUAGES:
@@ -571,7 +575,7 @@ def main():
 		code_globals[language] = ', '.join(f'\t{escape_multiline_lua_sting(code_block)}\n' for code_block in global_list)
 
 	with open(f'{args.filetype}.lua', 'w') as fp:
-		fp.write(f'-- Generated {datetime.now().strftime("%Y-%m-%d")} using ultisnips_to_luasnip.py\n\n')
+		fp.write(f'-- Generated using ultisnips_to_luasnip.py\n\n')
 		fp.write(FILE_HEADER)
 		if code_globals:
 			fp.write('\n')
