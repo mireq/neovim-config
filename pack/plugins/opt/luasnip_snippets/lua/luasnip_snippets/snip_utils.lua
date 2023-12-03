@@ -20,7 +20,7 @@ if filetype_mapping_fp ~= nil then
 		end
 		filetype = nil
 		aliases = {}
-		for word in line:gmatch("%w+") do
+		for word in line:gmatch("[^%s]+") do
 			if filetype == nil then
 				filetype = word
 			else
@@ -273,7 +273,6 @@ local function setup()
 	require("luasnip.loaders.from_lua").lazy_load({
 		paths = { module_path }
 	})
-	--call_python('hello')
 end
 
 return {
