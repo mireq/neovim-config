@@ -503,7 +503,7 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 def parse_snippet(snippet):
 	snippet_text = snippet._value
 	lines = snippet_text.splitlines(keepends=True)
-	snippet.launch('', VisualContent('', 'v'), None, None, None)
+	#snippet.launch('', VisualContent('', 'v'), None, None, None)
 
 	if isinstance(snippet, SnipMateSnippetDefinition):
 		tokens = do_tokenize(None, snippet._value, snipmate_parsing.__ALLOWED_TOKENS, snipmate_parsing.__ALLOWED_TOKENS_IN_TABSTOPS, {ShellCodeToken: VimLCodeToken})
