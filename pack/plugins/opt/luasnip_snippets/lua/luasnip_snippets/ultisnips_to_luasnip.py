@@ -336,6 +336,8 @@ class ParsedSnippet:
 				case LSCodeNode():
 					related_nodes_code = f'{", ".join(str(i) for i in range(1, self.max_placeholder + 1))}'
 					snippet_body.write(f'f(function(args, snip) return {token.get_lua_code(self)} end, {{{related_nodes_code}}})')
+				case LSVisualNode():
+					snippet_body.write(f'f(function(args, snip) return snip.env.LS_SELECT_DEDENT or {{}} end)')
 				case _:
 					raise RuntimeError("Unknown token: %s" % token)
 			if not last_token:
