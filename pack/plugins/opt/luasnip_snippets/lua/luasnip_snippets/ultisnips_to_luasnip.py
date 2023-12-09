@@ -465,6 +465,20 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 	# replace zero tokens and copy or insert tokens
 	token_list = [finalize_token(token) for token in token_list]
 
+
+	def merge_adjacent_text_tokens(tokens: list[LSNode]) -> list[LSNode]:
+		new_tokens: list[LSNode] = []
+		last_token: LSNode | None = None
+		for token in tokens:
+			if isinstance(last_token, LSTextNode) and isinstance(token, LSTextNode) and last_token.text != '\n' and token.text != '\n':
+				last_token.text = last_token.text + token.text
+				continue
+			new_tokens.append(token)
+			last_token = token
+		return new_tokens
+
+	token_list = merge_adjacent_text_tokens(token_list)
+
 	if remove_nodes:
 		node_numbers.discard(0)
 		node_numbers = sorted(node_numbers - remove_nodes)
@@ -525,8 +539,6 @@ def main():
 	global_definitions = defaultdict(OrderedSet)
 
 	for snippet in snippets:
-		if snippet.trigger != 'exit':
-			continue
 		for global_type, global_codes in snippet._globals.items():
 			for global_code in global_codes:
 				if global_type in KNOWN_LANGUAGES:
