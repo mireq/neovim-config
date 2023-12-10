@@ -9,7 +9,7 @@ from datetime import datetime
 from functools import cached_property
 from io import StringIO
 from pathlib import Path
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Iterable
 import argparse
 import logging.config
 import operator
@@ -264,11 +264,19 @@ class ParsedSnippet:
 			actions.append(f'[{escape_lua_string(key)}] = {escape_lua_string(value)}')
 		return ', '.join(actions)
 
-	@cached_property
-	def max_placeholder(self):
-		tokens = self.tokens
-		max_placeholder = 0
+	def __iter_tokens(self, tokens: list[LSNode]) -> Iterable[LSNode]:
 		for token in tokens:
+			yield token
+			if isinstance(token, LSInsertNode) and token.children:
+				yield from self.__iter_tokens(token.children)
+
+	def iter_all_tokens(self) -> Iterable[LSNode]:
+		yield from self.__iter_tokens(self.tokens)
+
+	@property
+	def max_placeholder(self) -> int:
+		max_placeholder = 0
+		for token in self.iter_all_tokens():
 			if isinstance(token, (LSInsertNode, LSCopyNode)):
 				max_placeholder = max(max_placeholder, token.number)
 		return max_placeholder
