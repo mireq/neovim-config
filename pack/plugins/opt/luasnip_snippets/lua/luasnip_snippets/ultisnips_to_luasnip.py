@@ -484,20 +484,20 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 
 	token_list = merge_adjacent_text_tokens(token_list)
 
-	if remove_nodes:
-		node_numbers.discard(0)
-		node_numbers = sorted(node_numbers - remove_nodes)
-		remap = {node_numbers[new_number]: new_number + 1 for new_number in range(len(node_numbers))}
+	# try to correctly remap node numbers
+	node_numbers.discard(0)
+	node_numbers = sorted(node_numbers - remove_nodes)
+	remap = {node_numbers[new_number]: new_number + 1 for new_number in range(len(node_numbers))}
 
-		def remap_numbers(token):
-			if isinstance(token, LSInsertNode):
-				children = [remap_numbers(child) for child in token.children]
-				token = LSInsertNode(remap.get(token.number, token.number), children)
-			elif isinstance(token, LSCopyNode):
-				token = LSCopyNode(remap.get(token.number, token.number))
-			return token
+	def remap_numbers(token):
+		if isinstance(token, LSInsertNode):
+			children = [remap_numbers(child) for child in token.children]
+			token = LSInsertNode(remap.get(token.number, token.number), children)
+		elif isinstance(token, LSCopyNode):
+			token = LSCopyNode(remap.get(token.number, token.number))
+		return token
 
-		token_list = [remap_numbers(token) for token in token_list]
+	token_list = [remap_numbers(token) for token in token_list]
 
 	return token_list
 
