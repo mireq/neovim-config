@@ -251,11 +251,18 @@ class ParsedSnippet:
 	filetype: str
 	tokens: list[LSNode]
 	snippet: UltiSnipsSnippetDefinition
+	actions: dict[str, str]
 
 	def get_code(self, indent: int, replace_zero_placeholders: bool = False) -> str:
 		tokens = self.tokens
 		tokens = self.__replace_zero_placeholders(tokens, replace_zero_placeholders)
 		return self.render_tokens(tokens, indent)
+
+	def get_actions_code(self) -> str:
+		actions = []
+		for key, value in self.actions.items():
+			actions.append(f'[{escape_lua_string(key)}] = {escape_lua_string(value)}')
+		return ', '.join(actions)
 
 	@cached_property
 	def max_placeholder(self):
@@ -583,7 +590,8 @@ def main():
 			attributes=", ".join(snippet_attrs),
 			filetype=args.filetype,
 			tokens=tokens,
-			snippet=snippet
+			snippet=snippet,
+			actions=snippet._actions,
 		))
 		#snippet_code[snippet.trigger].append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
 
@@ -602,6 +610,9 @@ def main():
 		for snippet_list in snippet_code.values():
 			parsed_snippet = snippet_list[0]
 			if len(snippet_list) == 1:
+				actions_code = parsed_snippet.get_actions_code()
+				if actions_code:
+					print(actions_code)
 				try:
 					fp.write(f'\ts({{{parsed_snippet.attributes}}}, {{{parsed_snippet.get_code(indent=2)}\n\t}}),\n')
 				except Exception:
