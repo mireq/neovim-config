@@ -2,6 +2,7 @@ local io = require("io")
 
 local ls = require("luasnip")
 local util = require("luasnip.util.util")
+local events = require("luasnip.util.events")
 local f = ls.function_node
 local t = ls.text_node
 local k = require("luasnip.nodes.key_indexer").new_key
@@ -270,6 +271,39 @@ local function setup()
 	end
 end
 
+
+local action_node_context = {}
+
+
+local function make_actions(actions, max_placeholder)
+	local callbacks = {}
+	callbacks[-1] = {
+		[events.pre_expand] = function(snippet, event_args)
+			action_node_context[snippet.id] = { index = 0 }
+		end
+	}
+
+	local function on_enter(index)
+		return function(snippet, event_args)
+			local main = snippet
+			while main.id == nil and main.parent do
+				main = main.parent
+			end
+			local previous_index = action_node_context[main.id].index
+			print(previous_index, index)
+			action_node_context[main.id].index = index
+		end
+	end
+
+	for i = 1, max_placeholder do
+		callbacks[i] = {
+			[events.enter] = on_enter(i)
+		}
+	end
+	return {callbacks=callbacks}
+end
+
+
 return {
 	copy = copy,
 	join_text = join_text,
@@ -282,4 +316,5 @@ return {
 	code_python = code_python,
 	code_viml = code_viml,
 	code_shell = code_shell,
+	make_actions = make_actions,
 }
