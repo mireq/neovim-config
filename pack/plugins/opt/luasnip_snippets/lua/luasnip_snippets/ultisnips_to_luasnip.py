@@ -82,6 +82,7 @@ local te = su.trig_engine
 local c_py = su.code_python
 local c_viml = su.code_viml
 local c_shell = su.code_shell
+local make_actions = su.make_actions
 
 """
 
@@ -620,9 +621,9 @@ def main():
 			if len(snippet_list) == 1:
 				actions_code = parsed_snippet.get_actions_code()
 				if actions_code:
-					print(actions_code)
+					actions_code = f', make_actions({{{actions_code}}}, {parsed_snippet.max_placeholder})'
 				try:
-					fp.write(f'\ts({{{parsed_snippet.attributes}}}, {{{parsed_snippet.get_code(indent=2)}\n\t}}),\n')
+					fp.write(f'\ts({{{parsed_snippet.attributes}}}, {{{parsed_snippet.get_code(indent=2)}\n\t}}{actions_code}),\n')
 				except Exception:
 					logger.exception("Error in snippet '%s':\n%s", parsed_snippet.snippet.trigger, parsed_snippet.snippet._value)
 					continue
