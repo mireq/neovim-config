@@ -246,6 +246,13 @@ class LSShellCodeNode(LSCodeNode):
 		return f'c_shell({escape_lua_string(code)})'
 
 
+def iter_all_tokens(tokens: list[LSNode]) -> Iterable[LSNode]:
+	for token in tokens:
+		yield token
+		if isinstance(token, LSInsertNode) and token.children:
+			yield from iter_all_tokens(token.children)
+
+
 @dataclass
 class ParsedSnippet:
 	attributes: str
@@ -265,14 +272,8 @@ class ParsedSnippet:
 			actions.append(f'[{escape_lua_string(key)}] = {escape_lua_string(value)}')
 		return ', '.join(actions)
 
-	def __iter_tokens(self, tokens: list[LSNode]) -> Iterable[LSNode]:
-		for token in tokens:
-			yield token
-			if isinstance(token, LSInsertNode) and token.children:
-				yield from self.__iter_tokens(token.children)
-
 	def iter_all_tokens(self) -> Iterable[LSNode]:
-		yield from self.__iter_tokens(self.tokens)
+		yield from iter_all_tokens(self.tokens)
 
 	@property
 	def max_placeholder(self) -> int:
@@ -460,8 +461,39 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 		previous_token_end = token.end
 	token_list.extend(get_text_nodes_between(lines, previous_token_end, None))
 
+	def merge_adjacent_text_tokens(tokens: list[LSNode]) -> list[LSNode]:
+		new_tokens: list[LSNode] = []
+		last_token: LSNode | None = None
+		for token in tokens:
+			if isinstance(last_token, LSTextNode) and isinstance(token, LSTextNode) and last_token.text != '\n' and token.text != '\n':
+				last_token.text = last_token.text + token.text
+				continue
+			new_tokens.append(token)
+			last_token = token
+		return new_tokens
+
+	return merge_adjacent_text_tokens(token_list)
+
+
+def parse_snippet(snippet):
+	snippet_text = snippet._value
+	lines = snippet_text.splitlines(keepends=True)
+	#snippet.launch('', VisualContent('', 'v'), None, None, None)
+
+	if isinstance(snippet, SnipMateSnippetDefinition):
+		tokens = do_tokenize(None, snippet._value, snipmate_parsing.__ALLOWED_TOKENS, snipmate_parsing.__ALLOWED_TOKENS_IN_TABSTOPS, {ShellCodeToken: VimLCodeToken})
+	else:
+		tokens = do_tokenize(None, snippet._value, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing.__ALLOWED_TOKENS, {})
+
+	token_list = transform_tokens(tokens, lines)
+
+	insert_nodes = {}
 	remove_nodes = set()
 	node_numbers = set()
+
+	for token in iter_all_tokens(token_list):
+		if isinstance(token, LSInsertNode):
+			insert_nodes.setdefault(token.number, token)
 
 	insert_tokens = set(token.number for token in insert_nodes.values())
 	def finalize_token(token):
@@ -486,20 +518,6 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 	# replace zero tokens and copy or insert tokens
 	token_list = [finalize_token(token) for token in token_list]
 
-
-	def merge_adjacent_text_tokens(tokens: list[LSNode]) -> list[LSNode]:
-		new_tokens: list[LSNode] = []
-		last_token: LSNode | None = None
-		for token in tokens:
-			if isinstance(last_token, LSTextNode) and isinstance(token, LSTextNode) and last_token.text != '\n' and token.text != '\n':
-				last_token.text = last_token.text + token.text
-				continue
-			new_tokens.append(token)
-			last_token = token
-		return new_tokens
-
-	token_list = merge_adjacent_text_tokens(token_list)
-
 	# try to correctly remap node numbers
 	node_numbers.discard(0)
 	node_numbers = sorted(node_numbers - remove_nodes)
@@ -516,19 +534,6 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 	token_list = [remap_numbers(token) for token in token_list]
 
 	return token_list
-
-
-def parse_snippet(snippet):
-	snippet_text = snippet._value
-	lines = snippet_text.splitlines(keepends=True)
-	#snippet.launch('', VisualContent('', 'v'), None, None, None)
-
-	if isinstance(snippet, SnipMateSnippetDefinition):
-		tokens = do_tokenize(None, snippet._value, snipmate_parsing.__ALLOWED_TOKENS, snipmate_parsing.__ALLOWED_TOKENS_IN_TABSTOPS, {ShellCodeToken: VimLCodeToken})
-	else:
-		tokens = do_tokenize(None, snippet._value, ulti_snips_parsing.__ALLOWED_TOKENS, ulti_snips_parsing.__ALLOWED_TOKENS, {})
-
-	return transform_tokens(tokens, lines)
 
 
 
@@ -621,6 +626,7 @@ def main():
 			if len(snippet_list) == 1:
 				actions_code = parsed_snippet.get_actions_code()
 				if actions_code:
+					# TODO placeholder mapping
 					actions_code = f', make_actions({{{actions_code}}}, {parsed_snippet.max_placeholder})'
 				try:
 					fp.write(f'\ts({{{parsed_snippet.attributes}}}, {{{parsed_snippet.get_code(indent=2)}\n\t}}{actions_code}),\n')
