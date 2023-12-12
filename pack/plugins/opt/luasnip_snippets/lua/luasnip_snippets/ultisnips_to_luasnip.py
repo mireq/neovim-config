@@ -475,7 +475,7 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 	return merge_adjacent_text_tokens(token_list)
 
 
-def parse_snippet(snippet):
+def parse_snippet(snippet) -> tuple[list[LSNode], dict[int, int]]:
 	snippet_text = snippet._value
 	lines = snippet_text.splitlines(keepends=True)
 	#snippet.launch('', VisualContent('', 'v'), None, None, None)
@@ -533,7 +533,7 @@ def parse_snippet(snippet):
 
 	token_list = [remap_numbers(token) for token in token_list]
 
-	return token_list
+	return token_list, remap
 
 
 
@@ -589,7 +589,7 @@ def main():
 			continue
 
 		try:
-			tokens = parse_snippet(snippet)
+			tokens, token_mapping = parse_snippet(snippet)
 		except Exception:
 			logger.exception("Parsing error of snippet: %s", snippet.trigger)
 			continue
