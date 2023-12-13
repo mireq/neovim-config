@@ -276,6 +276,7 @@ local action_node_context = {}
 
 
 local function make_actions(actions, max_placeholder)
+	-- actions: pre_expand, post_expand, jump
 	local callbacks = {}
 	callbacks[-1] = {
 		[events.pre_expand] = function(snippet, event_args)
