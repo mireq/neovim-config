@@ -182,10 +182,10 @@ local colorscheme = {
 
 	{"CmpItemKindVariable", {ctermfg=255, ctermbg=55}},
 	{"CmpItemKindFile", {ctermfg=255, ctermbg=55}},
+	{"CmpItemKindFolder", {ctermfg=255, ctermbg=55}},
 	{"CmpItemKindSnippet", {ctermfg=255, ctermbg=55}},
 
 	{"CmpItemKindUnit", {ctermfg=255, ctermbg=58}},
-	{"CmpItemKindFolder", {ctermfg=255, ctermbg=58}},
 	{"CmpItemKindText", {ctermfg=255, ctermbg=58}},
 
 	{"CmpItemKindMethod", {ctermfg=255, ctermbg=61}},
