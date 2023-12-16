@@ -260,6 +260,7 @@ class ParsedSnippet:
 	tokens: list[LSNode]
 	snippet: UltiSnipsSnippetDefinition
 	actions: dict[str, str]
+	token_mapping: dict[int, int]
 
 	def get_code(self, indent: int, replace_zero_placeholders: bool = False) -> str:
 		tokens = self.tokens
@@ -381,6 +382,13 @@ class ParsedSnippet:
 				return token.get_lua_code(self)
 			case _:
 				raise RuntimeError("Token not allowed: %s" % token)
+
+	@property
+	def has_remapped_tokens(self) -> bool:
+		for key, value in self.token_mapping.items():
+			if key != value:
+				return True
+		return False
 
 
 def get_text_nodes_between(content: List[str], start: Tuple[int, int], end: Optional[Tuple[int, int]]):
@@ -606,7 +614,9 @@ def main():
 			tokens=tokens,
 			snippet=snippet,
 			actions=snippet._actions,
+			token_mapping=token_mapping,
 		))
+		print(snippet_code[snippet.trigger].has_remapped_tokens)
 		#snippet_code[snippet.trigger].append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
 
 	code_globals = {}
