@@ -257,13 +257,13 @@ def iter_all_tokens(tokens: list[LSNode]) -> Iterable[LSNode]:
 
 @dataclass
 class ParsedSnippet:
-	idx: int
+	index: int
 	attributes: str
 	filetype: str
 	tokens: list[LSNode]
 	snippet: UltiSnipsSnippetDefinition
 	actions: dict[str, str]
-	token_mapping: dict[int, int]
+	token_number_to_index: dict[int, int]
 
 	def get_code(self, indent: int, replace_zero_placeholders: bool = False) -> str:
 		tokens = self.tokens
@@ -388,7 +388,7 @@ class ParsedSnippet:
 
 	@property
 	def has_remapped_tokens(self) -> bool:
-		for key, value in self.token_mapping.items():
+		for key, value in self.token_number_to_index.items():
 			if key != value:
 				return True
 		return False
@@ -558,6 +558,7 @@ def main():
 	UltiSnips_Manager.get_buffer_filetypes = lambda: [args.filetype]
 	snippets = UltiSnips_Manager._snips("", True)
 	snippet_code = defaultdict(list)
+	snippet_code_list = []
 
 	filetype_mapping = {}
 	try:
@@ -575,7 +576,7 @@ def main():
 
 	global_definitions = defaultdict(OrderedSet)
 
-	for idx, snippet in enumerate(snippets, 1):
+	for index, snippet in enumerate(snippets, 1):
 		for global_type, global_codes in snippet._globals.items():
 			for global_code in global_codes:
 				if global_type in KNOWN_LANGUAGES:
@@ -600,7 +601,7 @@ def main():
 			continue
 
 		try:
-			tokens, token_mapping = parse_snippet(snippet)
+			tokens, token_number_to_index = parse_snippet(snippet)
 		except Exception:
 			logger.exception("Parsing error of snippet: %s", snippet.trigger)
 			continue
@@ -611,15 +612,17 @@ def main():
 			snippet_attrs.append(f'descr = {escape_lua_string(snippet.description)}')
 		snippet_attrs.append(f'priority = {snippet.priority}')
 		snippet_attrs.append(f'trigEngine = te({escape_lua_string(snippet._opts)})')
-		snippet_code[snippet.trigger].append(ParsedSnippet(
-			idx=idx,
+		parsed_snippet = ParsedSnippet(
+			index=index,
 			attributes=", ".join(snippet_attrs),
 			filetype=args.filetype,
 			tokens=tokens,
 			snippet=snippet,
 			actions=snippet._actions,
-			token_mapping=token_mapping,
-		))
+			token_number_to_index=token_number_to_index,
+		)
+		snippet_code[snippet.trigger].append(parsed_snippet)
+		snippet_code_list.append(parsed_snippet)
 		print(snippet_code[snippet.trigger][0].has_remapped_tokens)
 		#snippet_code[snippet.trigger].append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
 
@@ -630,6 +633,15 @@ def main():
 	with open(f'{args.filetype}.lua', 'w') as fp:
 		fp.write(f'-- Generated using ultisnips_to_luasnip.py\n\n')
 		fp.write(FILE_HEADER)
+		fp.write('\n')
+		fp.write('local am = { -- argument mapping: token index to placeholder number\n')
+		for snippet in snippet_code_list:
+			if snippet.has_remapped_tokens:
+				token_mapping = ', '.join([f'[{index}] = {number}' for number, index in snippet.token_number_to_index.items()])
+				fp.write(f'\t{{{token_mapping}}},\n')
+			else:
+				fp.write(f'\t{snippet.max_placeholder},\n')
+		fp.write('}\n')
 		if code_globals:
 			fp.write('\n')
 			fp.write(''.join(f'local {language}_globals = {{\n{global_list}}}\n' for language, global_list in code_globals.items()))
