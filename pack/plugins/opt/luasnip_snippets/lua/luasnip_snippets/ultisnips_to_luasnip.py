@@ -152,11 +152,12 @@ class LSTextNode(LSNode):
 
 
 class LSInsertNode(LSNode):
-	__slots__ = ['number', 'children']
+	__slots__ = ['number', 'children', 'original_number']
 
-	def __init__(self, number, children=[]):
+	def __init__(self, number, children=[], original_number=None):
 		self.number = number
 		self.children = children
+		self.original_number = self.number if original_number is None else original_number
 
 	def __repr__(self):
 		return f'{self.__class__.__name__}({self.number!r}, {self.children!r})'
@@ -170,10 +171,11 @@ class LSInsertNode(LSNode):
 
 
 class LSCopyNode(LSNode):
-	__slots__ = ['number']
+	__slots__ = ['number', 'original_number']
 
-	def __init__(self, number):
+	def __init__(self, number, original_number=None):
 		self.number = number
+		self.original_number = self.number if original_number is None else original_number
 
 	def __repr__(self):
 		return f'{self.__class__.__name__}({self.number})'
@@ -534,9 +536,9 @@ def parse_snippet(snippet) -> tuple[list[LSNode], dict[int, int]]:
 	def remap_numbers(token):
 		if isinstance(token, LSInsertNode):
 			children = [remap_numbers(child) for child in token.children]
-			token = LSInsertNode(remap.get(token.number, token.number), children)
+			token = LSInsertNode(remap.get(token.number, token.number), children, token.number)
 		elif isinstance(token, LSCopyNode):
-			token = LSCopyNode(remap.get(token.number, token.number))
+			token = LSCopyNode(remap.get(token.number, token.number), token.number)
 		return token
 
 	token_list = [remap_numbers(token) for token in token_list]
@@ -616,7 +618,7 @@ def main():
 			actions=snippet._actions,
 			token_mapping=token_mapping,
 		))
-		print(snippet_code[snippet.trigger].has_remapped_tokens)
+		print(snippet_code[snippet.trigger][0].has_remapped_tokens)
 		#snippet_code[snippet.trigger].append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
 
 	code_globals = {}
