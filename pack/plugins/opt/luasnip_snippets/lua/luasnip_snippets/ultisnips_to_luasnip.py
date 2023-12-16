@@ -5,8 +5,6 @@
 
 from collections import namedtuple, defaultdict
 from dataclasses import dataclass
-from datetime import datetime
-from functools import cached_property
 from io import StringIO
 from pathlib import Path
 from typing import List, Tuple, Optional, Iterable
@@ -21,7 +19,6 @@ vim.command('Lazy load ultisnips')
 vim.command('Lazy load vim-snippets')
 
 from UltiSnips import UltiSnips_Manager
-from UltiSnips.snippet.parsing.base import tokenize_snippet_text
 from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken, PythonCodeToken, VimLCodeToken, ShellCodeToken, EscapeCharToken
 from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing
 from UltiSnips.snippet.parsing import snipmate as snipmate_parsing
