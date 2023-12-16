@@ -189,7 +189,7 @@ local function trig_engine(opts)
 
 			-- only on beginning of line or only whitespace before trigger
 			if matched ~= nil and opts:find('b') ~= nil then
-				local content_before_trigger = line_to_cursor:sub(1, first_char)
+				local content_before_trigger = line_to_cursor:gsub("%s*$", ""):sub(1, -string.len(matched) - 1)
 				if content_before_trigger:gsub("[%s\t]+", "") ~= '' then
 					return nil
 				end
