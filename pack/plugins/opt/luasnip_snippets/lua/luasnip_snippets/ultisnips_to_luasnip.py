@@ -217,7 +217,7 @@ class LSPythonCodeNode(LSCodeNode):
 
 	def get_lua_code(self, snippet: 'ParsedSnippet') -> str:
 		code = self.code.replace("\\`", "`")
-		return f'c_py({{{escape_lua_string(snippet.filetype)}, {escape_lua_string(snippet.snippet.trigger)}}}, {escape_lua_string(code)}, python_globals, args, snip, {escape_lua_string(self.indent)})'
+		return f'c_py({{{escape_lua_string(snippet.filetype)}, {snippet.index}}}, {escape_lua_string(code)}, python_globals, args, snip, {escape_lua_string(self.indent)})'
 
 
 class LSVimLCodeNode(LSCodeNode):
