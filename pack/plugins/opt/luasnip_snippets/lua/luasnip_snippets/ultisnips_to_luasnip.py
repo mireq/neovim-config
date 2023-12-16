@@ -214,7 +214,7 @@ class LSPythonCodeNode(LSCodeNode):
 
 	def get_lua_code(self, snippet: 'ParsedSnippet') -> str:
 		code = self.code.replace("\\`", "`")
-		return f'c_py({{{escape_lua_string(snippet.filetype)}, {snippet.index}}}, {escape_lua_string(code)}, python_globals, args, snip, {escape_lua_string(self.indent)})'
+		return f'c_py({{{escape_lua_string(snippet.filetype)}, {snippet.index}}}, {escape_lua_string(code)}, python_globals, args, snip, {escape_lua_string(self.indent)}, am[{snippet.index}])'
 
 
 class LSVimLCodeNode(LSCodeNode):
@@ -634,7 +634,7 @@ def main():
 		fp.write('local am = { -- argument mapping: token index to placeholder number\n')
 		for snippet in snippet_code_list:
 			if snippet.has_remapped_tokens:
-				token_mapping = ', '.join([f'[{index}] = {number}' for number, index in snippet.token_number_to_index.items()])
+				token_mapping = ', '.join([f'["{index}"] = {number}' for number, index in snippet.token_number_to_index.items()])
 				fp.write(f'\t{{{token_mapping}}},\n')
 			else:
 				fp.write(f'\t{snippet.max_placeholder},\n')
