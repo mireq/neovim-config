@@ -257,6 +257,7 @@ def iter_all_tokens(tokens: list[LSNode]) -> Iterable[LSNode]:
 
 @dataclass
 class ParsedSnippet:
+	idx: int
 	attributes: str
 	filetype: str
 	tokens: list[LSNode]
@@ -574,7 +575,7 @@ def main():
 
 	global_definitions = defaultdict(OrderedSet)
 
-	for snippet in snippets:
+	for idx, snippet in enumerate(snippets, 1):
 		for global_type, global_codes in snippet._globals.items():
 			for global_code in global_codes:
 				if global_type in KNOWN_LANGUAGES:
@@ -611,6 +612,7 @@ def main():
 		snippet_attrs.append(f'priority = {snippet.priority}')
 		snippet_attrs.append(f'trigEngine = te({escape_lua_string(snippet._opts)})')
 		snippet_code[snippet.trigger].append(ParsedSnippet(
+			idx=idx,
 			attributes=", ".join(snippet_attrs),
 			filetype=args.filetype,
 			tokens=tokens,
