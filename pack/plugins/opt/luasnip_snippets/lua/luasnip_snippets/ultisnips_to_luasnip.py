@@ -76,6 +76,7 @@ local cp = su.copy
 local jt = su.join_text
 local nl = su.new_line
 local te = su.trig_engine
+local ae = su.args_expand
 local c_py = su.code_python
 local c_viml = su.code_viml
 local c_shell = su.code_shell
@@ -353,7 +354,7 @@ class ParsedSnippet:
 					snippet_body.write(f'cp({token.original_number})')
 				case LSCodeNode():
 					related_nodes_code = f'{", ".join(str(i) for i in range(1, self.max_placeholder + 1))}'
-					snippet_body.write(f'f(function(args, snip) return {token.get_lua_code(self)} end, {{{related_nodes_code}}})')
+					snippet_body.write(f'f(function(args, snip) return {token.get_lua_code(self)} end, ae(am[{self.index}]))')
 				case LSVisualNode():
 					snippet_body.write(f'f(function(args, snip) return snip.env.LS_SELECT_DEDENT or {{}} end)')
 				case _:
@@ -634,7 +635,7 @@ def main():
 		fp.write('local am = { -- argument mapping: token index to placeholder number\n')
 		for snippet in snippet_code_list:
 			if snippet.has_remapped_tokens:
-				token_mapping = ', '.join([f'["{index}"] = {number}' for number, index in snippet.token_number_to_index.items()])
+				token_mapping = ', '.join([f'{"{"}{index}, {number}{"}"}' for number, index in snippet.token_number_to_index.items()])
 				fp.write(f'\t{{{token_mapping}}},\n')
 			else:
 				fp.write(f'\t{snippet.max_placeholder},\n')

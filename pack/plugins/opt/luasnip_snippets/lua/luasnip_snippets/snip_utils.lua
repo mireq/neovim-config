@@ -226,8 +226,8 @@ local function call_python(python_function_name, opts)
 	return result
 end
 
-local function code_python(id, node_code, global_code, args, snip, indent)
-	return call_python("execute_code", {node_id=id, node_code=node_code, global_code=global_code, tabstops=args, env=snip.env, indent=indent})
+local function code_python(id, node_code, global_code, args, snip, indent, tabstop_mapping)
+	return call_python("execute_code", {node_id=id, node_code=node_code, global_code=global_code, tabstops=args, env=snip.env, indent=indent, tabstop_mapping=tabstop_mapping})
 end
 
 local function code_viml(code)
@@ -305,6 +305,21 @@ local function make_actions(actions, max_placeholder)
 end
 
 
+local function args_expand(args)
+	local result = {}
+	if type(args) == 'table' then
+		for __, tabstop in ipairs(args) do
+			table.insert(result, k('i' .. tostring(tabstop[2])))
+		end
+	else
+		for i = 1, args do
+			table.insert(result, k('i' .. tostring(i)))
+		end
+	end
+	return result
+end
+
+
 return {
 	copy = copy,
 	join_text = join_text,
@@ -318,4 +333,5 @@ return {
 	code_viml = code_viml,
 	code_shell = code_shell,
 	make_actions = make_actions,
+	args_expand = args_expand,
 }

@@ -325,8 +325,8 @@ def execute_code(node_id, node_code, global_code, tabstops, env, indent, tabstop
 	snip = SnippetUtil(indent, vim.eval("visualmode()"), text, context, start, end)
 	path = vim.eval('expand("%")') or ""
 
-	if isinstance(tabstop_mapping, dict):
-		tabstop_mapping = {val: int(key) for key, val in tabstop_mapping.items()}
+	if isinstance(tabstop_mapping, list):
+		tabstop_mapping = {val: key for key, val in tabstop_mapping}
 	else:
 		tabstop_mapping = None
 
