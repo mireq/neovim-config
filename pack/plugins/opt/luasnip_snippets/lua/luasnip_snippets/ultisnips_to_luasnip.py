@@ -1,7 +1,7 @@
 #!/usr/bin/env -S nvim --headless -n -c "pyfile %" -c "q!"
 # -*- coding: utf-8 -*-
 
-# snippet listing: find snippets UltiSnips -maxdepth 1 -mindeph 1 -exec basename {} .snippets \;|sort -u
+# snippet listing: find snippets UltiSnips -maxdepth 1 -mindepth 1 -exec basename {} .snippets \;|sort -u
 
 from collections import namedtuple, defaultdict
 from dataclasses import dataclass
