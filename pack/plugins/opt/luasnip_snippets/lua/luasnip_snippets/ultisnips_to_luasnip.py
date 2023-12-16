@@ -621,7 +621,6 @@ def main():
 		)
 		snippet_code[snippet.trigger].append(parsed_snippet)
 		snippet_code_list.append(parsed_snippet)
-		print(snippet_code[snippet.trigger][0].has_remapped_tokens)
 		#snippet_code[snippet.trigger].append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
 
 	code_globals = {}
