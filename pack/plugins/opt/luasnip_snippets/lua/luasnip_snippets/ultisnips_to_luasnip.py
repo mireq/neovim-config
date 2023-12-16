@@ -26,7 +26,7 @@ from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
 from UltiSnips.snippet.definition.snipmate import SnipMateSnippetDefinition
 
 
-SUPPORTED_OPTS = {'w', 'b', 'i'}
+SUPPORTED_OPTS = {'w', 'b', 'i', '!'}
 
 LOG_CONFIG = {
 	'version': 1,
@@ -619,7 +619,10 @@ def main():
 			actions=snippet._actions,
 			token_number_to_index=token_number_to_index,
 		)
-		snippet_code[snippet.trigger].append(parsed_snippet)
+		if '!' in opts:
+			snippet_code[snippet.trigger] = [parsed_snippet]
+		else:
+			snippet_code[snippet.trigger].append(parsed_snippet)
 		snippet_code_list.append(parsed_snippet)
 		#snippet_code[snippet.trigger].append(f'\ts({{{", ".join(snippet_attrs)}}}, {{{snippet_body}\n\t}}),\n')
 
@@ -649,6 +652,7 @@ def main():
 			if len(snippet_list) == 1:
 				actions_code = parsed_snippet.get_actions_code()
 				if actions_code:
+					print(actions_code)
 					# TODO placeholder mapping
 					actions_code = f', make_actions({{{actions_code}}}, {parsed_snippet.max_placeholder})'
 				try:
