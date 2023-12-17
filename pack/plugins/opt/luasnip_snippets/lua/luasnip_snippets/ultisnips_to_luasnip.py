@@ -571,19 +571,44 @@ def parse_snippet(snippet) -> tuple[list[LSNode], dict[int, int]]:
 class ExtendedSnippetManager(SnippetManager):
 	def __init__(self, filetype: str):
 		self.filetype = filetype
-		super().__init__(
-			vim.eval("g:UltiSnipsExpandTrigger"),
-			vim.eval("g:UltiSnipsJumpForwardTrigger"),
-			vim.eval("g:UltiSnipsJumpBackwardTrigger"),
-		)
-
+		super().__init__('', '', '')
 
 	def get_all_snippets(self) -> list[SnippetDefinition]:
-		snippets: list[SnippetDefinition] = []
+		possible_snippets: list[SnippetDefinition] = []
+		matching_snippets = defaultdict(list)
+		filetypes = [self.filetype]
+
+		clear_priority = None
+		cleared = {}
+
 
 		for _, source in self._snippet_sources:
-			source.ensure([self.filetype])
-			snippets.extend(list(source._snippets[self.filetype]))
+			source.ensure(filetypes)
+			possible_snippets.extend(list(source._snippets[self.filetype]))
+
+		for _, source in self._snippet_sources:
+			sclear_priority = source.get_clear_priority(filetypes)
+			if sclear_priority is not None and (
+				clear_priority is None or sclear_priority > clear_priority
+			):
+				clear_priority = sclear_priority
+			for key, value in source.get_cleared(filetypes).items():
+				if key not in cleared or value > cleared[key]:
+					cleared[key] = value
+
+		for snippet in possible_snippets:
+			if (clear_priority is None or snippet.priority > clear_priority) and (
+				snippet.trigger not in cleared
+				or snippet.priority > cleared[snippet.trigger]
+			):
+				matching_snippets[snippet.trigger].append(snippet)
+
+		snippets: list[SnippetDefinition] = []
+		for snippets_with_trigger in matching_snippets.values():
+			highest_priority = max(s.priority for s in snippets_with_trigger)
+			snippets.extend(
+				s for s in snippets_with_trigger if s.priority == highest_priority
+			)
 
 		return snippets
 
