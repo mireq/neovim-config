@@ -49,6 +49,16 @@ local function copy(num)
 	return f(copy_helper, k('i' .. num))
 end
 
+
+local function transform_helper(args)
+	return args[1]
+end
+
+-- Transform node
+local function transform(num)
+	return f(transform_helper, k('i' .. num))
+end
+
 -- Join text
 local function join_text(args, indent)
 	local parts = {}
@@ -322,6 +332,7 @@ end
 
 return {
 	copy = copy,
+	transform = transform,
 	join_text = join_text,
 	new_line = new_line,
 	trig_engine = trig_engine,

@@ -19,7 +19,7 @@ vim.command('Lazy load ultisnips')
 vim.command('Lazy load vim-snippets')
 
 from UltiSnips import UltiSnips_Manager
-from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken, PythonCodeToken, VimLCodeToken, ShellCodeToken, EscapeCharToken
+from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken, PythonCodeToken, VimLCodeToken, ShellCodeToken, EscapeCharToken, TransformationToken
 from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing
 from UltiSnips.snippet.parsing import snipmate as snipmate_parsing
 from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
@@ -73,6 +73,7 @@ local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
 local su = require("luasnip_snippets.snip_utils")
 local cp = su.copy
+local tr = su.transform
 local jt = su.join_text
 local nl = su.new_line
 local te = su.trig_engine
@@ -246,6 +247,19 @@ class LSShellCodeNode(LSCodeNode):
 		return f'c_shell({escape_lua_string(code)})'
 
 
+class LSTransformationNode(LSNode):
+	__slots__ = ['number', 'search', 'replace', 'original_number']
+
+	def __init__(self, number: int, search: str, replace: str, original_number: Optional[int] = None):
+		self.number = number
+		self.search = search
+		self.replace = replace
+		self.original_number = self.number if original_number is None else original_number
+
+	def __repr__(self):
+		return f'{self.__class__.__name__}({self.number}, {self.search!r}, {self.replace!r}, {self.original_number})'
+
+
 def iter_all_tokens(tokens: list[LSNode]) -> Iterable[LSNode]:
 	for token in tokens:
 		yield token
@@ -357,6 +371,8 @@ class ParsedSnippet:
 					snippet_body.write(f'f(function(args, snip) return {token.get_lua_code(self)} end, ae(am[{self.index}]))')
 				case LSVisualNode():
 					snippet_body.write(f'f(function(args, snip) return snip.env.LS_SELECT_DEDENT or {{}} end)')
+				case LSTransformationNode():
+					snippet_body.write(f'tr({token.original_number}, {escape_lua_string(token.search)}, {escape_lua_string(token.replace)})')
 				case _:
 					raise RuntimeError("Unknown token: %s" % token)
 			if not last_token:
@@ -464,6 +480,8 @@ def transform_tokens(tokens, lines, insert_nodes = None):
 				token_list.append(LSShellCodeNode(token.code))
 			case EscapeCharToken():
 				token_list.append(LSTextNode(token.initial_text))
+			case TransformationToken():
+				token_list.append(LSTransformationNode(token.number, token.search, token.replace))
 			case _:
 				snippet_text = '\n'.join(lines)
 				raise RuntimeError(f"Unknown token {token} in snippet: \n{snippet_text}")
@@ -538,6 +556,8 @@ def parse_snippet(snippet) -> tuple[list[LSNode], dict[int, int]]:
 			token = LSInsertNode(remap.get(token.number, token.number), children, token.number)
 		elif isinstance(token, LSCopyNode):
 			token = LSCopyNode(remap.get(token.number, token.number), token.number)
+		elif isinstance(token, LSTransformationNode):
+			token = LSTransformationNode(remap.get(token.number, token.number), token.search, token.replace, token.number)
 		return token
 
 	token_list = [remap_numbers(token) for token in token_list]
