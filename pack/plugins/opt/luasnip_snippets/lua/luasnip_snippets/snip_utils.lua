@@ -49,16 +49,6 @@ local function copy(num)
 	return f(copy_helper, k('i' .. num))
 end
 
-
-local function transform_helper(args)
-	return args[1]
-end
-
--- Transform node
-local function transform(num)
-	return f(transform_helper, k('i' .. num))
-end
-
 -- Join text
 local function join_text(args, indent)
 	local parts = {}
@@ -83,6 +73,27 @@ local function join_text(args, indent)
 	end
 
 	return lines
+end
+
+
+-- Transform node
+local function transform(num, search, replace)
+	local jsregexp_ok, jsregexp = pcall(require, "luasnip-jsregexp")
+	if jsregexp_ok then
+		search = jsregexp.compile(search)
+	else
+		search = nil
+	end
+
+	local function transform_helper(args)
+		if search then
+			return join_text({search:replace(table.concat(args[1]), replace)})
+		else
+			return args[1]
+		end
+	end
+
+	return f(transform_helper, k('i' .. num))
 end
 
 -- New line
