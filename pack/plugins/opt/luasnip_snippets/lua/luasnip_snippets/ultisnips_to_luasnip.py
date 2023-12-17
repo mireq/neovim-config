@@ -294,11 +294,11 @@ class ParsedSnippet:
 
 	@property
 	def max_placeholder(self) -> int:
-		max_placeholder = 0
-		for token in self.iter_all_tokens():
-			if isinstance(token, (LSInsertNode, LSCopyNode)):
-				max_placeholder = max(max_placeholder, token.number)
-		return max_placeholder
+		return max(self.token_number_to_index.values(), default=0)
+
+	@property
+	def max_token(self) -> int:
+		return max(self.token_number_to_index.keys(), default=0)
 
 	def __replace_zero_placeholders(self, tokens: list[LSNode], force: bool):
 		def replace_token(token):
@@ -306,8 +306,10 @@ class ParsedSnippet:
 				shouldd_replace = force
 				if not shouldd_replace and len(token.children) > 1 or (len(token.children) == 1 and not isinstance(token.children[0], LSTextNode)):
 					shouldd_replace = True
-				if shouldd_replace:
-					return LSInsertNode(token.number or self.max_placeholder + 1, token.children)
+				if shouldd_replace and token.number == 0:
+					token = LSInsertNode(self.max_placeholder + 1, token.children, self.max_token + 1)
+					self.token_number_to_index[token.original_number] = token.number
+					return token
 				else:
 					return token
 			else:
@@ -449,7 +451,7 @@ def do_tokenize(parent, text, allowed_tokens_in_text, allowed_tokens_in_tabstops
 	return tokens
 
 
-def transform_tokens(tokens, lines, insert_nodes = None):
+def transform_tokens(tokens, lines, insert_nodes=None):
 	token_list = []
 	insert_nodes = insert_nodes or {}
 
@@ -583,11 +585,7 @@ class ExtendedSnippetManager(SnippetManager):
 			source.ensure([self.filetype])
 			snippets.extend(list(source._snippets[self.filetype]))
 
-		for snippet in snippets:
-			print(snippet.trigger)
-
 		return snippets
-
 
 
 def main():
