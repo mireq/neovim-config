@@ -248,7 +248,7 @@ local function call_python(python_function_name, opts)
 end
 
 local function code_python(id, node_code, global_code, args, snip, indent, tabstop_mapping)
-	return call_python("execute_code", {node_id=id, node_code=node_code, global_code=global_code, tabstops=args, env=snip.env, indent=indent, tabstop_mapping=tabstop_mapping})
+	return call_python("execute_code", {node_id=id, node_code=node_code, global_code=global_code or {}, tabstops=args, env=snip.env, indent=indent, tabstop_mapping=tabstop_mapping})
 end
 
 local function code_viml(code)
