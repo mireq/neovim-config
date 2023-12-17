@@ -18,12 +18,13 @@ import vim
 vim.command('Lazy load ultisnips')
 vim.command('Lazy load vim-snippets')
 
-from UltiSnips import UltiSnips_Manager
-from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken, PythonCodeToken, VimLCodeToken, ShellCodeToken, EscapeCharToken, TransformationToken
-from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing
-from UltiSnips.snippet.parsing import snipmate as snipmate_parsing
-from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
+from UltiSnips.snippet.definition.base import SnippetDefinition
 from UltiSnips.snippet.definition.snipmate import SnipMateSnippetDefinition
+from UltiSnips.snippet.definition.ulti_snips import UltiSnipsSnippetDefinition
+from UltiSnips.snippet.parsing import snipmate as snipmate_parsing
+from UltiSnips.snippet.parsing import ulti_snips as ulti_snips_parsing
+from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, EndOfTextToken, TabStopToken, VisualToken, PythonCodeToken, VimLCodeToken, ShellCodeToken, EscapeCharToken, TransformationToken
+from UltiSnips.snippet_manager import SnippetManager
 
 
 SUPPORTED_OPTS = {'w', 'b', 'i', '!'}
@@ -565,6 +566,29 @@ def parse_snippet(snippet) -> tuple[list[LSNode], dict[int, int]]:
 	return token_list, remap
 
 
+class ExtendedSnippetManager(SnippetManager):
+	def __init__(self, filetype: str):
+		self.filetype = filetype
+		super().__init__(
+			vim.eval("g:UltiSnipsExpandTrigger"),
+			vim.eval("g:UltiSnipsJumpForwardTrigger"),
+			vim.eval("g:UltiSnipsJumpBackwardTrigger"),
+		)
+
+
+	def get_all_snippets(self) -> list[SnippetDefinition]:
+		snippets: list[SnippetDefinition] = []
+
+		for _, source in self._snippet_sources:
+			source.ensure([self.filetype])
+			snippets.extend(list(source._snippets[self.filetype]))
+
+		for snippet in snippets:
+			print(snippet.trigger)
+
+		return snippets
+
+
 
 def main():
 	args = vim.exec_lua('return vim.v.argv')[8:]
@@ -573,8 +597,9 @@ def main():
 	parser.add_argument('filetype')
 	args = parser.parse_args(args)
 
-	UltiSnips_Manager.get_buffer_filetypes = lambda: [args.filetype]
-	snippets = UltiSnips_Manager._snips("", True)
+	manager = ExtendedSnippetManager(args.filetype)
+	snippets = manager.get_all_snippets()
+
 	snippet_code = defaultdict(list)
 	snippet_code_list = []
 
