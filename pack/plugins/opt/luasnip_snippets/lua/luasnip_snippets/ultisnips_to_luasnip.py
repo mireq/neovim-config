@@ -27,7 +27,7 @@ from UltiSnips.snippet.parsing.lexer import tokenize, Position, MirrorToken, End
 from UltiSnips.snippet_manager import SnippetManager
 
 
-SUPPORTED_OPTS = {'w', 'b', 'i', '!'}
+SUPPORTED_OPTS = {'w', 'b', 'i', 'r', '!'}
 
 LOG_CONFIG = {
 	'version': 1,

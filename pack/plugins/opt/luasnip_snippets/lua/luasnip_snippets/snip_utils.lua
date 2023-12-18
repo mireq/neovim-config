@@ -169,6 +169,9 @@ local function is_keyword_char(char)
 end
 
 
+local regex_matchers = {}
+
+
 local function trig_engine(opts)
 	local function engine(trigger)
 		local function matcher(line_to_cursor, trigger)
@@ -178,7 +181,26 @@ local function trig_engine(opts)
 			local first_char = 0
 			local last_char = 0
 
-			if opts:find('w') ~= nil then
+			if opts:find('r') ~= nil then
+				local rx = regex_matchers[trigger]
+				if rx == nil then
+					local jsregexp_ok, jsregexp = pcall(require, "luasnip-jsregexp")
+					if jsregexp_ok then
+						rx = jsregexp.compile(trigger)
+						regex_matchers[trigger] = rx
+					end
+				end
+				if rx ~= nil then
+					local matches = rx(line_to_cursor)
+					for i, match in ipairs(matches) do
+						if match.end_ind == #line_to_cursor then
+							matched = match.groups[1]
+							first_char = match.begin_ind
+							last_char = match.end_ind
+						end
+					end
+				end
+			elseif opts:find('w') ~= nil then
 				local words_len = #trigger
 				local words_prefix = string.sub(words, 1, -words_len - 1)
 				local words_suffix = string.sub(words, -words_len)
