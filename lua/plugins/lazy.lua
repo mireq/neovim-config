@@ -767,6 +767,9 @@ require("lazy").setup({
 			'L3MON4D3/LuaSnip',
 		},
 		init = function()
+			vim.g.snips_author = 'yourname'
+			vim.g.snips_email = 'yourname@email.com'
+			vim.g.snips_github = 'https://github.com/yourname'
 			require('luasnip_snippets.snip_utils').setup()
 		end
 	},
