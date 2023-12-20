@@ -321,6 +321,13 @@ class ParsedSnippet:
 		snippet_body = StringIO()
 		num_tokens = len(tokens)
 		accumulated_text = ['\n']
+
+		def write_comma():
+			if not last_token:
+				snippet_body.write(',')
+				if not at_line_start:
+					snippet_body.write(' ')
+
 		for i, token in enumerate(tokens):
 			last_token = i == num_tokens - 1
 			if at_line_start:
@@ -339,7 +346,7 @@ class ParsedSnippet:
 						if token.is_nested: # nested nodes are not supported, unwrapping
 							dynamic_node_content = self.render_tokens(token.children, at_line_start=False)
 							snippet_body.write(dynamic_node_content)
-							snippet_body.write(", ")
+							write_comma()
 							continue
 						#print(dynamic_node_content)
 						#snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{{dynamic_node_content}}}) end)')
@@ -378,10 +385,7 @@ class ParsedSnippet:
 					snippet_body.write(f'tr({token.original_number}, {escape_lua_string(token.search)}, {escape_lua_string(token.replace)})')
 				case _:
 					raise RuntimeError("Unknown token: %s" % token)
-			if not last_token:
-				snippet_body.write(',')
-				if not at_line_start:
-					snippet_body.write(' ')
+			write_comma()
 
 		return snippet_body.getvalue()
 
