@@ -586,7 +586,6 @@ class ExtendedSnippetManager(SnippetManager):
 		clear_priority = None
 		cleared = {}
 
-
 		for _, source in self._snippet_sources:
 			source.ensure(filetypes)
 			possible_snippets.extend(list(source._snippets[self.filetype]))
@@ -617,6 +616,14 @@ class ExtendedSnippetManager(SnippetManager):
 
 		return snippets
 
+	def get_extends(self) -> set[str]:
+		filetypes = [self.filetype]
+		extends: set[str] = set()
+		for _, source in self._snippet_sources:
+			source.ensure(filetypes)
+			extends = extends.union(filetypes)
+		return extends
+
 
 def main():
 	args = vim.exec_lua('return vim.v.argv')[8:]
@@ -626,6 +633,7 @@ def main():
 	args = parser.parse_args(args)
 
 	manager = ExtendedSnippetManager(args.filetype)
+	included_filetypes = manager.get_extends()
 	snippets = manager.get_all_snippets()
 
 	snippet_code = defaultdict(list)
@@ -643,8 +651,6 @@ def main():
 	except FileNotFoundError:
 		pass
 
-	included_filetypes = set()
-
 	global_definitions = defaultdict(OrderedSet)
 
 	for index, snippet in enumerate(snippets, 1):
@@ -657,12 +663,6 @@ def main():
 					global_definitions[lang].add(global_code)
 				else:
 					logger.error("Unknown code block %s", global_type)
-
-		filetype = snippet.location.rsplit(':', 1)[0].split('/')[-1].rsplit('.', 1)[0]
-
-		if filetype != args.filetype:
-			included_filetypes.add(filetype)
-			continue
 
 		opts = set(snippet._opts)
 		unsupported_opts = opts - SUPPORTED_OPTS
