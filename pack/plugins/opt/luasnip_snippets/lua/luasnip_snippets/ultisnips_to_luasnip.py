@@ -376,9 +376,10 @@ class ParsedSnippet:
 						snippet_body.write(f'i({token.number}, "", {{key = "i{token.original_number}"}})')
 				case LSCopyNode():
 					snippet_body.write(f'cp({token.original_number})')
-				case LSCodeNode():
-					related_nodes_code = f'{", ".join(str(i) for i in range(1, self.max_placeholder + 1))}'
+				case LSPythonCodeNode():
 					snippet_body.write(f'f(function(args, snip) return {token.get_lua_code(self)} end, ae(am[{self.index}]))')
+				case LSCodeNode():
+					snippet_body.write(f'f(function(args, snip) return {token.get_lua_code(self)} end, {{}})')
 				case LSVisualNode():
 					snippet_body.write(f'f(function(args, snip) return snip.env.LS_SELECT_DEDENT or {{}} end)')
 				case LSTransformationNode():
