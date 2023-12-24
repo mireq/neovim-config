@@ -723,11 +723,12 @@ def main():
 		fp.write(f'ls.add_snippets({escape_lua_string(args.filetype)}, {{\n')
 		for snippet_list in snippet_code.values():
 			parsed_snippet = snippet_list[0]
+			if parsed_snippet.get_actions_code():
+				sys.stdout.write(f"Unsupported actions: {parsed_snippet.get_actions_code()}\n")
+				continue
 			if len(snippet_list) == 1:
 				actions_code = parsed_snippet.get_actions_code()
 				if actions_code:
-					print(actions_code)
-					# TODO placeholder mapping
 					actions_code = f', make_actions({{{actions_code}}}, {parsed_snippet.max_placeholder})'
 				try:
 					fp.write(f'\ts({{{parsed_snippet.attributes}}}, {{{parsed_snippet.get_code(indent=2)}\n\t}}{actions_code}),\n')
