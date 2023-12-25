@@ -12,7 +12,7 @@ local python_helper_loaded = false
 
 
 local filetype_includes = {}
-local filetype_mapping_fp = io.open(rundir .. 'filetype_includes.txt')
+local filetype_mapping_fp = io.open(rundir .. '../filetype_includes.txt')
 if filetype_mapping_fp ~= nil then
 	while true do
 		local line = filetype_mapping_fp:read('*line')
@@ -37,7 +37,7 @@ end
 
 local function script_path()
 	local str = debug.getinfo(2, "S").source:sub(2)
-	return str:match("(.*/)")
+	return str:match("(.*/)") .. '../'
 end
 
 local function copy_helper(args)
