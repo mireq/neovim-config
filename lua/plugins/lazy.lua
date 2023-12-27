@@ -199,6 +199,17 @@ require("lazy").setup({
 						vim.fn["UltiSnips#Anon"](args.body)
 					end,
 				},
+				confirmation = {
+					get_commit_characters = function(commit_characters)
+						local filtered_characters = {}
+						for _, char in ipairs(commit_characters) do
+							if char ~= '(' then
+								table.insert(filtered_characters, char)
+							end
+						end
+						return filtered_characters
+					end,
+				},
 				window = {
 					completion = {
 						--winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
