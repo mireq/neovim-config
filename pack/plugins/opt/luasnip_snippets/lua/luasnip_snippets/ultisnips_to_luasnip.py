@@ -414,7 +414,7 @@ class ParsedSnippet:
 							dynamic_node_content = ', '.join(self.token_to_dynamic_text(child, related_nodes) for child in token.children)
 							related_nodes_code = ''
 							if related_nodes:
-								related_nodes_code = f', k{{{", ".join(escape_lua_string("i" + str(v)) for v in related_nodes.keys())}}}'
+								related_nodes_code = f', {{{", ".join("k" + escape_lua_string("i" + str(v)) for v in related_nodes.keys())}}}'
 							snippet_body.write(f'd({token.number}, function(args, snip) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}}, {escape_lua_string(node_indent)}), {{key = "i{token.original_number}"}}) }}) end{related_nodes_code})')
 					else:
 						snippet_body.write(f'i({token.number}, "", {{key = "i{token.original_number}"}})')
