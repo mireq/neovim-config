@@ -648,6 +648,7 @@ class ExtendedSnippetManager(SnippetManager):
 			source.ensure(filetypes)
 			extends = extends.union(source.get_deep_extends(filetypes))
 		extends.discard(self.filetype)
+		extends = extends.union(set((self.configuration.additional_extends)))
 		return extends
 
 
