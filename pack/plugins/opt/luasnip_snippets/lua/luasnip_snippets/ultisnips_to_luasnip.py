@@ -15,6 +15,7 @@ import operator
 import os
 import re
 import sys
+import tomllib
 
 import vim
 vim.command('Lazy load ultisnips')
@@ -127,6 +128,22 @@ def escape_multiline_lua_sting(text: str) -> str:
 			break
 		equal_signs += 1
 	return f'{start_delimiter}{text}{end_delimiter}'
+
+
+class Configuration:
+	def __init__(self, filetype: str):
+		config = {}
+		try:
+			with open('configuration.toml', 'rb') as fp:
+				config = tomllib.load(fp)
+		except FileNotFoundError:
+			pass
+
+		self.excluded_snippets: set[str] = set(config.get(filetype, {}).get('excluded_snippets', []))
+		self.additional_files: list[str] = list(config.get(filetype, {}).get('additional_files', []))
+
+	def __str__(self):
+		return f'additional_files: {self.additional_files!r}, exclude: {self.excluded_snippets!r}'
 
 
 class OrderedSet(dict):
@@ -642,6 +659,8 @@ def main():
 
 	output_dir = Path(args.output_dir)
 	output_dir.mkdir(parents=True, exist_ok=True)
+
+	configuration = Configuration(args.filetype)
 
 	manager = ExtendedSnippetManager(args.filetype)
 	included_filetypes = manager.get_extends()
