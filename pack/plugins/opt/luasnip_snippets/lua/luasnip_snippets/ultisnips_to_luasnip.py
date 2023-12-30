@@ -140,10 +140,10 @@ class Configuration:
 			pass
 
 		self.excluded_snippets: set[str] = set(config.get(filetype, {}).get('excluded_snippets', []))
-		self.additional_files: list[str] = list(config.get(filetype, {}).get('additional_files', []))
+		self.additional_extends: list[str] = list(config.get(filetype, {}).get('additional_extends', []))
 
 	def __str__(self):
-		return f'additional_files: {self.additional_files!r}, exclude: {self.excluded_snippets!r}'
+		return f'additional_extends: {self.additional_extends!r}, exclude: {self.excluded_snippets!r}'
 
 
 class OrderedSet(dict):
@@ -597,8 +597,9 @@ def parse_snippet(snippet) -> tuple[list[LSNode], dict[int, int]]:
 
 
 class ExtendedSnippetManager(SnippetManager):
-	def __init__(self, filetype: str):
+	def __init__(self, filetype: str, configuration: Configuration):
 		self.filetype = filetype
+		self.configuration = configuration
 		super().__init__('', '', '')
 
 	def get_all_snippets(self) -> list[SnippetDefinition]:
@@ -612,6 +613,7 @@ class ExtendedSnippetManager(SnippetManager):
 		for _, source in self._snippet_sources:
 			source.ensure(filetypes)
 			possible_snippets.extend(list(source._snippets[self.filetype]))
+		possible_snippets = [s for s in possible_snippets if not s.trigger in self.configuration.excluded_snippets]
 
 		for _, source in self._snippet_sources:
 			sclear_priority = source.get_clear_priority(filetypes)
@@ -662,7 +664,7 @@ def main():
 
 	configuration = Configuration(args.filetype)
 
-	manager = ExtendedSnippetManager(args.filetype)
+	manager = ExtendedSnippetManager(args.filetype, configuration)
 	included_filetypes = manager.get_extends()
 	snippets = manager.get_all_snippets()
 
