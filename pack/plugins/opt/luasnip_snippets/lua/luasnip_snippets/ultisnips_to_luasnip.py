@@ -641,7 +641,7 @@ class ExtendedSnippetManager(SnippetManager):
 
 		return snippets
 
-	def get_extends(self) -> set[str]:
+	def get_extends(self) -> list[str]:
 		filetypes = [self.filetype]
 		extends: set[str] = set()
 		for _, source in self._snippet_sources:
@@ -649,7 +649,7 @@ class ExtendedSnippetManager(SnippetManager):
 			extends = extends.union(source.get_deep_extends(filetypes))
 		extends.discard(self.filetype)
 		extends = extends.union(set((self.configuration.additional_extends)))
-		return extends
+		return list(sorted(extends))
 
 
 def main():
