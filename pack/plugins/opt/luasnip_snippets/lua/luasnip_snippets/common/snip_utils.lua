@@ -209,7 +209,7 @@ local function trig_engine(opts)
 					local matches = rx(line_to_cursor)
 					for i, match in ipairs(matches) do
 						if match.end_ind == #line_to_cursor then
-							matched = match.groups[1]
+							matched = line_to_cursor:sub(match.begin_ind, match.end_ind)
 							first_char = match.begin_ind
 							last_char = match.end_ind
 						end
