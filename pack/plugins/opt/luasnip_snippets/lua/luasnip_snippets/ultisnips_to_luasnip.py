@@ -90,52 +90,11 @@ local make_actions = su.make_actions
 """
 
 
-class IMPORTS(StrEnum):
-	SN = 'local sn = ls.snippet_node'
-	ISN = 'local isn = ls.indent_snippet_node'
-	T = 'local t = ls.text_node'
-	I = 'local i = ls.insert_node'
-	F = 'local f = ls.function_node'
-	C = 'local c = ls.choice_node'
-	D = 'local d = ls.dynamic_node'
-	R = 'local r = ls.restore_node'
-	EVENTS = 'local events = require("luasnip.util.events")'
-	AI = 'local ai = require("luasnip.nodes.absolute_indexer")'
-	EXTRAS = 'local extras = require("luasnip.extras")'
-	L = 'local l = extras.lambda'
-	REP = 'local rep = extras.rep'
-	P = 'local p = extras.partial'
-	M = 'local m = extras.match'
-	N = 'local n = extras.nonempty'
-	DL = 'local dl = extras.dynamic_lambda'
-	FMT = 'local fmt = require("luasnip.extras.fmt").fmt'
-	FMTA = 'local fmta = require("luasnip.extras.fmt").fmta'
-	CONDS = 'local conds = require("luasnip.extras.expand_conditions")'
-	POSTFIX = 'local postfix = require("luasnip.extras.postfix").postfix'
-	TYPES = 'local types = require("luasnip.util.types")'
-	PARSE = 'local parse = require("luasnip.util.parser").parse_snippet'
-	MS = 'local ms = ls.multi_snippet'
-	K = 'local k = require("luasnip.nodes.key_indexer").new_key'
-	SU = 'local su = require("luasnip_snippets.common.snip_utils")'
-	CP = 'local cp = su.copy'
-	TR = 'local tr = su.transform'
-	RX_TR = 'local rx_tr = su.regex_transform'
-	JT = 'local jt = su.join_text'
-	NL = 'local nl = su.new_line'
-	TE = 'local te = su.trig_engine'
-	AE = 'local ae = su.args_expand'
-	C_PY = 'local c_py = su.code_python'
-	C_VIML = 'local c_viml = su.code_viml'
-	C_SHELL = 'local c_shell = su.code_shell'
-	MAKE_ACTIONS = 'local make_actions = su.make_actions'
-
-
 logging.config.dictConfig(LOG_CONFIG)
 logger = logging.getLogger(__name__)
 
 
 sys.path.append(str(Path.home().joinpath('.local/share/nvim/lazy/ultisnips/pythonx')))
-VisualContent = namedtuple('VisualContent', ['text', 'mode'])
 LUA_SPECIAL_CHAR_RX = re.compile(r'("|\'|\t|\n|\\)')
 INDENT_RE = re.compile(r'^([\t ]*)')
 KNOWN_LANGUAGES = {
@@ -561,7 +520,6 @@ def transform_tokens(tokens, lines, insert_nodes=None):
 def parse_snippet(snippet) -> tuple[list[LSNode], dict[int, int]]:
 	snippet_text = snippet._value
 	lines = snippet_text.splitlines(keepends=True)
-	#snippet.launch('', VisualContent('', 'v'), None, None, None)
 
 	if isinstance(snippet, SnipMateSnippetDefinition):
 		tokens = do_tokenize(None, snippet._value, snipmate_parsing.__ALLOWED_TOKENS, snipmate_parsing.__ALLOWED_TOKENS_IN_TABSTOPS, {ShellCodeToken: VimLCodeToken})
