@@ -572,9 +572,9 @@ def parse_snippet(snippet) -> tuple[list[LSNode], dict[int, int]]:
 	token_list = [finalize_token(token) for token in token_list]
 
 	# try to correctly remap node numbers
-	#node_numbers.discard(0)
+	offset = 0 if 0 in node_numbers else 1
 	node_numbers = sorted(node_numbers)
-	remap = {node_numbers[new_number]: new_number for new_number in range(len(node_numbers))}
+	remap = {node_numbers[new_number]: new_number + offset for new_number in range(len(node_numbers))}
 
 	def remap_numbers(token):
 		if isinstance(token, LSInsertNode):
