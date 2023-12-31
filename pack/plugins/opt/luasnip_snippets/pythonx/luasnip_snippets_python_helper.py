@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import functools
 import os
+import re
 from collections import namedtuple
 
 import vim
@@ -309,6 +310,9 @@ def get_node_locals(node_id):
 	return node_locals[node_id]
 
 
+INDENT_RE = re.compile(r'^[ \t]*')
+
+
 def execute_code(node_id, node_code, global_code, tabstops, env, indent, tabstop_mapping):
 	global_code = 'import re, os, vim, string, random\n' + '\n'.join(global_code or [])
 	codes = (
@@ -324,6 +328,7 @@ def execute_code(node_id, node_code, global_code, tabstops, env, indent, tabstop
 	context = None
 	start = (int(env['TM_LINE_NUMBER']), int(env['LS_CAPTURE_1']))
 	end = (int(env['TM_LINE_NUMBER']), int(env['LS_CAPTURE_2']))
+	indent = INDENT_RE.match(env['TM_CURRENT_LINE']).group(0)
 	snip = SnippetUtil(indent, vim.eval("visualmode()"), text, context, start, end)
 	path = vim.eval('expand("%")') or ""
 
@@ -351,4 +356,5 @@ def execute_code(node_id, node_code, global_code, tabstops, env, indent, tabstop
 			raise
 
 	rv = str(snip.rv if snip._rv_changed else node_locals["res"])
-	return rv.splitlines()
+	lines = rv.splitlines()
+	return [line[line.startswith(indent) and len(indent):] for line in lines]
