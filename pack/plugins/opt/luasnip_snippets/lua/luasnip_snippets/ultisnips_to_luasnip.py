@@ -327,7 +327,7 @@ class ParsedSnippet:
 				if not shouldd_replace and len(token.children) > 1 or (len(token.children) == 1 and not isinstance(token.children[0], LSTextNode)):
 					shouldd_replace = True
 				if shouldd_replace and token.number == 0:
-					token = LSInsertNode(self.max_placeholder + 1, token.children, self.max_token + 1)
+					token = LSInsertNode(self.max_placeholder + 1, token.children, 0)
 					return token
 				else:
 					return token
