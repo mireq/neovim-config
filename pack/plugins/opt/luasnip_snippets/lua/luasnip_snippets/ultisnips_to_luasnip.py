@@ -429,13 +429,6 @@ class ParsedSnippet:
 			case _:
 				raise RuntimeError("Token not allowed: %s" % token)
 
-	@property
-	def has_remapped_tokens(self) -> bool:
-		for key, value in self.token_number_to_index.items():
-			if key != value:
-				return True
-		return False
-
 
 def get_text_nodes_between(content: List[str], start: Tuple[int, int], end: Optional[Tuple[int, int]]):
 	if not content:
@@ -739,11 +732,8 @@ def main():
 		fp.write('\n')
 		fp.write('local am = { -- argument mapping: token index to placeholder number\n')
 		for snippet in snippet_code_list:
-			if snippet.has_remapped_tokens:
-				token_mapping = ', '.join([f'{"{"}{index}, {number}{"}"}' for number, index in snippet.token_number_to_index.items()])
-				fp.write(f'\t{{{token_mapping}}},\n')
-			else:
-				fp.write(f'\t{snippet.max_placeholder},\n')
+			token_mapping = ', '.join([f'{"{"}{index}, {number}{"}"}' for number, index in snippet.token_number_to_index.items()])
+			fp.write(f'\t{{{token_mapping}}},\n')
 		fp.write('}\n')
 		if code_globals:
 			fp.write('\n')
