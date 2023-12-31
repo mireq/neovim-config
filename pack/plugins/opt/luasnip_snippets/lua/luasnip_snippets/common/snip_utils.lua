@@ -365,14 +365,8 @@ end
 
 local function args_expand(args)
 	local result = {}
-	if type(args) == 'table' then
-		for __, tabstop in ipairs(args) do
-			table.insert(result, k('i' .. tostring(tabstop[2])))
-		end
-	else
-		for i = 1, args do
-			table.insert(result, k('i' .. tostring(i)))
-		end
+	for __, tabstop in ipairs(args) do
+		table.insert(result, k('i' .. tostring(tabstop[2])))
 	end
 	return result
 end
