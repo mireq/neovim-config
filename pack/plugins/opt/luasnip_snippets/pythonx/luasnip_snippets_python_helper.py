@@ -6,6 +6,9 @@ from collections import namedtuple
 import vim
 
 
+_Placeholder = namedtuple("_FrozenPlaceholder", ["current_text", "start", "end"])
+
+
 class VimBuffer:
 
 	"""Wrapper around the current Vim buffer."""
@@ -221,8 +224,6 @@ class SnippetUtil:
 
 	@property
 	def p(self):
-		if self._parent.current_placeholder:
-			return self._parent.current_placeholder
 		return _Placeholder("", 0, 0)
 
 	@property
@@ -281,17 +282,18 @@ class _Tabs:
 
 	def __getitem__(self, no):
 		no = self._mapping.get(int(no), int(no))
-		tab_idx = no - 1
 		current_text = ''
-		if tab_idx >= 0 and tab_idx < len(self._tabs):
-			current_text = self._tabs[tab_idx]
+		if no >= 0 and no < len(self._tabs):
+			current_text = self._tabs[no]
 		return current_text
 
 	def __setitem__(self, no, value):
 		no = self._mapping.get(int(no), int(no))
-		tab_idx = no - 1
-		if tab_idx >= 0 and tab_idx < len(self._tabs):
-			self._tabs[tab_idx] = value
+		if no >= 0 and no < len(self._tabs):
+			self._tabs[no] = value
+
+	def __repr__(self):
+		return f'{self.__class__.__name__}({self._tabs!r}, {self._mapping!r})'
 
 
 @functools.cache
