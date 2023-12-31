@@ -328,13 +328,15 @@ def execute_code(node_id, node_code, global_code, tabstops, env, indent, tabstop
 	path = vim.eval('expand("%")') or ""
 
 	if isinstance(tabstop_mapping, list):
-		tabstop_mapping = {val: key for key, val in tabstop_mapping}
+		source_map = {}
+		for i, val in enumerate(tabstop_mapping):
+			source_map[val[1]] = i
 	else:
-		tabstop_mapping = None
+		source_map = None
 
 	node_locals = get_node_locals(tuple(node_id))
 	node_locals.update({
-		't': _Tabs(['\n'.join(tab) for tab in tabstops], tabstop_mapping),
+		't': _Tabs(['\n'.join(tab) for tab in tabstops], source_map),
 		'fn': os.path.basename(path),
 		'cur': '',
 		'res': '',
