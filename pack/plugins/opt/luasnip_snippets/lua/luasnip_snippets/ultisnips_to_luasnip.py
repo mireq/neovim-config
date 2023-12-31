@@ -328,7 +328,6 @@ class ParsedSnippet:
 					shouldd_replace = True
 				if shouldd_replace and token.number == 0:
 					token = LSInsertNode(self.max_placeholder + 1, token.children, self.max_token + 1)
-					self.token_number_to_index[token.original_number] = token.number
 					return token
 				else:
 					return token
@@ -365,7 +364,7 @@ class ParsedSnippet:
 					if token.children:
 						if token.is_nested: # nested nodes are not supported, unwrapping
 							dynamic_node_content = self.render_tokens(token.children, at_line_start=False)
-							snippet_body.write(dynamic_node_content)
+							snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{{dynamic_node_content}}}) end, {{}}, {{key = "i{token.original_number}"}})')
 							write_comma()
 							continue
 						#print(dynamic_node_content)
@@ -378,9 +377,9 @@ class ParsedSnippet:
 							text_content = ''.join(child.text for child in token.children)
 							if '\n' in text_content:
 								text_content = ', '.join(escape_lua_string(line) for line in text_content.split('\n'))
-								snippet_body.write(f'i({token.number}, {{{text_content}}}, {{key = "i{token.number}"}})')
+								snippet_body.write(f'i({token.number}, {{{text_content}}}, {{key = "i{token.original_number}"}})')
 							else:
-								snippet_body.write(f'i({token.number}, {escape_lua_string(text_content)}, {{key = "i{token.number}"}})')
+								snippet_body.write(f'i({token.number}, {escape_lua_string(text_content)}, {{key = "i{token.original_number}"}})')
 						else:
 							related_nodes = {}
 							for child in token.children:
@@ -546,7 +545,6 @@ def parse_snippet(snippet) -> tuple[list[LSNode], dict[int, int]]:
 	token_list = transform_tokens(tokens, lines)
 
 	insert_nodes = {}
-	remove_nodes = set()
 	node_numbers = set()
 
 	for token in iter_all_tokens(token_list):
@@ -566,9 +564,6 @@ def parse_snippet(snippet) -> tuple[list[LSNode], dict[int, int]]:
 				insert_tokens.add(token.number)
 		if isinstance(token, LSInsertNode):
 			token.children = [finalize_token(child) for child in token.children]
-			# nested nodes are not supported by luasnip
-			if token.is_nested:
-				remove_nodes.add(token.number)
 		if isinstance(token, (LSInsertNode, LSCopyNode)):
 			node_numbers.add(token.number)
 		return token
@@ -577,9 +572,9 @@ def parse_snippet(snippet) -> tuple[list[LSNode], dict[int, int]]:
 	token_list = [finalize_token(token) for token in token_list]
 
 	# try to correctly remap node numbers
-	node_numbers.discard(0)
-	node_numbers = sorted(node_numbers - remove_nodes)
-	remap = {node_numbers[new_number]: new_number + 1 for new_number in range(len(node_numbers))}
+	#node_numbers.discard(0)
+	node_numbers = sorted(node_numbers)
+	remap = {node_numbers[new_number]: new_number for new_number in range(len(node_numbers))}
 
 	def remap_numbers(token):
 		if isinstance(token, LSInsertNode):
