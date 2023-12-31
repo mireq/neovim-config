@@ -598,12 +598,14 @@ class ExtendedSnippetManager(SnippetManager):
 		clear_priority = None
 		cleared = {}
 
-		for _, source in self._snippet_sources:
+		snippet_sources = sorted(self._snippet_sources)
+
+		for _, source in snippet_sources:
 			source.ensure(filetypes)
 			possible_snippets.extend(list(source._snippets[self.filetype]))
 		possible_snippets = [s for s in possible_snippets if not s.trigger in self.configuration.excluded_snippets]
 
-		for _, source in self._snippet_sources:
+		for _, source in snippet_sources:
 			sclear_priority = source.get_clear_priority(filetypes)
 			if sclear_priority is not None and (
 				clear_priority is None or sclear_priority > clear_priority
