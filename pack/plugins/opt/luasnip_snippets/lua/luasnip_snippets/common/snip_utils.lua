@@ -285,7 +285,6 @@ local function call_python(python_function_name, opts)
 end
 
 local function code_python(id, node_code, global_code, args, snip, indent, tabstop_mapping)
-	local indent = string.match(snip.env.TM_CURRENT_LINE, "^[ \t]*")
 	return call_python("execute_code", {node_id=id, node_code=node_code, global_code=global_code or {}, tabstops=args, env=snip.env, indent=indent, tabstop_mapping=tabstop_mapping})
 end
 
@@ -328,6 +327,11 @@ local function setup()
 	for filetype, extends in pairs(filetype_includes) do
 		ls.filetype_extend(filetype, extends)
 	end
+
+	if vim.g.snips_author == nil then vim.g.snips_author = 'yourname' end
+	if vim.g.snips_email == nil then vim.g.snips_email = 'yourname@email.com' end
+	if vim.g.snips_github == nil then vim.g.snips_github = 'https://github.com/yourname' end
+	if vim.g.snips_company == nil then vim.g.snips_company = 'company' end
 end
 
 
