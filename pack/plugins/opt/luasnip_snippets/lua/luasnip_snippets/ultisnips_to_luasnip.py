@@ -336,7 +336,7 @@ class ParsedSnippet:
 
 		return [replace_token(token) for token in tokens]
 
-	def render_tokens(self, tokens: List[LSNode], indent: int = 0, at_line_start: bool = True) -> str:
+	def render_tokens(self, tokens: List[LSNode], indent: int = 0, at_line_start: bool = True, parent: LSNode | None = None) -> str:
 		snippet_body = StringIO()
 		num_tokens = len(tokens)
 		accumulated_text = ['\n']
@@ -362,9 +362,10 @@ class ParsedSnippet:
 						snippet_body.write(f't{escape_lua_string(token.text)}')
 				case LSInsertNode():
 					if token.children:
+						parent_token_number = 0 if parent is None else parent.number
 						if token.is_nested: # nested nodes are not supported, unwrapping
-							dynamic_node_content = self.render_tokens(token.children, at_line_start=False)
-							snippet_body.write(f'd({token.number}, function(args) return sn(nil, {{{dynamic_node_content}}}) end, {{}}, {{key = "i{token.original_number}"}})')
+							dynamic_node_content = self.render_tokens(token.children, at_line_start=False, parent=token)
+							snippet_body.write(f'd({token.number - parent_token_number}, function(args) return sn(nil, {{{dynamic_node_content}}}) end, {{}}, {{key = "i{token.original_number}"}})')
 							write_comma()
 							continue
 						#print(dynamic_node_content)
@@ -390,7 +391,7 @@ class ParsedSnippet:
 							related_nodes_code = ''
 							if related_nodes:
 								related_nodes_code = f', {{{", ".join("k" + escape_lua_string("i" + str(v)) for v in related_nodes.keys())}}}'
-							snippet_body.write(f'd({token.number}, function(args, snip) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}}, {escape_lua_string(node_indent)}), {{key = "i{token.original_number}"}}) }}) end{related_nodes_code})')
+							snippet_body.write(f'd({token.number - parent_token_number}, function(args, snip) return sn(nil, {{ i(1, jt({{{dynamic_node_content}}}, {escape_lua_string(node_indent)}), {{key = "i{token.original_number}"}}) }}) end{related_nodes_code})')
 					else:
 						snippet_body.write(f'i({token.number}, "", {{key = "i{token.original_number}"}})')
 				case LSCopyNode():
