@@ -7,7 +7,7 @@ local colorscheme = {
 	{"Boolean", {ctermfg=192, cterm={bold=true}}},
 	{"Character", {ctermfg=181, cterm={bold=true}}},
 	{"ColorColumn", {ctermbg=233}},
-	{"Comment", {ctermfg=8}},
+	{"Comment", {ctermfg=243}},
 	{"Conditional", {ctermfg=229, cterm={bold=true}}},
 	{"Conceal", {ctermfg=120}},
 	{"Constant", {ctermfg=181, cterm={bold=true}}},
