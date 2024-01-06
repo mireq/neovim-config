@@ -783,23 +783,10 @@ require("lazy").setup({
 	},
 	{
 		'mireq/luasnip-snippets',
-		dependencies = {'L3MON4D3/LuaSnip'},
-		init = function()
-			require('luasnip_snippets.common.snip_utils').setup()
-		end
-	},
-	{
-		dir = vim.fn.stdpath("config") .. "/pack/plugins/opt/luasnip_snippets",
 		lazy = snippet_engine == 'ultisnips',
 		enabled = snippet_engine ~= 'ultisnips',
-		dependencies = {
-			'L3MON4D3/LuaSnip',
-		},
+		dependencies = {'L3MON4D3/LuaSnip'},
 		init = function()
-			vim.g.snips_author = 'yourname'
-			vim.g.snips_email = 'yourname@email.com'
-			vim.g.snips_github = 'https://github.com/yourname'
-			vim.g.snips_company = 'company'
 			require('luasnip_snippets.common.snip_utils').setup()
 		end
 	},
