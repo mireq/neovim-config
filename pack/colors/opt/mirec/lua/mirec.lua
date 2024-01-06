@@ -35,7 +35,7 @@ local colorscheme = {
 	{"Identifier", {ctermfg=153, cterm={bold=true}}},
 	{"phpMethodsVar", {ctermfg=151}},
 	{"Include", {ctermfg=156, cterm={bold=true}}},
-	{"IncSearch", {ctermfg=16, ctermbg=131}},
+	{"IncSearch", {ctermfg=231, ctermbg=163, cterm={bold=true}}},
 	{"Keyword", {ctermfg=227, cterm={bold=true}}},
 	{"Label", {ctermfg=229, cterm={bold=true, underline=true}}},
 	{"LineNr", {ctermfg=244, ctermbg=234}},
