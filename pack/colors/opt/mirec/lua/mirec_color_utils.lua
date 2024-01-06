@@ -68,6 +68,7 @@ M.setup_colorscheme = function(colorscheme, name, background)
 end
 
 M.highlight_colorscheme = function()
+	vim.cmd('hi link @number NONE')
 	for color = 0, 255 do
 		local colorValue = tonumber(string.sub(M.C_256[color + 1], 2, 7), 16)
 		local b = colorValue % 256
