@@ -1,4 +1,4 @@
-local snippet_engine = 'ultisnips' -- luasnip or ultisnips
+local snippet_engine = 'luasnip' -- luasnip or ultisnips
 
 print(vim.fn.stdpath("config") .. "/pack/colors/opt/mirec")
 
@@ -775,6 +775,13 @@ require("lazy").setup({
 					return l:retval
 				endfunction
 			]])
+		end
+	},
+	{
+		'mireq/luasnip-snippets',
+		dependencies = {'L3MON4D3/LuaSnip'},
+		init = function()
+			require('luasnip_snippets.common.snip_utils').setup()
 		end
 	},
 	{
