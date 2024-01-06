@@ -98,6 +98,9 @@ require("lazy").setup({
 
 			-- display text completion at end of file
 			local function set_priority(entry1, entry2)
+				--local f = io.open("/tmp/e.txt", "w")
+				--f:write(vim.inspect(entry1))
+				--f:close()
 				local entry_kind_1 = entry1:get_kind()
 				local entry_kind_2 = entry2:get_kind()
 				local entry1_priority = get_kind_priority(entry_kind_1)
@@ -141,6 +144,9 @@ require("lazy").setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
 				filetypes = {'typescript', 'vue'},
+				--settings = {
+				--	['vue.autoInsert.parentheses'] = false,
+				--},
 				flags = {
 					debounce_text_changes = 500
 				},
@@ -274,7 +280,6 @@ require("lazy").setup({
 					priority_weight = 2,
 					comparators = {
 						set_priority,
-						cmp.config.compare.offset,
 						cmp.config.compare.exact,
 						-- cmp.config.compare.scopes,
 						cmp.config.compare.score,
@@ -282,8 +287,9 @@ require("lazy").setup({
 						cmp.config.compare.locality,
 						cmp.config.compare.kind,
 						-- cmp.config.compare.sort_text,
-						cmp.config.compare.length,
 						cmp.config.compare.order,
+						cmp.config.compare.offset,
+						cmp.config.compare.length,
 					},
 				},
 			})
@@ -781,7 +787,8 @@ require("lazy").setup({
 			vim.g.snips_author = 'yourname'
 			vim.g.snips_email = 'yourname@email.com'
 			vim.g.snips_github = 'https://github.com/yourname'
-			require('luasnip_snippets.snip_utils').setup()
+			vim.g.snips_company = 'company'
+			require('luasnip_snippets.common.snip_utils').setup()
 		end
 	},
 	{
@@ -796,11 +803,13 @@ require("lazy").setup({
 		init = function()
 			local ls = require('luasnip')
 			ls.setup({
-				load_ft_func = require('luasnip_snippets.snip_utils').load_ft_func,
-				ft_func = require('luasnip_snippets.snip_utils').ft_func,
+				load_ft_func = require('luasnip_snippets.common.snip_utils').load_ft_func,
+				ft_func = require('luasnip_snippets.common.snip_utils').ft_func,
 				store_selection_keys = '<c-x>',
+				enable_autosnippets = true,
 			})
-			vim.keymap.set({"i"}, "<Tab>", function() if ls.expand_or_jumpable() then ls.expand_or_jump() else vim.api.nvim_input('<C-V><Tab>') end end, {silent = true})
+			vim.keymap.set({"i", "s"}, "<Tab>", function() if ls.expand_or_jumpable() then ls.expand_or_jump() else vim.api.nvim_input('<C-V><Tab>') end end, {silent = true})
+			vim.keymap.set({"i", "s"}, "<S-Tab>", function() ls.jump(-1) end, {silent = true})
 			--vim.api.nvim_set_keymap("i", "<C-n>", "<Plug>luasnip-next-choice", {})
 			--vim.api.nvim_set_keymap("s", "<C-n>", "<Plug>luasnip-next-choice", {})
 			vim.keymap.set("i", "<C-u>", function() require("luasnip.extras.select_choice")() end, {})
