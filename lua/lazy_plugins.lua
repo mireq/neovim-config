@@ -203,7 +203,11 @@ require("lazy").setup({
 				),
 				snippet = {
 					expand = function(args)
-						vim.fn["UltiSnips#Anon"](args.body)
+						if snippet_engine == 'ultisnips' then
+							vim.fn["UltiSnips#Anon"](args.body)
+						else
+							require('luasnip').lsp_expand(args.body)
+						end
 					end,
 				},
 				confirmation = {
