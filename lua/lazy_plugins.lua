@@ -1,5 +1,6 @@
 local snippet_engine = 'ultisnips' -- luasnip or ultisnips
 
+print(vim.fn.stdpath("config") .. "/pack/colors/opt/mirec")
 
 local ultisnips_nvim_cmp_deps = {
 	'hrsh7th/cmp-nvim-lsp',

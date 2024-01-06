@@ -15,6 +15,6 @@ require('core/keys')
 require('core/largefile')
 require('core/filetypes')
 require('core/commands')
-require('plugins/lazy')
+require('lazy_plugins')
 
 vim.cmd('colorscheme mirec')
