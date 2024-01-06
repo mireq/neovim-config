@@ -52,12 +52,13 @@ syntax match Title /{%\s*\(end\)\?trans[^%]*%}/
 ]], {})
 
 
-vim.api.nvim_create_user_command('ReloadColorscheme', [[
-TSDisable highlight
-TSEnable highlight
-exec 'lua require("plenary.reload").reload_module("mirec", true)'
-colorscheme mirec
-]], {})
+vim.api.nvim_create_user_command('ReloadColorscheme', function()
+	vim.cmd.TSDisable('highlight')
+	vim.cmd.TSEnable('highlight')
+	local current_colorscheme = vim.g.colors_name
+	require("plenary.reload").reload_module(current_colorscheme, true)
+	vim.cmd('colorscheme ' .. current_colorscheme)
+end, {})
 
 vim.api.nvim_create_user_command('HighlightColorscheme', [[
 TSDisable highlight
