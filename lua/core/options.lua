@@ -87,6 +87,9 @@ opt.wrap = true
 
 -- Enable line number display
 opt.number = true
+
+-- Show waring / error symbols in number column
+opt.signcolumn = 'number'
 --
 -- Hide conceal chars
 opt.conceallevel = 2
