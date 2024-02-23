@@ -48,3 +48,12 @@ vim.api.nvim_create_autocmd({"BufEnter"}, {
 		end
 	end
 })
+
+
+-- local hooks = require "ibl.hooks"
+-- hooks.register(
+-- 	hooks.type.ACTIVE,
+-- 	function(bufnr)
+-- 		return vim.api.nvim_buf_line_count(bufnr) < 5000
+-- 	end
+-- )
