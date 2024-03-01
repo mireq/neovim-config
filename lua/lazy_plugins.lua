@@ -42,7 +42,7 @@ require("lazy").setup({
 	},
 	{
 		'hrsh7th/nvim-cmp',
-		--event = 'InsertEnter',
+		event = 'InsertEnter',
 		dependencies = nvim_cmp_deps,
 		config = function()
 			local cmp = require('cmp')
@@ -466,6 +466,7 @@ require("lazy").setup({
 	},
 	{
 		'pangloss/vim-javascript',
+		filetype = {'javascript', 'typescript'},
 		config = function()
 			vim.g.javascript_conceal = 1
 			vim.g.javascript_conceal_function   = "∫"
@@ -481,14 +482,17 @@ require("lazy").setup({
 	},
 	{
 		'mattn/emmet-vim',
+		event = 'InsertEnter',
 		filetype = {'html', 'htmldjango'}
 	},
 	{
 		'vim-scripts/po.vim--Jelenak',
+		event = 'InsertEnter',
 		filetype = {'po'}
 	},
 	{
 		'tikhomirov/vim-glsl',
+		event = 'InsertEnter',
 		filetype = {'glsl'}
 	},
 	{
