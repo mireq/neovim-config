@@ -750,6 +750,7 @@ require("lazy").setup({
 	{
 		"SirVer/ultisnips",
 		lazy = snippet_engine ~= 'ultisnips',
+		enabled = snippet_engine == 'ultisnips',
 		init = function()
 			vim.g.UltiSnipsExpandTrigger="<TAB>"
 			vim.g.UltiSnipsJumpForwardTrigger="<TAB>"
@@ -785,23 +786,27 @@ require("lazy").setup({
 	},
 	{
 		'mireq/luasnip-snippets',
-		lazy = snippet_engine == 'ultisnips',
+		--lazy = snippet_engine == 'ultisnips',
+		lazy = true,
+		event = 'InsertEnter',
 		enabled = snippet_engine ~= 'ultisnips',
 		dependencies = {'L3MON4D3/LuaSnip'},
-		init = function()
+		config = function()
 			require('luasnip_snippets.common.snip_utils').setup()
 		end
 	},
 	{
 		"L3MON4D3/LuaSnip",
 		version = "2.*",
-		lazy = snippet_engine == 'ultisnips',
+		--lazy = snippet_engine == 'ultisnips',
+		lazy = true,
+		event = 'InsertEnter',
 		enabled = snippet_engine ~= 'ultisnips',
 		build = "make install_jsregexp",
 		dependencies = {
 			'nvim-treesitter/nvim-treesitter',
 		},
-		init = function()
+		config = function()
 			local ls = require('luasnip')
 			ls.setup({
 				load_ft_func = require('luasnip_snippets.common.snip_utils').load_ft_func,
