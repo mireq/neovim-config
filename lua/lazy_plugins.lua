@@ -530,7 +530,12 @@ require("lazy").setup({
 			vim.keymap.set('n', '<C-p>', function()
 				local opts = {
 					layout_config = {
-						prompt_position = 'bottom'
+						prompt_position = 'bottom',
+						bottom_pane = {
+							prompt_position = "bottom",
+							preview_cutoff = 120,
+							preview_width = 0.4,
+						},
 					},
 					--previewer = false,
 					prompt_title = false,
