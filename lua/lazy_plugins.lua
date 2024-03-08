@@ -4,6 +4,7 @@ local ultisnips_nvim_cmp_deps = {
 	'hrsh7th/cmp-nvim-lsp',
 	'hrsh7th/cmp-buffer',
 	'hrsh7th/cmp-path',
+	'hrsh7th/cmp-cmdline',
 	'hrsh7th/cmp-nvim-lsp-signature-help',
 	'neovim/nvim-lspconfig',
 	'onsails/lspkind.nvim',
@@ -15,6 +16,7 @@ local luasnip_nvim_cmp_deps = {
 	'hrsh7th/cmp-nvim-lsp',
 	'hrsh7th/cmp-buffer',
 	'hrsh7th/cmp-path',
+	'hrsh7th/cmp-cmdline',
 	'hrsh7th/cmp-nvim-lsp-signature-help',
 	'neovim/nvim-lspconfig',
 	'onsails/lspkind.nvim',
@@ -315,6 +317,25 @@ require("lazy").setup({
 				vim.cmd("au! UltiSnips_AutoTrigger")
 				vim.cmd("autocmd BufLeave * call UltiSnips#LeavingBuffer()")
 			end
+
+			-- complete search
+			cmp.setup.cmdline({ '/', '?' }, {
+				mapping = cmp.mapping.preset.cmdline(),
+				sources = {
+					{ name = 'buffer' }
+				}
+			})
+
+			-- complete files and commands
+			cmp.setup.cmdline(':', {
+				mapping = cmp.mapping.preset.cmdline(),
+				sources = cmp.config.sources({
+					{ name = 'path' }
+				}, {
+					{ name = 'cmdline' }
+				})
+			})
+
 		end,
 	},
 	--{
