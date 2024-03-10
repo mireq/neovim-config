@@ -431,10 +431,71 @@ require("lazy").setup({
 					lualine_z = {}
 				},
 				tabline = {},
+				--tabline = {
+				--	lualine_a = {
+				--		{
+				--			'tabs',
+				--			tab_max_length = 40,
+				--			mode = 2,
+				--			path = 0,
+				--		}
+				--	},
+				--	lualine_b = {},
+				--	lualine_c = {},
+				--	lualine_x = {},
+				--	lualine_y = {},
+				--	lualine_z = {},
+				--},
 				winbar = {},
 				inactive_winbar = {},
 				extensions = {}
 			}
+
+			local function fancyTabLine()
+				local s = ''
+				for i = 1, vim.fn.tabpagenr('$') do
+					-- Define the action for clicking on the tab, which is to switch to the tab
+					local tab_click = '%' .. i .. 'T'
+
+					-- Get buffer number
+					local bufnr = vim.fn.tabpagebuflist(i)[vim.fn.tabpagewinnr(i)]
+
+					-- Write name
+					local bufname = vim.fn.fnamemodify(vim.fn.bufname(bufnr), ':t')
+					if #bufname > 30 then
+						bufname = bufname:sub(1, 29) .. '…'
+					end
+					if bufname == '' then
+						bufname = 'Tab ' .. i
+					end
+					
+					-- Set highlight
+					if i == vim.fn.tabpagenr() then
+						-- Selected tab highlight
+						s = s .. '%#TabLineSel#'
+					else
+						-- Unselected tab highlight
+						s = s .. '%#TabLine#'
+					end
+
+					-- Add tab label and click action
+					s = s .. tab_click .. ' ' .. bufname .. ' '
+
+					-- Add tab separator
+					if i == vim.fn.tabpagenr() then
+						s = s .. '%#TabLineSepSel#'
+					else
+						s = s .. '%#TabLineSep#'
+					end
+				end
+
+				-- Fill to the right
+				s = s .. '%#TabLineFill#'
+
+				return s
+			end
+			_G.FancyTabLine = fancyTabLine
+			vim.o.tabline = '%!v:lua.FancyTabLine()'
 		end
 	},
 	{
