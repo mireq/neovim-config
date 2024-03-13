@@ -453,7 +453,10 @@ require("lazy").setup({
 
 			local function fancyTabLine()
 				local s = ''
-				for i = 1, vim.fn.tabpagenr('$') do
+
+				local tabcount = vim.fn.tabpagenr('$')
+
+				for i = 1, tabcount do
 					-- Define the action for clicking on the tab, which is to switch to the tab
 					local tab_click = '%' .. i .. 'T'
 
@@ -468,24 +471,41 @@ require("lazy").setup({
 					if bufname == '' then
 						bufname = 'Tab ' .. i
 					end
-					
+
+					local current_tab_type = 'Normal'
 					-- Set highlight
 					if i == vim.fn.tabpagenr() then
 						-- Selected tab highlight
 						s = s .. '%#TabLineSel#'
+						current_tab_type = 'Sel'
 					else
 						-- Unselected tab highlight
 						s = s .. '%#TabLine#'
 					end
 
+					local next_tab_type = 'Fill'
+					if i <= tabcount - 1 then
+						next_tab_type = 'Normal'
+					end
+					if i + 1 == vim.fn.tabpagenr() then
+						next_tab_type = 'Sel'
+					end
+
 					-- Add tab label and click action
 					s = s .. tab_click .. ' ' .. bufname .. ' '
 
-					-- Add tab separator
 					if i == vim.fn.tabpagenr() then
-						s = s .. '%#TabLineSepSel#'
+						s = s .. '%#TabLineSepSel#'
 					else
-						s = s .. '%#TabLineSep#'
+						s = s .. '%#TabLineSep#'
+					end
+					s = s .. '%#TabLine' .. current_tab_type .. 'To' .. next_tab_type .. '#'
+
+					-- Add tab separator
+					if current_tab_type == 'Normal' and next_tab_type == 'Normal' then
+						s = s .. ''
+					else
+						s = s .. ''
 					end
 				end
 
