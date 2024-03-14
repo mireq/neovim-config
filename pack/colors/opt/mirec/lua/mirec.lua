@@ -175,15 +175,17 @@ local colorscheme = {
 
 	{"CmpItemKindFunction", {ctermfg=255, ctermbg=90}},
 
-	{"CmpItemKindStruct", {ctermfg=255, ctermbg=125}},
+	{"CmpItemKindStruct", {ctermfg=255, ctermbg=124}},
 	{"CmpItemKindClass", {ctermfg=255, ctermbg=125}},
-	{"CmpItemKindModule", {ctermfg=255, ctermbg=125}},
-	{"CmpItemKindOperator", {ctermfg=255, ctermbg=125}},
+	{"CmpItemKindModule", {ctermfg=255, ctermbg=126}},
+	{"CmpItemKindOperator", {ctermfg=255, ctermbg=127}},
 
 	{"CmpItemKindVariable", {ctermfg=255, ctermbg=55}},
-	{"CmpItemKindFile", {ctermfg=255, ctermbg=55}},
-	{"CmpItemKindFolder", {ctermfg=255, ctermbg=55}},
-	{"CmpItemKindSnippet", {ctermfg=255, ctermbg=55}},
+
+	{"CmpItemKindSnippet", {ctermfg=255, ctermbg=26}},
+
+	{"CmpItemKindFile", {ctermfg=255, ctermbg=28}},
+	{"CmpItemKindFolder", {ctermfg=255, ctermbg=28}},
 
 	{"CmpItemKindUnit", {ctermfg=255, ctermbg=58}},
 	{"CmpItemKindText", {ctermfg=255, ctermbg=58}},
@@ -236,8 +238,11 @@ local colorscheme = {
 	{"@tag.vue", {link="Statement"}},
 	{"@tag.attribute.vue", {link="Type"}},
 	{"@method.vue", {link="Type"}},
+	{"@variable.vue", {link="Title"}},
+	{"@variable.member.vue", {link="CallClass"}},
+	{"@function.method.vue", {link="Define"}},
 	{"@punction.special.vue", {link="Type"}},
-	{"@none.vue", {link="Type"}},
+	{"@keyword.import", {link="PreProc"}},
 };
 
 M.setup = function(config)
