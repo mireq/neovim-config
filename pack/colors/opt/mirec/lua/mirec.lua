@@ -89,6 +89,19 @@ local colorscheme = {
 	{"BufferSelected", {ctermfg=227, ctermbg=16, cterm={bold=true, reverse=true}}},
 	{"BufferNormal", {ctermfg=252, ctermbg=16}},
 
+	{"TabLineFill", {ctermfg=246, ctermbg=234}},
+	{"TabLineSel", {ctermfg=22, ctermbg=148}},
+	{"TabLine", {ctermfg=246, ctermbg=236}},
+
+	{"TabLineSelToFill", {ctermfg=148, ctermbg=234}},
+	{"TabLineSelToNormal", {ctermfg=148, ctermbg=236}},
+	{"TabLineNormalToFill", {ctermfg=236, ctermbg=234}},
+	{"TabLineNormalToNormal", {ctermfg=246, ctermbg=236}},
+	{"TabLineNormalToSel", {ctermfg=236, ctermbg=148}},
+
+	{"TabLineSep", {ctermfg=236, ctermbg=234}},
+	{"TabLineSepSel", {ctermfg=148, ctermbg=236}},
+
 	{"QtObject", {ctermfg=120}},
 
 	{"outlTags", {ctermfg=51}},
