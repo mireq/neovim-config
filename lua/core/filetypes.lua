@@ -30,15 +30,15 @@ vim.api.nvim_create_autocmd({"ColorScheme"}, {
 	command = 'highlight ExtraWhitespace ctermbg=red guibg=red'
 })
 vim.api.nvim_create_autocmd({"BufWinEnter"}, {
-	pattern = {'*.cpp', '*.h', '*.hpp', '*.php', '*.py', '*.css', '*.js', '*.html', '*.xhtml', '*.htm'},
+	pattern = {'*.cpp', '*.h', '*.hpp', '*.php', '*.py', '*.css', '*.js', '*.html', '*.xhtml', '*.htm', '*.vue', '*.ts'},
 	command = "match ExtraWhitespace /\\s\\+$\\| \\+\\ze\\t/",
 })
 vim.api.nvim_create_autocmd({"InsertEnter"}, {
-	pattern = {'*.cpp', '*.h', '*.hpp', '*.php', '*.py', '*.css', '*.js', '*.html', '*.xhtml', '*.htm'},
+	pattern = {'*.cpp', '*.h', '*.hpp', '*.php', '*.py', '*.css', '*.js', '*.html', '*.xhtml', '*.htm', '*.vue', '*.ts'},
 	command = "match ExtraWhitespace /\\s\\+\\%#\\@<!$\\| \\+\\ze\\t\\%#\\@<!/",
 })
 vim.api.nvim_create_autocmd({"BufWinLeave"}, {
-	pattern = {'*.cpp', '*.h', '*.hpp', '*.php', '*.py', '*.css', '*.js', '*.html', '*.xhtml', '*.htm'},
+	pattern = {'*.cpp', '*.h', '*.hpp', '*.php', '*.py', '*.css', '*.js', '*.html', '*.xhtml', '*.htm', '*.vue', '*.ts'},
 	command = "match ExtraWhitespace /\\s\\+$\\| \\+\\ze\\t/",
 })
 
