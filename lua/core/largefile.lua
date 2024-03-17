@@ -8,7 +8,7 @@ vim.api.nvim_create_autocmd({"BufReadPre"}, {
 	callback = function(ev)
 		if ev.file then
 			local status, size = pcall(function() return vim.loop.fs_stat(ev.file).size end)
-			if status and size > 1024 * 1024 then -- large file
+			if status and size > 4 * 1024 * 1024 then -- large file
 				vim.wo.wrap = false
 				old_eventignore = vim.o.eventignore
 				largefile_opened = true
