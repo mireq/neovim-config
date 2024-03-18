@@ -655,6 +655,20 @@ require("lazy").setup({
 				local theme = require('telescope.themes').get_ivy(opts);
 				require'telescope.builtin'.find_files(theme)
 			end, {})
+			vim.keymap.set('n', '<F1>', function()
+				require'telescope.builtin'.buffers({
+					layout_strategy = "vertical",
+					layout_config = {
+						prompt_position = "top",
+						width = 0.7,
+						mirror = true
+					},
+					sort_mru = true,
+					show_all_buffers = true,
+					file_ignore_patterns = {},
+					previewer = false,
+				})
+			end, {})
 		end,
 		config = function()
 			require('telescope').setup({
