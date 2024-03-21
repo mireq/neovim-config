@@ -613,12 +613,12 @@ require("lazy").setup({
 		event = 'InsertEnter',
 		cmd = {'Git', 'Gdiffsplit'},
 	},
-	{
-		"roblillack/vim-bufferlist",
-		keys = {
-			{"<F3>", "<cmd>call BufferList()<CR>", desc="Buffer list"},
-		},
-	},
+	--{
+	--	"roblillack/vim-bufferlist",
+	--	keys = {
+	--		{"<F3>", "<cmd>call BufferList()<CR>", desc="Buffer list"},
+	--	},
+	--},
 	{
 		'nvim-telescope/telescope-fzf-native.nvim',
 		build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
