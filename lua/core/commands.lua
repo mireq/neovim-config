@@ -66,3 +66,45 @@ TSEnable highlight
 exec 'lua require("plenary.reload").reload_module("mirec_color_utils", true)'
 lua require("mirec_color_utils").highlight_colorscheme()
 ]], {})
+
+
+
+local function update_env_vars_from_terminal()
+	-- Path to the temporary file
+	local tmp_file = os.tmpname()
+
+	-- Function to read the temporary file and update environment variables
+	local function set_env_vars()
+		local file = io.open(tmp_file, "r")
+		if file then
+			for line in file:lines() do
+				local key, value = line:match("([^=]+)=(.*)")
+				if key and value then
+					vim.fn.setenv(key, value)
+				end
+			end
+			file:close()
+			-- Remove the temporary file after reading
+			os.remove(tmp_file)
+		end
+	end
+
+  -- Get the current buffer number, assuming it's a terminal
+  local bufnr = vim.api.nvim_get_current_buf()
+  
+	-- Obtain the terminal's job ID
+	local channel_id = vim.b[bufnr].terminal_job_id
+
+	if channel_id then
+		-- Send the 'env' command to the terminal and redirect output to the temporary file
+		vim.fn.chansend(channel_id, "\nenv > " .. tmp_file .. "\n")
+	end
+
+	-- Give some time for the command to execute and the file to be populated
+	vim.defer_fn(function()
+		set_env_vars()
+	end, 100)
+end
+
+
+vim.api.nvim_create_user_command('TermUpdateEnv', update_env_vars_from_terminal, {})
