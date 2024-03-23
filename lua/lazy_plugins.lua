@@ -749,13 +749,13 @@ require("lazy").setup({
 		cmd = {'ToggleTerm', 'TermExec'},
 		config = function()
 			require("toggleterm").setup({
-				open_mapping = [[<F2>]],
 				direction = 'tab',
 				on_create = function(t)
-					vim.keymap.set('n', '<C-q>', '<Cmd>exe v:count1 . "ToggleTerm"<CR>', { buffer = t.bufnr })
+					vim.keymap.set('n', '<C-q>', function() vim.cmd('quit') end, { buffer = t.bufnr })
 				end,
 				on_open = function(t)
 					vim.cmd('nohlsearch')
+					vim.cmd("startinsert!")
 				end,
 			})
 		end

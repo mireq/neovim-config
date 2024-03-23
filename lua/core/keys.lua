@@ -93,9 +93,11 @@ vim.api.nvim_set_keymap('', '<F9>', ':make -j 2<CR>', {})
 -- => Terminal
 -- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-vim.keymap.set('n', '<F2>', '<Cmd>nohlsearch<Cr><Cmd>ToggleTerm<Cr>', {silent=true})
+vim.keymap.set('n', '<leader>t', '<Cmd>nohlsearch<Cr><Cmd>lua require"toggleterm"<Cr><Cmd>1ToggleTerm<Cr>', {silent=true})
+vim.keymap.set('n', '<F2>', '<Cmd>nohlsearch<Cr><Cmd>lua require"toggleterm"<Cr><Cmd>2ToggleTerm<Cr>', {silent=true})
+vim.keymap.set('n', '<F3>', '<Cmd>nohlsearch<Cr><Cmd>lua require"toggleterm"<Cr><Cmd>3ToggleTerm<Cr>', {silent=true})
 vim.keymap.set('t', '<C-w>', '<C-\\><C-n>', {silent=true})
-vim.keymap.set('t', '<C-q>', '<Cmd>exe v:count1 . "ToggleTerm"<CR>', {})
+vim.keymap.set('t', '<C-q>', function() vim.cmd('quit') end, {})
 vim.keymap.set('t', '<C-PageUp>', '<C-\\><C-n><PageUp>', {silent=true})
 vim.keymap.set('t', '<C-PageDown>', '<C-\\><C-n><PageDown>', {silent=true})
 
