@@ -108,3 +108,14 @@ end
 
 
 vim.api.nvim_create_user_command('TermUpdateEnv', update_env_vars_from_terminal, {})
+
+
+vim.api.nvim_create_user_command(
+	'TermFloatExec',
+	function(opts)
+		local term_exec_cmd = string.format(':9TermExec direction=float go_back=0 cmd="%s"', opts.args)
+		require "toggleterm"
+		vim.cmd(term_exec_cmd)
+	end,
+	{ nargs=1 }
+)
