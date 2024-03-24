@@ -12,7 +12,7 @@
 require('lazy_init')
 require('core/options')
 require('core/keys')
-require('core/largefile')
+require('core/largefile').setup()
 require('core/filetypes')
 require('core/commands')
 require('lazy_plugins')

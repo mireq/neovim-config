@@ -1,59 +1,97 @@
 local group = vim.api.nvim_create_augroup("LargeFileAutocmds", {})
-local old_eventignore = vim.o.eventignore;
-local largefile_opened = false;
+local old_eventignore = false
 
 
-vim.api.nvim_create_autocmd({"BufReadPre"}, {
-	group = group,
-	callback = function(ev)
-		if ev.file then
-			local status, size = pcall(function() return vim.loop.fs_stat(ev.file).size end)
-			if status and size > 4 * 1024 * 1024 then -- large file
-				vim.wo.wrap = false
-				old_eventignore = vim.o.eventignore
-				largefile_opened = true
-				vim.o.eventignore = 'FileType'
-				vim.bo.swapfile = false
-				vim.bo.bufhidden = 'unload'
-				vim.bo.buftype = 'nowrite'
-				vim.bo.undolevels = -1
+local default_settings = {
+	size_limit = 4 * 1024 * 1024,
+	buffer_options = {
+		swapfile = false,
+		bufhidden = 'unload',
+		buftype = 'nowrite',
+		undolevels = -1,
+	},
+	on_large_file_read_pre = function(ev) end
+}
+
+
+local settings = {}
+
+
+local buf_read_pre = function(ev)
+	if ev.file then
+		local status, size = pcall(function() return vim.loop.fs_stat(ev.file).size end)
+		if status and size > settings.size_limit then
+			old_eventignore = vim.o.eventignore
+			vim.b[ev.buf].is_large_file = true
+			vim.o.eventignore = 'FileType'
+			for option, value in pairs(settings.buffer_options) do
+				vim.api.nvim_buf_set_var(ev.buf, option, value)
 			end
+			settings.on_large_file_read_pre(ev)
 		end
 	end
-})
+end
 
-vim.api.nvim_create_autocmd({"BufWinEnter"}, {
-	group = group,
-	callback = function(ev)
-		if largefile_opened then
-			largefile_opened = false
-			vim.o.eventignore = nil
+
+local buf_win_enter = function(ev)
+	if old_eventignore ~= false then
+		vim.o.eventignore = old_eventignore
+		old_eventignore = false
+	end
+	if vim.b[ev.buf].is_large_file then
+		vim.wo.wrap = false
+	else
+		vim.wo.wrap = vim.o.wrap
+	end
+end
+
+
+local buf_enter = function(ev)
+	if vim.b[ev.buf].is_large_file then
+		if vim.g.loaded_matchparen then
+			vim.cmd('NoMatchParen')
+		end
+	else
+		if not vim.g.loaded_matchparen then
+			vim.cmd('DoMatchParen')
 		end
 	end
-})
+end
 
 
-vim.api.nvim_create_autocmd({"BufEnter"}, {
-	group = group,
-	callback = function(ev)
-		local byte_size = vim.api.nvim_buf_get_offset(ev.buf, vim.api.nvim_buf_line_count(ev.buf))
-		if byte_size > 1024 * 1024 then
-			if vim.g.loaded_matchparen then
-				vim.cmd('NoMatchParen')
-			end
+M = {}
+
+
+M.setup = function(opts)
+	if opts == nil then
+		opts = {}
+	end
+
+	for __, option in ipairs({'size_limit', 'buffer_options', 'on_large_file_read_pre'}) do
+		if opts[option] == nil then
+			settings[option] = default_settings[option]
 		else
-			if not vim.g.loaded_matchparen then
-				vim.cmd('DoMatchParen')
-			end
+			settings[option] = opts[option]
 		end
 	end
-})
+
+	vim.api.nvim_create_autocmd({"BufReadPre"}, {
+		group = group,
+		callback = buf_read_pre
+	})
 
 
--- local hooks = require "ibl.hooks"
--- hooks.register(
--- 	hooks.type.ACTIVE,
--- 	function(bufnr)
--- 		return vim.api.nvim_buf_line_count(bufnr) < 5000
--- 	end
--- )
+	vim.api.nvim_create_autocmd({"BufWinEnter"}, {
+		group = group,
+		callback = buf_win_enter
+	})
+
+
+	vim.api.nvim_create_autocmd({"BufEnter"}, {
+		group = group,
+		callback = buf_enter
+	})
+end
+
+
+return M
