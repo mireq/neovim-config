@@ -25,7 +25,7 @@ local buf_read_pre = function(ev)
 			vim.b[ev.buf].is_large_file = true
 			vim.o.eventignore = 'FileType'
 			for option, value in pairs(settings.buffer_options) do
-				vim.api.nvim_buf_set_var(ev.buf, option, value)
+				vim.bo[option] = value
 			end
 			settings.on_large_file_read_pre(ev)
 		end
