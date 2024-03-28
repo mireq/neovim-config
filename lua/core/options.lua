@@ -24,7 +24,7 @@ opt.visualbell = false
 opt.cf = true
 
 -- Allow move cursor outside text
-opt.virtualedit = 'onemore,block'
+opt.virtualedit = 'block'
 
 -- Enable : in keywords
 opt.iskeyword = '@,~,48-57,_,192-255'
