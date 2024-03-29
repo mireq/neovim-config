@@ -108,3 +108,6 @@ vim.keymap.set('i', '<C-S>', function() vim.api.nvim_feedkeys(vim.api.nvim_repla
 -- Git history
 vim.keymap.set('n', '<leader>gh', ':0GlLog<CR>')
 -- " :cexpr system('find . -name whatever.txt -printf "%p:1:1:%f\n"')
+
+-- Close quick fix
+vim.keymap.set('n', '<space>cc', ':cclose<CR>')
