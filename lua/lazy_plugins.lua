@@ -392,9 +392,9 @@ require("lazy").setup({
 					always_divide_middle = true,
 					globalstatus = false,
 					refresh = {
-						statusline = 1000,
-						tabline = 1000,
-						winbar = 1000,
+						statusline = 5000,
+						tabline = 5000,
+						winbar = 5000,
 					}
 				},
 				sections = {
@@ -415,12 +415,30 @@ require("lazy").setup({
 							end,
 						},
 						'branch',
-						{'diagnostics', colored=true}
+						{'diagnostics', colored=true},
 					},
 					lualine_c = {{'filename', path=1}},
-					lualine_x = {'encoding', 'fileformat', 'filetype'},
+					lualine_x = {
+						'encoding',
+						'fileformat',
+						'filetype'
+				},
 					lualine_y = {'progress'},
-					lualine_z = {'location'},
+					lualine_z = {
+						{
+							function()
+								local command = 'git --git-dir="$TIMETRACK_GIT_DIR" timetrack -cs'
+								local handle = io.popen(command)
+								local result = handle:read("*a")
+								handle:close()
+								return result
+							end,
+							cond = function(arg)
+								return vim.bo.filetype == "toggleterm" and os.getenv('TIMETRACK_GIT_DIR') ~= nil
+							end,
+						},
+						'location'
+					},
 				},
 				inactive_sections = {
 					lualine_a = {},
