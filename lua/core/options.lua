@@ -199,3 +199,8 @@ vim.api.nvim_create_autocmd({"BufEnter", "WinEnter"}, {
 --		end
 --	end
 --})
+
+
+if vim.g.neovide then
+	vim.o.guifont = "DejaVu Sans Mono:h11"
+end
