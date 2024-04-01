@@ -108,6 +108,11 @@ local colorscheme = {
 	{"FloatBorder", {link="WinSeparator"}},
 	{"FloatTitle", {link="Title"}},
 	{"FloatFooter", {link="Title"}},
+
+	{"GitSignsAdd", {link="DiffAdd"}},
+	{"GitSignsChange", {link="DiffChange"}},
+	{"GitSignsDelete", {link="DiffDelete"}},
+
 	{"outlTags", {ctermfg=51}},
 	{"OL1", {ctermfg=231, ctermbg=232, cterm={bold=true, underline=true}}},
 	{"OL2", {ctermfg=231, cterm={bold=true}}},
