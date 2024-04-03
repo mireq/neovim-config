@@ -770,6 +770,7 @@ require("lazy").setup({
 				direction = 'tab',
 				on_create = function(t)
 					vim.keymap.set('n', '<C-q>', function() vim.cmd('quit') end, { buffer = t.bufnr })
+					vim.keymap.set('n', 'q', function() vim.cmd('quit') end, { buffer = t.bufnr })
 				end,
 				on_open = function(t)
 					vim.cmd('nohlsearch')
