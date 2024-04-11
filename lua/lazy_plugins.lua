@@ -966,12 +966,15 @@ require("lazy").setup({
 				store_selection_keys = '<c-x>',
 				enable_autosnippets = true,
 			})
-			vim.keymap.set({"i", "s"}, "<Tab>", function() if ls.expand_or_jumpable() then ls.expand_or_jump() else vim.api.nvim_input('<C-V><Tab>') end end, {silent = true})
-			vim.keymap.set({"i", "s"}, "<S-Tab>", function() ls.jump(-1) end, {silent = true})
-			--vim.api.nvim_set_keymap("i", "<C-n>", "<Plug>luasnip-next-choice", {})
-			--vim.api.nvim_set_keymap("s", "<C-n>", "<Plug>luasnip-next-choice", {})
-			vim.keymap.set("i", "<C-u>", function() require("luasnip.extras.select_choice")() end, {})
-			vim.keymap.set("s", "<C-u>", function() require("luasnip.extras.select_choice")() end, {})
+			--vim.keymap.set({"i", "s"}, "<Tab>", function() if ls.expand_or_jumpable() then ls.expand_or_jump() else vim.api.nvim_input('<C-V><Tab>') end end, {silent = true})
+			--vim.keymap.set({"i", "s"}, "<S-Tab>", function() ls.jump(-1) end, {silent = true})
+			vim.keymap.set({"i"}, "<Tab>", function() if ls.expandable() then ls.expand() else vim.api.nvim_input('<C-V><Tab>') end end, {silent = true})
+			vim.keymap.set({"i", "s"}, "<C-K>", function() ls.jump(1) end, {silent = true})
+			vim.keymap.set({"i", "s"}, "<C-J>", function() ls.jump(-1) end, {silent = true})
+			vim.api.nvim_set_keymap("i", "<C-u>", "<Plug>luasnip-next-choice", {})
+			vim.api.nvim_set_keymap("s", "<C-u>", "<Plug>luasnip-next-choice", {})
+			--vim.keymap.set("i", "<C-u>", function() require("luasnip.extras.select_choice")() end, {})
+			--vim.keymap.set("s", "<C-u>", function() require("luasnip.extras.select_choice")() end, {})
 
 			--vim.keymap.set({"i", "s"}, "<Tab>", function() ls.jump(1) end, {silent = true})
 			--vim.cmd("snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>")
