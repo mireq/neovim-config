@@ -944,6 +944,7 @@ require("lazy").setup({
 		enabled = snippet_engine ~= 'ultisnips',
 		dependencies = {'L3MON4D3/LuaSnip'},
 		config = function()
+			vim.g.snips_debug = true
 			require('luasnip_snippets.common.snip_utils').setup()
 		end
 	},
