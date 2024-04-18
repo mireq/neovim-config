@@ -816,6 +816,7 @@ require("lazy").setup({
 		opts = {
 			highlight = {
 				enable = true,
+				additional_vim_regex_highlighting = false,
 				disable = function(lang, buf)
 					local max_filesize = 1024 * 1024 -- 1 MB
 					local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
