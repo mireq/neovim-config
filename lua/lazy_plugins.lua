@@ -141,17 +141,29 @@ require("lazy").setup({
 				}
 			}
 
-			lspconfig['volar'].setup {
-				on_attach = on_attach,
-				capabilities = capabilities,
-				filetypes = {'typescript', 'vue'},
-				--settings = {
-				--	['vue.autoInsert.parentheses'] = false,
-				--},
+			local ts_plugin_path = vim.env.HOME .. '/lib64/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin'
+			lspconfig.tsserver.setup {
+				init_options = {
+					plugins = {
+						{
+							name = '@vue/typescript-plugin',
+							location = ts_plugin_path,
+							languages = { 'vue' },
+						},
+					},
+				},
 				flags = {
 					debounce_text_changes = 500
 				},
-				root_dir = lspconfig_util.root_pattern 'package.json',
+				on_attach = on_attach,
+				filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+			}
+
+			lspconfig.volar.setup {
+				flags = {
+					debounce_text_changes = 500
+				},
+				on_attach = on_attach,
 			}
 
 			local insert_mapping = cmp.mapping.preset.insert({
