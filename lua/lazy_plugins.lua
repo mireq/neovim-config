@@ -84,6 +84,8 @@ require("lazy").setup({
 				vim.keymap.set('n', '<C-c>ro', function() vim.lsp.buf.code_action({ apply = true, context = { only = {"source.organizeImports"} } }) end, bufopts)
 				vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
 				vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+
+				client.server_capabilities.semanticTokensProvider = nil
 			end
 
 			local function get_kind_priority(kind)
