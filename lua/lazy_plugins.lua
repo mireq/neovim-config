@@ -241,6 +241,9 @@ require("lazy").setup({
 						--winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
 						col_offset = -3,
 						side_padding = 0,
+					},
+					documentation = {
+						max_height = 0,
 					}
 				},
 				mapping = insert_mapping,
