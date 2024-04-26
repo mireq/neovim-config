@@ -696,7 +696,7 @@ require("lazy").setup({
 				local theme = require('telescope.themes').get_ivy(opts);
 				require'telescope.builtin'.find_files(theme)
 			end, {})
-			vim.keymap.set('n', '<F1>', function()
+			vim.keymap.set('n', '<C-n>', function()
 				require'telescope.builtin'.buffers({
 					layout_strategy = "vertical",
 					layout_config = {
