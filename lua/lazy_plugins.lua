@@ -158,7 +158,7 @@ require("lazy").setup({
 					debounce_text_changes = 500
 				},
 				on_attach = on_attach,
-				filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+				filetypes = { 'typescript', 'typescriptreact', 'vue' },
 			}
 
 			lspconfig.volar.setup {
