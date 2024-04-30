@@ -244,6 +244,9 @@ require("lazy").setup({
 					},
 					documentation = {
 						max_height = 0,
+						border = 'rounded',
+						winhighlight = 'Normal:FloatDoc,FloatBorder:FloatDocBorder,CursorLine:Visual,Search:None'
+						--border = { "⎾", "▔", "⏋", "▕", "⏌", "▁", "⎿", "▏" },
 					}
 				},
 				mapping = insert_mapping,
