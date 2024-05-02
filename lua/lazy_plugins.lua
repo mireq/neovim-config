@@ -1057,4 +1057,5 @@ require("lazy").setup({
 			require("large_file").setup()
 		end
 	},
+	'ii14/neorepl.nvim',
 }, {install={colorscheme={"mirec"}}})
