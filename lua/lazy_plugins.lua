@@ -1115,6 +1115,12 @@ require("lazy").setup({
 			end
 		end,
 	},
+	{
+		"zbirenbaum/copilot-cmp",
+		event = "InsertEnter",
+		opts = {},
+		dependencies = "copilot.lua"
+	},
 		opts = {
 			-- your configuration comes here
 			-- or leave it empty to use the default settings
