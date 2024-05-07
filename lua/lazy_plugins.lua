@@ -1116,7 +1116,7 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"zbirenbaum/copilot-cmp",
+		"JosefLitos/cmp-copilot",
 		event = "InsertEnter",
 		opts = {},
 		dependencies = "copilot.lua"
