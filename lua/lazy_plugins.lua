@@ -1121,11 +1121,21 @@ require("lazy").setup({
 		opts = {},
 		dependencies = "copilot.lua"
 	},
+	{
+		"CopilotC-Nvim/CopilotChat.nvim",
+		branch = "canary",
+		cmd = {'CopilotChat', 'CopilotChatClose', 'CopilotChatCommit', 'CopilotChatCommitStaged', 'CopilotChatDebugInfo', 'CopilotChatDocs', 'CopilotChatExplain', 'CopilotChatFix', 'CopilotChatFixDiagnostic', 'CopilotChatLoad', 'CopilotChatOpen', 'CopilotChatOptimize', 'CopilotChatReset', 'CopilotChatReview', 'CopilotChatSave', 'CopilotChatTests'},
+		dependencies = {
+			{ "zbirenbaum/copilot.lua" },
+			{ "nvim-lua/plenary.nvim" },
+		},
 		opts = {
-			-- your configuration comes here
-			-- or leave it empty to use the default settings
-			-- refer to the configuration section below
-		}
+			debug = false,
+			window = {
+				layout = 'horizontal',
+				relative = 'editor',
+			},
+		},
 	},
 	'ii14/neorepl.nvim',
 }, {install={colorscheme={"mirec"}}})
