@@ -1137,5 +1137,5 @@ require("lazy").setup({
 			},
 		},
 	},
-	'ii14/neorepl.nvim',
+	{ 'AndreM222/copilot-lualine' },
 }, {install={colorscheme={"mirec"}}})
