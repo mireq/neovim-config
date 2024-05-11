@@ -1070,6 +1070,7 @@ require("lazy").setup({
 	--		-- refer to the configuration section below
 	--	}
 	--},
+	'ii14/neorepl.nvim',
 	{
 		"zbirenbaum/copilot.lua",
 		enabled = enable_ai,
