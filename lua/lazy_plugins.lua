@@ -734,6 +734,9 @@ require("lazy").setup({
 		'tpope/vim-fugitive',
 		event = 'InsertEnter',
 		cmd = {'Git', 'Gdiffsplit'},
+		init = function()
+			vim.keymap.set('n', 'tg', "<Cmd>tab Git<CR>", {})
+		end
 	},
 	--{
 	--	"roblillack/vim-bufferlist",
