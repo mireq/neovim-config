@@ -988,13 +988,6 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"williamboman/mason.nvim",
-		config = function()
-			require('mason').setup()
-		end,
-		build = ":MasonUpdate" -- :MasonUpdate updates registry contents
-	},
-	{
 		"norcalli/nvim-colorizer.lua",
 		cmd = "ColorizerToggle",
 		config = function()
