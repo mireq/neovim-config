@@ -236,6 +236,9 @@ require("lazy").setup({
 						return filtered_characters
 					end,
 				},
+				completion = {
+					completeopt = 'menu,menuone,noinsert'
+				},
 				window = {
 					completion = {
 						winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
