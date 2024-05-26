@@ -86,6 +86,10 @@ require("lazy").setup({
 				vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 
 				client.server_capabilities.semanticTokensProvider = nil
+
+				--if client.server_capabilities.inlayHintProvider then
+				--	vim.lsp.inlay_hint.enable(true, {bufnr = bufnr})
+				--end
 			end
 
 			local function get_kind_priority(kind)
