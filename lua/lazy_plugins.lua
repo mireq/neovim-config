@@ -312,10 +312,12 @@ require("lazy").setup({
 				sorting = {
 					priority_weight = 2,
 					comparators = {
+						require("cmp_copilot.comparators").prioritize,
 						set_priority,
 						cmp.config.compare.exact,
 						-- cmp.config.compare.scopes,
-						cmp.config.compare.score,
+						-- cmp.config.compare.score,
+						require("cmp_copilot.comparators").score,
 						cmp.config.compare.recently_used,
 						cmp.config.compare.locality,
 						cmp.config.compare.kind,
