@@ -92,7 +92,8 @@ require("lazy").setup({
 				--end
 			end
 
-			local function get_kind_priority(kind)
+			local function get_kind_priority(entry)
+				local kind = entry:get_kind()
 				local priority = 100
 				if kind == types.lsp.CompletionItemKind.Text then
 					priority = 0
@@ -100,18 +101,17 @@ require("lazy").setup({
 				if kind == types.lsp.CompletionItemKind.Snippet then
 					priority = 50
 				end
+				if entry:get_completion_item().copilot then
+					priority = 101
+				end
 				return priority
 			end
 
 			-- display text completion at end of file
 			local function set_priority(entry1, entry2)
-				--local f = io.open("/tmp/e.txt", "w")
-				--f:write(vim.inspect(entry1))
-				--f:close()
-				local entry_kind_1 = entry1:get_kind()
 				local entry_kind_2 = entry2:get_kind()
-				local entry1_priority = get_kind_priority(entry_kind_1)
-				local entry2_priority = get_kind_priority(entry_kind_2)
+				local entry1_priority = get_kind_priority(entry1)
+				local entry2_priority = get_kind_priority(entry2)
 				if entry1_priority == entry2_priority then
 					return nil
 				else
