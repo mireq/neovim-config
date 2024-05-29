@@ -186,13 +186,16 @@ require("lazy").setup({
 				sources = cmp.config.sources(
 					{
 						{
-							name = snippet_engine
+							name = 'copilot',
 						},
 						{
-							name = 'nvim_lsp'
+							name = snippet_engine,
 						},
 						{
-							name = 'nvim_lsp_signature_help'
+							name = 'nvim_lsp',
+						},
+						{
+							name = 'nvim_lsp_signature_help',
 						},
 						{
 							name = 'buffer',
@@ -211,7 +214,8 @@ require("lazy").setup({
 									end
 									return vim.tbl_keys(bufs)
 								end
-							}
+							},
+							group_index = 2
 						},
 					},
 					{
