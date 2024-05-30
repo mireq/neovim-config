@@ -293,6 +293,7 @@ require("lazy").setup({
 								Event = "",
 								Operator = "±",
 								TypeParameter = "",
+								Copilot = "",
 							}
 						})(entry, vim_item)
 						local strings = vim.split(kind.kind, "%s", { trimempty = true })
