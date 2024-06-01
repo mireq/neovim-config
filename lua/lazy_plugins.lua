@@ -147,7 +147,7 @@ require("lazy").setup({
 				}
 			}
 
-			local ts_plugin_path = vim.env.HOME .. '/lib64/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin'
+			local ts_plugin_path = vim.env.HOME .. '/.npm/lib64/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin'
 			lspconfig.tsserver.setup {
 				init_options = {
 					plugins = {
