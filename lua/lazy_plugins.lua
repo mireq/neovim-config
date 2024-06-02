@@ -380,7 +380,7 @@ require("lazy").setup({
 					{
 						name = 'path',
 						option = {
-							trailing_slash = true
+							trailing_slash = false
 						}
 					}
 				}, {
