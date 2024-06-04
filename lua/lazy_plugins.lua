@@ -367,7 +367,9 @@ require("lazy").setup({
 
 			-- complete search
 			cmp.setup.cmdline({ '/', '?' }, {
-				mapping = cmp.mapping.preset.cmdline(),
+				["<c-j>"] = {
+					c = cmp.mapping.confirm({ select = false }),
+				},
 				sources = {
 					{ name = 'buffer' }
 				}
@@ -375,7 +377,12 @@ require("lazy").setup({
 
 			-- complete files and commands
 			cmp.setup.cmdline(':', {
-				mapping = cmp.mapping.preset.cmdline(),
+				--mapping = cmp.mapping.preset.cmdline(),
+				mapping = cmp.mapping.preset.cmdline({
+					["<c-j>"] = {
+						c = cmp.mapping.confirm({ select = false }),
+					},
+				}),
 				sources = cmp.config.sources({
 					{
 						name = 'path',
