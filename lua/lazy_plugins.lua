@@ -758,6 +758,15 @@ require("lazy").setup({
 		init = function()
 			vim.keymap.set('n', 'tg', "<Cmd>tab Git<CR>", {})
 			vim.g.fugitive_summary_format = "%<(16,trunc)%an || %s"
+		end,
+		config = function()
+			vim.api.nvim_create_autocmd({"DirChanged"}, {
+				callback = function(e)
+					if e.match == 'global' then
+						vim.call('FugitiveDetect', e.file)
+					end
+				end
+			})
 		end
 	},
 	--{
