@@ -756,7 +756,7 @@ require("lazy").setup({
 		event = 'InsertEnter',
 		cmd = {'Git', 'Gdiffsplit'},
 		init = function()
-			vim.keymap.set('n', 'tg', "<Cmd>tab Git<CR>", {})
+			vim.keymap.set('n', 'sg', "<Cmd>tab Git<CR>", {})
 			vim.g.fugitive_summary_format = "%<(16,trunc)%an || %s"
 		end,
 		config = function()
