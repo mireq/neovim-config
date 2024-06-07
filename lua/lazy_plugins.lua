@@ -163,6 +163,58 @@ require("lazy").setup({
 				},
 				on_attach = on_attach,
 				filetypes = { 'typescript', 'typescriptreact', 'vue' },
+				settings = {
+					typescript = {
+						inlayHints = {
+							includeInlayParameterNameHints = 'none',
+							includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+							includeInlayFunctionParameterTypeHints = false,
+							includeInlayVariableTypeHints = false,
+							includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+							includeInlayPropertyDeclarationTypeHints = false,
+							includeInlayFunctionLikeReturnTypeHints = false,
+							includeInlayEnumMemberValueHints = false,
+						}
+					},
+					javascript = {
+						inlayHints = {
+							includeInlayParameterNameHints = 'none',
+							includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+							includeInlayFunctionParameterTypeHints = false,
+							includeInlayVariableTypeHints = false,
+							includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+							includeInlayPropertyDeclarationTypeHints = false,
+							includeInlayFunctionLikeReturnTypeHints = false,
+							includeInlayEnumMemberValueHints = false,
+						}
+					}
+				},
+				--settings = {
+				--	typescript = {
+				--		inlayHints = {
+				--			includeInlayParameterNameHints = 'all',
+				--			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+				--			includeInlayFunctionParameterTypeHints = true,
+				--			includeInlayVariableTypeHints = true,
+				--			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+				--			includeInlayPropertyDeclarationTypeHints = true,
+				--			includeInlayFunctionLikeReturnTypeHints = true,
+				--			includeInlayEnumMemberValueHints = true,
+				--		}
+				--	},
+				--	javascript = {
+				--		inlayHints = {
+				--			includeInlayParameterNameHints = 'all',
+				--			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+				--			includeInlayFunctionParameterTypeHints = true,
+				--			includeInlayVariableTypeHints = true,
+				--			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+				--			includeInlayPropertyDeclarationTypeHints = true,
+				--			includeInlayFunctionLikeReturnTypeHints = true,
+				--			includeInlayEnumMemberValueHints = true,
+				--		}
+				--	}
+				--},
 			}
 
 			lspconfig.volar.setup {
