@@ -1256,4 +1256,5 @@ require("lazy").setup({
 	},
 	{ 'AndreM222/copilot-lualine' },
 	{ 'nathanaelkane/vim-indent-guides' },
+	{ 'junegunn/gv.vim' },
 }, {install={colorscheme={"mirec"}}})
