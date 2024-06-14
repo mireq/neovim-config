@@ -57,6 +57,7 @@ local colorscheme = {
 	{"Question", {ctermfg=231, cterm={bold=true}}},
 	{"Repeat", {ctermfg=222, cterm={bold=true}}},
 	{"Search", {ctermfg=227, ctermbg=16, cterm={bold=true, reverse=true}}},
+	{"CurSearch", {link="Search"}},
 	{"SignColumn", {ctermfg=244, ctermbg=233}},
 	{"SpecialChar", {ctermfg=181, cterm={bold=true}}},
 	{"SpecialComment", {ctermfg=181, cterm={bold=true}}},
