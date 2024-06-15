@@ -83,7 +83,8 @@ local colorscheme = {
 	{"VisualNOS", {ctermfg=234, ctermbg=210, cterm={bold=true, underline=true}}},
 	{"WarningMsg", {ctermfg=231, ctermbg=234, cterm={bold=true}}},
 	{"WildMenu", {ctermfg=16, ctermbg=181}},
-	{"Whitespace", {ctermfg=236}},
+	{"Whitespace", {ctermfg=240}},
+	{"WinSeparator", {ctermfg=236}},
 
 	{"OverLength", {ctermbg=237}},
 	{"WarnLength", {ctermbg=235}},
