@@ -172,8 +172,8 @@ local colorscheme = {
 	{"mailQuoted3", {ctermfg=24}},
 	{"mailQuoted4", {ctermfg=88}},
 
-	{"IndentGuidesOdd", {ctermbg=234, ctermfg=8}},
-	{"IndentGuidesEven", {ctermbg=235, ctermfg=8}},
+	{"IndentGuidesOdd", {ctermbg=16, ctermfg=244}},
+	{"IndentGuidesEven", {ctermbg=233, ctermfg=244}},
 
 	{"IndentBlanklineSpaceIndent1", {ctermfg=242, ctermbg=16}},
 	{"IndentBlanklineSpaceIndent2", {ctermfg=242, ctermbg=232}},
