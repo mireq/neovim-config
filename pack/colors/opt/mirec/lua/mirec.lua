@@ -270,6 +270,7 @@ local colorscheme = {
 	{"@function.method.vue", {link="Define"}},
 	{"@punction.special.vue", {link="Type"}},
 	{"@keyword.import", {link="PreProc"}},
+	{"@type.builtin.python", {link="Type"}},
 };
 
 M.setup = function(config)
