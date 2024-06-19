@@ -112,6 +112,9 @@ local colorscheme = {
 	{"FloatTitle", {link="Title"}},
 	{"FloatFooter", {link="Title"}},
 
+	{"FloatDoc", {ctermbg=232}},
+	{"FloatDocBorder", {ctermbg=232, ctermfg=240}},
+
 	{"GitSignsAdd", {link="DiffAdd"}},
 	{"GitSignsChange", {link="DiffChange"}},
 	{"GitSignsDelete", {link="DiffDelete"}},
