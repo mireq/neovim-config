@@ -1033,6 +1033,18 @@ require("lazy").setup({
 					return true
 				end, opts.ensure_installed)
 			end
+
+			--local is_supported = function(ft)
+			--	for __, lang in ipairs(opts.ensure_installed) do
+			--		if lang == ft then
+			--			return true
+			--		end
+			--	end
+			--	return false
+			--end
+
+			--opts.highlight.is_supported = is_supported
+			--opts.indent.is_supported = is_supported
 			require("nvim-treesitter.configs").setup(opts)
 
 			if load_textobjects then
