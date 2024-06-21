@@ -155,7 +155,7 @@ local colorscheme = {
 
 
 	{"Attribute", {ctermfg=158}},
-	{"CallClass", {ctermfg=120, cterm={nocombine=true}}},
+	{"CallClass", {ctermfg=120, cterm={nocombine=true, bold=false}}},
 	{"DefineClass", {ctermfg=228}},
 	{"CallStaticClass", {ctermfg=231, cterm={bold=true}}},
 	{"CallFunction", {ctermfg=153}},
