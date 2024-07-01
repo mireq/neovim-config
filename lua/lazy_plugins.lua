@@ -314,8 +314,16 @@ require("lazy").setup({
 				},
 				mapping = insert_mapping,
 				formatting = {
-					fields = { "kind", "abbr", "menu" },
+					--fields = { "kind", "abbr", "menu" },
+					fields = { "kind", "abbr" },
 					format = function(entry, vim_item)
+						-- Hide function arguments in the completion menu
+						vim_item.menu = vim_item.menu or ""
+						if vim_item.kind == "Function" or vim_item.kind == "Method" or vim_item.kind == "Copilot" then
+							vim_item.abbr = vim_item.abbr:gsub('%b()', '')
+						end
+
+						--vim_item.abbr = vim_item.word
 						local kind = require("lspkind").cmp_format({
 							mode = "symbol_text",
 							maxwidth = 50,
