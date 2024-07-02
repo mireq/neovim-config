@@ -394,16 +394,16 @@ require("lazy").setup({
 				},
 			})
 
-			local hl = vim.api.nvim_get_hl_by_name('PmenuSel', true)
-			local cmp_namespace = vim.api.nvim_create_namespace('nvim-comp')
-			vim.api.nvim_set_hl(cmp_namespace, 'CursorLine', {ctermbg=238})
-			--vim.api.nvim_set_hl(cmp_namespace, 'CmpItemKindSnippet', {ctermfg=255, ctermbg=23})
+			--local hl = vim.api.nvim_get_hl_by_name('PmenuSel', true)
+			--local cmp_namespace = vim.api.nvim_create_namespace('nvim-comp')
+			--vim.api.nvim_set_hl(cmp_namespace, 'CursorLine', {ctermbg=238})
+			----vim.api.nvim_set_hl(cmp_namespace, 'CmpItemKindSnippet', {ctermfg=255, ctermbg=23})
 
-			cmp.event:on("menu_opened", function(window)
-				vim.api.nvim_win_set_hl_ns(window.window.entries_win.win, cmp_namespace)
-				--local hl = vim.api.nvim_get_hl_by_name('PmenuSel', true)
-				--print(vim.inspect(hl))
-			end)
+			--cmp.event:on("menu_opened", function(window)
+			--	vim.api.nvim_win_set_hl_ns(window.window.entries_win.win, cmp_namespace)
+			--	--local hl = vim.api.nvim_get_hl_by_name('PmenuSel', true)
+			--	--print(vim.inspect(hl))
+			--end)
 
 
 			vim.api.nvim_exec_autocmds("FileType", { group = 'lspconfig', modeline = false })
