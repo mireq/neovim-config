@@ -119,6 +119,10 @@ local colorscheme = {
 	{"GitSignsChange", {link="DiffChange"}},
 	{"GitSignsDelete", {link="DiffDelete"}},
 
+	{"GitSignsStagedAddNr", {ctermbg=34, ctermfg=16}},
+	{"GitSignsStagedChangeNr", {ctermbg=45, ctermfg=16}},
+	{"GitSignsStagedDeleteNr", {ctermbg=196, ctermfg=16}},
+
 	{"outlTags", {ctermfg=51}},
 	{"OL1", {ctermfg=231, ctermbg=232, cterm={bold=true, underline=true}}},
 	{"OL2", {ctermfg=231, cterm={bold=true}}},
