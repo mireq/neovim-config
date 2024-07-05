@@ -2,7 +2,7 @@
 
 ((identifier) @variable.class
 	(#lua-match? @variable.class "^[A-Z].*[a-z]")
-	(#not-has-parent? @variable.class call class_definition)
+	(#not-has-parent? @variable.class call class_definition function)
 )
 
 (call
