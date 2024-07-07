@@ -104,6 +104,8 @@ opt.showmatch = true
 -- Highlidhgt search
 opt.hlsearch = true
 opt.incsearch = true
+opt.ignorecase = true
+opt.smartcase = true
 
 -- Disable toolbars
 -- if has("gui_running")
