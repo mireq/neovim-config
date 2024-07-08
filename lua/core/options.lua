@@ -106,6 +106,7 @@ opt.hlsearch = true
 opt.incsearch = true
 opt.ignorecase = true
 opt.smartcase = true
+opt.inccommand = "split"
 
 -- Disable toolbars
 -- if has("gui_running")
