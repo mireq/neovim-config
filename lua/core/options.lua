@@ -145,14 +145,19 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter", "WinEnter", "CmdwinEnter
 -- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 -- Prevent auto indenting while typing
 
-opt.formatoptions = 'croq1'
---                   |||||
---                   ||||+ Not break lines in insert mode
---                   |||+ Formatting with gq
---                   ||+ Insert comment leader after 'o'
---                   |+ Insert comment leader after <Enter>
---                   + Auto wrap comments using textwidth
---
+opt.formatoptions = 'q1'
+--                   ||
+--                   |+ No break lines in insert mode
+--                   + Formatting with gq
+
+--opt.formatoptions = 'croq1'
+--                     |||||
+--                     ||||+ Not break lines in insert mode
+--                     |||+ Formatting with gq
+--                     ||+ Insert comment leader after 'o'
+--                     |+ Insert comment leader after <Enter>
+--                     + Auto wrap comments using textwidth
+--  
 -- Wrap on end
 opt.wrapmargin = 0
 opt.linebreak = true
