@@ -45,7 +45,7 @@ local function insert_parentheses(first, last)
 		local line = vim.api.nvim_get_current_line()
 		local _, _, indent = string.find(line, "^([ \t]*)")
 		vim.api.nvim_buf_set_text(current_buf, cursor[1]-1, cursor[2], cursor[1]-1, cursor[2], {first, indent, indent .. last})
-		local keys = vim.api.nvim_replace_termcodes("<C-o>k<Tab>", true, false, true)
+		local keys = vim.api.nvim_replace_termcodes("<C-o>j<Tab>", true, false, true)
 		vim.api.nvim_feedkeys(keys, 'n', false)
 	end
 end
