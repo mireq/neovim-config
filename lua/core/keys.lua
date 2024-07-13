@@ -12,7 +12,10 @@ vim.keymap.set('i', '<C-a>', '<C-o>^')
 vim.keymap.set('i', '<C-h>', '<left>')
 vim.keymap.set('i', '<C-l>', '<right>')
 vim.keymap.set('i', '<C-y>', '<BS>')
---
+
+-- Tabs
+vim.keymap.set('n', '<C-q>', '<Cmd>tabclose<CR>')
+
 -- Remap home
 vim.keymap.set('', '<Home>', '^')
 vim.keymap.set('i', '<Home>', '<C-O>^', {silent=true})
