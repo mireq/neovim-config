@@ -24,6 +24,9 @@ vim.keymap.set('i', '<Home>', '<C-O>^', {silent=true})
 vim.keymap.set('i', '<C-Space>', '<C-X><C-O>')
 vim.keymap.set('i', '<Nul>', '<C-X><C-O>')
 
+-- nohlsearch on esc
+vim.keymap.set('n', '<Esc>', '<Cmd>nohlsearch<CR>')
+
 
 -- Adjust indent
 vim.api.nvim_create_autocmd({"BufEnter", "InsertLeave"}, {
