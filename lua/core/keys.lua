@@ -99,7 +99,7 @@ vim.api.nvim_set_keymap('', '<F9>', ':make -j 2<CR>', {})
 -- => Terminal
 -- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-vim.keymap.set('n', 'gh', '<Cmd>nohlsearch<Cr><Cmd>lua require"toggleterm"<Cr><Cmd>1ToggleTerm<Cr>', {silent=true})
+vim.keymap.set('n', 'ss', '<Cmd>nohlsearch<Cr><Cmd>lua require"toggleterm"<Cr><Cmd>1ToggleTerm<Cr>', {silent=true})
 vim.keymap.set('n', '<F2>', '<Cmd>nohlsearch<Cr><Cmd>lua require"toggleterm"<Cr><Cmd>2ToggleTerm<Cr>', {silent=true})
 vim.keymap.set('n', '<F3>', '<Cmd>nohlsearch<Cr><Cmd>lua require"toggleterm"<Cr><Cmd>3ToggleTerm<Cr>', {silent=true})
 vim.keymap.set('t', '<C-w>', '<C-\\><C-n>', {silent=true})
