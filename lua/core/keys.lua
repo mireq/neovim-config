@@ -117,3 +117,6 @@ vim.keymap.set('n', '<leader>gh', ':0GlLog<CR>')
 
 -- Close quick fix
 vim.keymap.set('n', '<space>cc', ':cclose<CR>')
+
+-- Disable ctrl+j in command
+vim.keymap.set('c', '<C-j>', '<Nop>')
