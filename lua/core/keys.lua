@@ -120,3 +120,8 @@ vim.keymap.set('n', '<space>cc', ':cclose<CR>')
 
 -- Disable ctrl+j in command
 vim.keymap.set('c', '<C-j>', '<Nop>')
+
+-- Tab editing
+vim.keymap.set("n", "te", ":tabedit")
+vim.keymap.set("n", "<tab>", ":tabnext<Return>", {silent=true})
+vim.keymap.set("n", "<s-tab>", ":tabprev<Return>", {silent=true})
