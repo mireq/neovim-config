@@ -125,3 +125,7 @@ vim.keymap.set('c', '<C-j>', '<Nop>')
 vim.keymap.set("n", "te", ":tabedit")
 vim.keymap.set("n", "<tab>", ":tabnext<Return>", {silent=true})
 vim.keymap.set("n", "<s-tab>", ":tabprev<Return>", {silent=true})
+
+-- Split windows
+vim.keymap.set("n", "sx", ":split<Return>", {silent=true})
+vim.keymap.set("n", "sv", ":vsplit<Return>", {silent=true})
