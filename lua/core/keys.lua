@@ -142,3 +142,7 @@ vim.keymap.set("n", "sl", "<C-w>l")
 --vim.keymap.set("n", "<C-up>", "<C-w>+")
 --vim.keymap.set("n", "<C-down>", "<C-w>-")
 vim.keymap.set("n", "se", "<C-w>=")
+
+
+-- delete buffer
+vim.keymap.set("n", "<Leader>x", ":bd<CR>", {silent=true})
