@@ -146,3 +146,7 @@ vim.keymap.set("n", "se", "<C-w>=")
 
 -- delete buffer
 vim.keymap.set("n", "<Leader>x", ":bd<CR>", {silent=true})
+
+-- toggle conceal
+--vim.keymap.set("n", "<leader>tc", ":setlocal <C-R>=&conceallevel ? 'conceallevel=0' : 'conceallevel=2'<CR><CR>", { desc = "[T]oggle [C]onceallevel"} )
+vim.keymap.set("n", "<leader>tc", function() if vim.opt_local.conceallevel:get() == 0 then vim.opt_local.conceallevel = 2 else vim.opt_local.conceallevel = 0 end end, { desc = "[T]oggle [C]onceallevel"} )
