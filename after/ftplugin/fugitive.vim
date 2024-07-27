@@ -3,3 +3,4 @@ if &modifiable
 endif
 
 nnoremap <buffer> gp :Git push -u origin HEAD<CR>
+nnoremap <buffer> ga :Git add .<CR>
