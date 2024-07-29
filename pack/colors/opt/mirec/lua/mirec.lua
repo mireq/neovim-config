@@ -187,8 +187,6 @@ local colorscheme = {
 	{"IndentBlanklineIndent1", {ctermfg=242, ctermbg=16}},
 	{"IndentBlanklineIndent2", {ctermfg=242, ctermbg=232}},
 
-	{"CmpItemMenu", {ctermfg=120, cterm={italic=true}}},
-
 	{"CmpItemAbbrMatch", {cterm={bold=true}, ctermfg=231}},
 	{"CmpItemAbbrMatchFuzzy", {cterm={bold=true}, ctermfg=231}},
 	{"CmpItemMenu", {cterm={italic=true}}},
