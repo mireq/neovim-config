@@ -48,6 +48,9 @@ vim.g.html_number_lines = 0
 vim.g.use_xhtml = 1
 vim.g.html_use_css = 1
 
+vim.g.php_autocomment = 0
+vim.g.PHP_autoformatcomment = 0
+
 
 
 vim.cmd([[
