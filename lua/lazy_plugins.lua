@@ -953,7 +953,7 @@ require("lazy").setup({
 	{
 		dir = vim.fn.stdpath("config") .. "/pack/colors/opt/mirec",
 	},
-	'nvim-lua/plenary.nvim',
+	--'nvim-lua/plenary.nvim',
 	{
 		'echasnovski/mini.nvim',
 		version = false,
