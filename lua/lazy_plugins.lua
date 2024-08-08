@@ -526,7 +526,7 @@ require("lazy").setup({
 								status = {
 									icons = {
 										enabled = "  ",
-										sleep = "⏾ ",   -- auto-trigger disabled
+										sleep = "  ",   -- auto-trigger disabled
 										disabled = " ",
 										warning = "𥉉 ",
 										unknown = " "
