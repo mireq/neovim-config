@@ -954,13 +954,13 @@ require("lazy").setup({
 		dir = vim.fn.stdpath("config") .. "/pack/colors/opt/mirec",
 	},
 	--'nvim-lua/plenary.nvim',
-	{
-		'echasnovski/mini.nvim',
-		version = false,
-		config = function()
-			require('mini.align').setup()
-		end
-	},
+	--{
+	--	'echasnovski/mini.nvim',
+	--	version = false,
+	--	config = function()
+	--		require('mini.align').setup()
+	--	end
+	--},
 	{
 		"nvim-treesitter/nvim-treesitter",
 		version = false, -- last release is way too old and doesn't work on Windows
