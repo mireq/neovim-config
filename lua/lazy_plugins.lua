@@ -32,7 +32,7 @@ end
 
 
 require("lazy").setup({
-	'gpanders/editorconfig.nvim',
+	--'gpanders/editorconfig.nvim',
 	{
 		'weilbith/nvim-code-action-menu',
 		cmd = 'CodeActionMenu',
