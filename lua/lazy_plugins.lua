@@ -1008,6 +1008,7 @@ require("lazy").setup({
 				"lua",
 				"php",
 				"html",
+				"vimdoc",
 			},
 			incremental_selection = {
 				enable = false,
