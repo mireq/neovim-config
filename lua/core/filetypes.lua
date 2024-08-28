@@ -109,15 +109,15 @@ vim.api.nvim_create_autocmd({"FileType"}, {
 
 -- Python
 
-vim.api.nvim_create_autocmd({"BufNewFile"}, {
-	pattern = {'*.py'},
-	callback = function()
-		local win = vim.api.nvim_get_current_win()
-		local cursor = vim.api.nvim_win_get_cursor(win)
-		local current_buf = vim.api.nvim_get_current_buf()
-		vim.api.nvim_buf_set_text(current_buf, cursor[1]-1, cursor[2], cursor[1]-1, cursor[2], {"# -*- coding: utf-8 -*-", ""})
-	end
-})
+--vim.api.nvim_create_autocmd({"BufNewFile"}, {
+--	pattern = {'*.py'},
+--	callback = function()
+--		local win = vim.api.nvim_get_current_win()
+--		local cursor = vim.api.nvim_win_get_cursor(win)
+--		local current_buf = vim.api.nvim_get_current_buf()
+--		vim.api.nvim_buf_set_text(current_buf, cursor[1]-1, cursor[2], cursor[1]-1, cursor[2], {"# -*- coding: utf-8 -*-", ""})
+--	end
+--})
 vim.api.nvim_create_autocmd({"FileType"}, {
 	pattern = {'py'},
 	callback = function()
