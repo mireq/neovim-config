@@ -141,6 +141,7 @@ require("lazy").setup({
 							pyflakes = { enabled = false },
 							pycodestyle = { enabled = false },
 							yapf = { enabled = false },
+							rope = { enabled = true },
 						},
 
 					}
