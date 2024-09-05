@@ -1210,6 +1210,7 @@ require("lazy").setup({
 					php = true,
 					po = true,
 					html = true,
+					javascript = true,
 					htmldjango = true,
 					["*"] = false,
 				},
