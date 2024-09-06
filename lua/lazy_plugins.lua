@@ -1212,6 +1212,7 @@ require("lazy").setup({
 					html = true,
 					javascript = true,
 					htmldjango = true,
+					gitcommit = true,
 					["*"] = false,
 				},
 			})
