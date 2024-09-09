@@ -458,10 +458,10 @@ require("lazy").setup({
 
 		end,
 	},
-	{
-		dir = vim.fn.stdpath("config") .. "/pack/colors/opt/killor",
-		ft = 'python'
-	},
+	--{
+	--	dir = vim.fn.stdpath("config") .. "/pack/colors/opt/killor",
+	--	ft = 'python'
+	--},
 	{
 		"mbbill/undotree",
 		keys = {
