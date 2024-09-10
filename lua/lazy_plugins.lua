@@ -1213,6 +1213,7 @@ require("lazy").setup({
 					javascript = true,
 					htmldjango = true,
 					gitcommit = true,
+					scss = true,
 					["*"] = false,
 				},
 			})
