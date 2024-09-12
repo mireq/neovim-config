@@ -148,8 +148,9 @@ require("lazy").setup({
 				}
 			}
 
+			-- https://www.reddit.com/r/neovim/comments/1f9iakw/lspconfig_renamed_tsserver_to_ts_ls_what_to_do_to/
 			local ts_plugin_path = vim.env.HOME .. '/.npm/lib64/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin'
-			lspconfig.tsserver.setup {
+			lspconfig.ts_ls.setup {
 				init_options = {
 					plugins = {
 						{
