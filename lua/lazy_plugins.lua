@@ -1215,6 +1215,7 @@ require("lazy").setup({
 					htmldjango = true,
 					gitcommit = true,
 					scss = true,
+					vue = true,
 					["*"] = false,
 				},
 			})
