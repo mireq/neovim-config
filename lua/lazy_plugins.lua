@@ -1216,6 +1216,7 @@ require("lazy").setup({
 					gitcommit = true,
 					scss = true,
 					vue = true,
+					typescript = true,
 					["*"] = false,
 				},
 			})
