@@ -149,75 +149,75 @@ require("lazy").setup({
 			}
 
 			-- https://www.reddit.com/r/neovim/comments/1f9iakw/lspconfig_renamed_tsserver_to_ts_ls_what_to_do_to/
-			local ts_plugin_path = vim.env.HOME .. '/.npm/lib64/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin'
-			lspconfig.ts_ls.setup {
-				init_options = {
-					plugins = {
-						{
-							name = '@vue/typescript-plugin',
-							location = ts_plugin_path,
-							languages = { 'vue' },
-						},
-					},
-				},
-				flags = {
-					debounce_text_changes = 500
-				},
-				on_attach = on_attach,
-				filetypes = { 'typescript', 'typescriptreact', 'vue' },
-				settings = {
-					typescript = {
-						inlayHints = {
-							includeInlayParameterNameHints = 'none',
-							includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-							includeInlayFunctionParameterTypeHints = false,
-							includeInlayVariableTypeHints = false,
-							includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-							includeInlayPropertyDeclarationTypeHints = false,
-							includeInlayFunctionLikeReturnTypeHints = false,
-							includeInlayEnumMemberValueHints = false,
-						}
-					},
-					javascript = {
-						inlayHints = {
-							includeInlayParameterNameHints = 'none',
-							includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-							includeInlayFunctionParameterTypeHints = false,
-							includeInlayVariableTypeHints = false,
-							includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-							includeInlayPropertyDeclarationTypeHints = false,
-							includeInlayFunctionLikeReturnTypeHints = false,
-							includeInlayEnumMemberValueHints = false,
-						}
-					}
-				},
-				--settings = {
-				--	typescript = {
-				--		inlayHints = {
-				--			includeInlayParameterNameHints = 'all',
-				--			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-				--			includeInlayFunctionParameterTypeHints = true,
-				--			includeInlayVariableTypeHints = true,
-				--			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-				--			includeInlayPropertyDeclarationTypeHints = true,
-				--			includeInlayFunctionLikeReturnTypeHints = true,
-				--			includeInlayEnumMemberValueHints = true,
-				--		}
-				--	},
-				--	javascript = {
-				--		inlayHints = {
-				--			includeInlayParameterNameHints = 'all',
-				--			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-				--			includeInlayFunctionParameterTypeHints = true,
-				--			includeInlayVariableTypeHints = true,
-				--			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-				--			includeInlayPropertyDeclarationTypeHints = true,
-				--			includeInlayFunctionLikeReturnTypeHints = true,
-				--			includeInlayEnumMemberValueHints = true,
-				--		}
-				--	}
-				--},
-			}
+			-- local ts_plugin_path = vim.env.HOME .. '/.npm/lib64/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin'
+			-- lspconfig.ts_ls.setup {
+			-- 	init_options = {
+			-- 		plugins = {
+			-- 			{
+			-- 				name = '@vue/typescript-plugin',
+			-- 				location = ts_plugin_path,
+			-- 				languages = { 'vue' },
+			-- 			},
+			-- 		},
+			-- 	},
+			-- 	flags = {
+			-- 		debounce_text_changes = 500
+			-- 	},
+			-- 	on_attach = on_attach,
+			-- 	filetypes = { 'typescript', 'typescriptreact', 'vue' },
+			-- 	settings = {
+			-- 		typescript = {
+			-- 			inlayHints = {
+			-- 				includeInlayParameterNameHints = 'none',
+			-- 				includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+			-- 				includeInlayFunctionParameterTypeHints = false,
+			-- 				includeInlayVariableTypeHints = false,
+			-- 				includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+			-- 				includeInlayPropertyDeclarationTypeHints = false,
+			-- 				includeInlayFunctionLikeReturnTypeHints = false,
+			-- 				includeInlayEnumMemberValueHints = false,
+			-- 			}
+			-- 		},
+			-- 		javascript = {
+			-- 			inlayHints = {
+			-- 				includeInlayParameterNameHints = 'none',
+			-- 				includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+			-- 				includeInlayFunctionParameterTypeHints = false,
+			-- 				includeInlayVariableTypeHints = false,
+			-- 				includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+			-- 				includeInlayPropertyDeclarationTypeHints = false,
+			-- 				includeInlayFunctionLikeReturnTypeHints = false,
+			-- 				includeInlayEnumMemberValueHints = false,
+			-- 			}
+			-- 		}
+			-- 	},
+			-- 	--settings = {
+			-- 	--	typescript = {
+			-- 	--		inlayHints = {
+			-- 	--			includeInlayParameterNameHints = 'all',
+			-- 	--			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+			-- 	--			includeInlayFunctionParameterTypeHints = true,
+			-- 	--			includeInlayVariableTypeHints = true,
+			-- 	--			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+			-- 	--			includeInlayPropertyDeclarationTypeHints = true,
+			-- 	--			includeInlayFunctionLikeReturnTypeHints = true,
+			-- 	--			includeInlayEnumMemberValueHints = true,
+			-- 	--		}
+			-- 	--	},
+			-- 	--	javascript = {
+			-- 	--		inlayHints = {
+			-- 	--			includeInlayParameterNameHints = 'all',
+			-- 	--			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+			-- 	--			includeInlayFunctionParameterTypeHints = true,
+			-- 	--			includeInlayVariableTypeHints = true,
+			-- 	--			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+			-- 	--			includeInlayPropertyDeclarationTypeHints = true,
+			-- 	--			includeInlayFunctionLikeReturnTypeHints = true,
+			-- 	--			includeInlayEnumMemberValueHints = true,
+			-- 	--		}
+			-- 	--	}
+			-- 	--},
+			-- }
 
 			lspconfig.volar.setup {
 				flags = {
