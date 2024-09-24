@@ -1217,6 +1217,7 @@ require("lazy").setup({
 					scss = true,
 					vue = true,
 					typescript = true,
+					markdown = true,
 					["*"] = false,
 				},
 			})
