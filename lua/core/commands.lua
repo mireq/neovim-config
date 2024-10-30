@@ -124,3 +124,7 @@ vim.api.nvim_create_user_command(
 vim.api.nvim_create_user_command('CopyFilenameToClipboard', function()
 	vim.fn.setreg('+', vim.fn.expand('%:p'))
 end, {})
+
+vim.api.nvim_create_user_command('CopyLocalFilenameToClipboard', function()
+	vim.fn.setreg('+', vim.fn.expand('%'))
+end, {})
