@@ -662,6 +662,12 @@ require("lazy").setup({
 			end
 			_G.FancyTabLine = fancyTabLine
 			vim.o.tabline = '%!v:lua.FancyTabLine()'
+
+			vim.api.nvim_create_autocmd({'WinEnter', 'BufEnter', 'BufWritePost', 'SessionLoadPost', 'FileChangedShellPost', 'VimResized', 'Filetype', 'CursorMoved', 'CursorMovedI', 'ModeChanged'}, {
+				callback = function(e)
+					require('lualine').refresh()
+				end
+			})
 		end
 	},
 	{
