@@ -477,9 +477,9 @@ require("lazy").setup({
 		'nvim-lualine/lualine.nvim',
 		config = function()
 			local powerline_darker = require('lualine.themes.powerline')
-			powerline_darker.normal.b.bg = '#3a3a3a'
-			powerline_darker.normal.c.bg = '#1c1c1c'
-			powerline_darker.inactive.c.bg = '#121212'
+			powerline_darker.normal.b.bg = '#444444'
+			powerline_darker.normal.c.bg = '#262626'
+			powerline_darker.inactive.c.bg = '#1c1c1c'
 			require('lualine').setup {
 				options = {
 					icons_enabled = false,
