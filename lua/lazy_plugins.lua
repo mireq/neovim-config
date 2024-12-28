@@ -236,6 +236,39 @@ require("lazy").setup({
 			})
 			insert_mapping['<C-E>'] = nil
 
+			local lspkind_format = require("lspkind").cmp_format({
+				mode = "symbol_text",
+				maxwidth = 50,
+				symbol_map = {
+					Text = "",
+					Method = "",
+					Function = "",
+					Constructor = "",
+					Field = "ﰠ",
+					Variable = "",
+					Class = "ﴯ",
+					Interface = "",
+					Module = "",
+					Property = "ﰠ",
+					Unit = "塞",
+					Value = "",
+					Enum = "",
+					Keyword = "",
+					Snippet = "",
+					Color = "",
+					File = "",
+					Reference = "",
+					Folder = "",
+					EnumMember = "",
+					Constant = "",
+					Struct = "פּ",
+					Event = "",
+					Operator = "±",
+					TypeParameter = "",
+					Copilot = "",
+				}
+			})
+
 			cmp.setup({
 				sources = cmp.config.sources(
 					{
@@ -326,38 +359,7 @@ require("lazy").setup({
 						end
 
 						--vim_item.abbr = vim_item.word
-						local kind = require("lspkind").cmp_format({
-							mode = "symbol_text",
-							maxwidth = 50,
-							symbol_map = {
-								Text = "",
-								Method = "",
-								Function = "",
-								Constructor = "",
-								Field = "ﰠ",
-								Variable = "",
-								Class = "ﴯ",
-								Interface = "",
-								Module = "",
-								Property = "ﰠ",
-								Unit = "塞",
-								Value = "",
-								Enum = "",
-								Keyword = "",
-								Snippet = "",
-								Color = "",
-								File = "",
-								Reference = "",
-								Folder = "",
-								EnumMember = "",
-								Constant = "",
-								Struct = "פּ",
-								Event = "",
-								Operator = "±",
-								TypeParameter = "",
-								Copilot = "",
-							}
-						})(entry, vim_item)
+						local kind = lspkind_format(entry, vim_item)
 						local strings = vim.split(kind.kind, "%s", { trimempty = true })
 						kind.kind = " " .. (strings[1] or "") .. " "
 						--kind.kind = '▍' -- instead of symbol
