@@ -1249,7 +1249,6 @@ require("lazy").setup({
 	},
 	{
 		"CopilotC-Nvim/CopilotChat.nvim",
-		branch = "canary",
 		cmd = {'CopilotChat', 'CopilotChatClose', 'CopilotChatCommit', 'CopilotChatCommitStaged', 'CopilotChatDebugInfo', 'CopilotChatDocs', 'CopilotChatExplain', 'CopilotChatFix', 'CopilotChatFixDiagnostic', 'CopilotChatLoad', 'CopilotChatOpen', 'CopilotChatOptimize', 'CopilotChatReset', 'CopilotChatReview', 'CopilotChatSave', 'CopilotChatTests'},
 		dependencies = {
 			{ "zbirenbaum/copilot.lua" },
