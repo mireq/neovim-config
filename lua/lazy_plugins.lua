@@ -156,7 +156,7 @@ require("lazy").setup({
 						{
 							name = '@vue/typescript-plugin',
 							location = ts_plugin_path,
-							languages = { 'vue' },
+							languages = { 'typescript', 'vue' },
 						},
 					},
 				},
