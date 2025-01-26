@@ -150,6 +150,7 @@ require("lazy").setup({
 
 			-- https://www.reddit.com/r/neovim/comments/1f9iakw/lspconfig_renamed_tsserver_to_ts_ls_what_to_do_to/
 			local ts_plugin_path = vim.env.HOME .. '/.npm/lib64/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin'
+			local tsdk_path = vim.env.HOME .. '/.npm/lib64/node_modules/typescript/lib'
 			lspconfig.ts_ls.setup {
 				init_options = {
 					plugins = {
@@ -220,6 +221,12 @@ require("lazy").setup({
 			}
 
 			lspconfig.volar.setup {
+				init_options = {
+					typescript = {
+						-- replace with your global TypeScript library path
+						tsdk = tsdk_path
+					}
+				},
 				flags = {
 					debounce_text_changes = 500
 				},
