@@ -1287,6 +1287,9 @@ require("lazy").setup({
 		end,
 		ft = { "markdown" },
 	},
+	{
+		"gentoo/gentoo-syntax",
+	},
 
 --  {{
 --    'tadaa/vimade',
