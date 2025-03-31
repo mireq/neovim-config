@@ -530,32 +530,32 @@ require("lazy").setup({
 					},
 					lualine_c = {{'filename', path=1}},
 					lualine_x = {
-						{
-							'copilot',
-							-- Default values
-							symbols = {
-								status = {
-									icons = {
-										enabled = "  ",
-										sleep = "  ",   -- auto-trigger disabled
-										disabled = " ",
-										warning = "𥉉 ",
-										unknown = " "
-									},
-									hl = {
-										enabled = "#50FA7B",
-										sleep = "#AEB7D0",
-										disabled = "#6272A4",
-										warning = "#FFB86C",
-										unknown = "#FF5555"
-									}
-								},
-								spinners = {' '},
-								spinner_color = "#6272A4"
-							},
-							show_colors = false,
-							show_loading = true
-						},
+						--{
+						--	'copilot',
+						--	-- Default values
+						--	symbols = {
+						--		status = {
+						--			icons = {
+						--				enabled = "  ",
+						--				sleep = "  ",   -- auto-trigger disabled
+						--				disabled = " ",
+						--				warning = "𥉉 ",
+						--				unknown = " "
+						--			},
+						--			hl = {
+						--				enabled = "#50FA7B",
+						--				sleep = "#AEB7D0",
+						--				disabled = "#6272A4",
+						--				warning = "#FFB86C",
+						--				unknown = "#FF5555"
+						--			}
+						--		},
+						--		spinners = {' '},
+						--		spinner_color = "#6272A4"
+						--	},
+						--	show_colors = false,
+						--	show_loading = true
+						--},
 						'encoding',
 						'fileformat',
 						'filetype'
