@@ -128,6 +128,7 @@ require("lazy").setup({
 				root_dir = function(fname)
 					local root_files = {
 						'.ropeproject',
+						'.git',
 					}
 					return lspconfig.util.root_pattern(unpack(root_files))(fname) or lspconfig.util.find_git_ancestor(fname)
 				end,
