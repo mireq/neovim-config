@@ -1291,6 +1291,12 @@ require("lazy").setup({
 	{
 		"gentoo/gentoo-syntax",
 	},
+	{
+		"nvzone/typr",
+		dependencies = "nvzone/volt",
+		opts = {},
+		cmd = { "Typr", "TyprStats" },
+	},
 
 --  {{
 --    'tadaa/vimade',
