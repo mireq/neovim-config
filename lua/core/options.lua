@@ -26,6 +26,9 @@ opt.cf = true
 -- Allow move cursor outside text
 opt.virtualedit = 'block'
 
+-- Don't blink cursor in terminal
+opt.guicursor = 'n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:block-TermCursor'
+
 -- Enable : in keywords
 opt.iskeyword = '@,~,48-57,_,192-255'
 
