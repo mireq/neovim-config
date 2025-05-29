@@ -215,3 +215,7 @@ vim.api.nvim_create_autocmd({"BufEnter", "WinEnter"}, {
 if vim.g.neovide then
 	vim.o.guifont = "DejaVu Sans Mono:h11"
 end
+
+
+-- temporary disable async parsin
+vim.g._ts_force_sync_parsing = true 
