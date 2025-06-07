@@ -218,4 +218,4 @@ end
 
 
 -- temporary disable async parsin
-vim.g._ts_force_sync_parsing = true 
+--vim.g._ts_force_sync_parsing = true 
