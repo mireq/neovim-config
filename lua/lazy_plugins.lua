@@ -149,90 +149,145 @@ require("lazy").setup({
 				}
 			}
 
-			-- https://www.reddit.com/r/neovim/comments/1f9iakw/lspconfig_renamed_tsserver_to_ts_ls_what_to_do_to/
-			local ts_plugin_path = vim.env.HOME .. '/.npm/lib64/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin'
-			local tsdk_path = vim.env.HOME .. '/.npm/lib64/node_modules/typescript/lib'
-			lspconfig.ts_ls.setup {
-				init_options = {
-					plugins = {
-						{
-							name = '@vue/typescript-plugin',
-							location = ts_plugin_path,
-							languages = { 'typescript', 'vue' },
+			---- https://www.reddit.com/r/neovim/comments/1f9iakw/lspconfig_renamed_tsserver_to_ts_ls_what_to_do_to/
+			--local ts_plugin_path = vim.env.HOME .. '/.npm/lib64/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin'
+			--local tsdk_path = vim.env.HOME .. '/.npm/lib64/node_modules/typescript/lib'
+			--lspconfig.ts_ls.setup {
+			--	init_options = {
+			--		plugins = {
+			--			{
+			--				name = '@vue/typescript-plugin',
+			--				location = ts_plugin_path,
+			--				languages = { 'typescript', 'vue' },
+			--			},
+			--		},
+			--	},
+			--	flags = {
+			--		debounce_text_changes = 500
+			--	},
+			--	on_attach = on_attach,
+			--	filetypes = { 'typescript', 'typescriptreact', 'vue' },
+			--	settings = {
+			--		typescript = {
+			--			inlayHints = {
+			--				includeInlayParameterNameHints = 'none',
+			--				includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+			--				includeInlayFunctionParameterTypeHints = false,
+			--				includeInlayVariableTypeHints = false,
+			--				includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+			--				includeInlayPropertyDeclarationTypeHints = false,
+			--				includeInlayFunctionLikeReturnTypeHints = false,
+			--				includeInlayEnumMemberValueHints = false,
+			--			}
+			--		},
+			--		javascript = {
+			--			inlayHints = {
+			--				includeInlayParameterNameHints = 'none',
+			--				includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+			--				includeInlayFunctionParameterTypeHints = false,
+			--				includeInlayVariableTypeHints = false,
+			--				includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+			--				includeInlayPropertyDeclarationTypeHints = false,
+			--				includeInlayFunctionLikeReturnTypeHints = false,
+			--				includeInlayEnumMemberValueHints = false,
+			--			}
+			--		}
+			--	},
+			--	--settings = {
+			--	--	typescript = {
+			--	--		inlayHints = {
+			--	--			includeInlayParameterNameHints = 'all',
+			--	--			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+			--	--			includeInlayFunctionParameterTypeHints = true,
+			--	--			includeInlayVariableTypeHints = true,
+			--	--			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+			--	--			includeInlayPropertyDeclarationTypeHints = true,
+			--	--			includeInlayFunctionLikeReturnTypeHints = true,
+			--	--			includeInlayEnumMemberValueHints = true,
+			--	--		}
+			--	--	},
+			--	--	javascript = {
+			--	--		inlayHints = {
+			--	--			includeInlayParameterNameHints = 'all',
+			--	--			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+			--	--			includeInlayFunctionParameterTypeHints = true,
+			--	--			includeInlayVariableTypeHints = true,
+			--	--			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+			--	--			includeInlayPropertyDeclarationTypeHints = true,
+			--	--			includeInlayFunctionLikeReturnTypeHints = true,
+			--	--			includeInlayEnumMemberValueHints = true,
+			--	--		}
+			--	--	}
+			--	--},
+			--}
+
+			--lspconfig.volar.setup {
+			--	init_options = {
+			--		typescript = {
+			--			-- replace with your global TypeScript library path
+			--			tsdk = tsdk_path
+			--		}
+			--	},
+			--	flags = {
+			--		debounce_text_changes = 500
+			--	},
+			--	on_attach = on_attach,
+			--}
+
+
+			local vue_language_server_path = vim.env.HOME .. '/.npm/lib64/node_modules/@vue/language-server'
+			local vue_plugin = {
+				name = '@vue/typescript-plugin',
+				location = vue_language_server_path,
+				languages = { 'vue' },
+				configNamespace = 'typescript',
+			}
+			local vtsls_config = {
+				settings = {
+					vtsls = {
+						tsserver = {
+							globalPlugins = {
+								vue_plugin,
+							},
 						},
 					},
 				},
-				flags = {
-					debounce_text_changes = 500
-				},
+				filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
 				on_attach = on_attach,
-				filetypes = { 'typescript', 'typescriptreact', 'vue' },
-				settings = {
-					typescript = {
-						inlayHints = {
-							includeInlayParameterNameHints = 'none',
-							includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-							includeInlayFunctionParameterTypeHints = false,
-							includeInlayVariableTypeHints = false,
-							includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-							includeInlayPropertyDeclarationTypeHints = false,
-							includeInlayFunctionLikeReturnTypeHints = false,
-							includeInlayEnumMemberValueHints = false,
-						}
-					},
-					javascript = {
-						inlayHints = {
-							includeInlayParameterNameHints = 'none',
-							includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-							includeInlayFunctionParameterTypeHints = false,
-							includeInlayVariableTypeHints = false,
-							includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-							includeInlayPropertyDeclarationTypeHints = false,
-							includeInlayFunctionLikeReturnTypeHints = false,
-							includeInlayEnumMemberValueHints = false,
-						}
-					}
-				},
-				--settings = {
-				--	typescript = {
-				--		inlayHints = {
-				--			includeInlayParameterNameHints = 'all',
-				--			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-				--			includeInlayFunctionParameterTypeHints = true,
-				--			includeInlayVariableTypeHints = true,
-				--			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-				--			includeInlayPropertyDeclarationTypeHints = true,
-				--			includeInlayFunctionLikeReturnTypeHints = true,
-				--			includeInlayEnumMemberValueHints = true,
-				--		}
-				--	},
-				--	javascript = {
-				--		inlayHints = {
-				--			includeInlayParameterNameHints = 'all',
-				--			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-				--			includeInlayFunctionParameterTypeHints = true,
-				--			includeInlayVariableTypeHints = true,
-				--			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-				--			includeInlayPropertyDeclarationTypeHints = true,
-				--			includeInlayFunctionLikeReturnTypeHints = true,
-				--			includeInlayEnumMemberValueHints = true,
-				--		}
-				--	}
-				--},
 			}
 
-			lspconfig.volar.setup {
-				init_options = {
-					typescript = {
-						-- replace with your global TypeScript library path
-						tsdk = tsdk_path
-					}
-				},
-				flags = {
-					debounce_text_changes = 500
-				},
+			local vue_ls_config = {
+				on_init = function(client)
+					client.handlers['tsserver/request'] = function(_, result, context)
+						local clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = 'vtsls' })
+						if #clients == 0 then
+							vim.notify('Could not find `vtsls` lsp client, `vue_ls` would not work without it.', vim.log.levels.ERROR)
+							return
+						end
+						local ts_client = clients[1]
+
+						local param = unpack(result)
+						local id, command, payload = unpack(param)
+						ts_client:exec_cmd({
+							title = 'vue_request_forward', -- You can give title anything as it's used to represent a command in the UI, `:h Client:exec_cmd`
+							command = 'typescript.tsserverRequest',
+							arguments = {
+								command,
+								payload,
+							},
+						}, { bufnr = context.bufnr }, function(_, r)
+								local response_data = { { id, r.body } }
+								---@diagnostic disable-next-line: param-type-mismatch
+								client:notify('tsserver/response', response_data)
+							end)
+					end
+				end,
 				on_attach = on_attach,
 			}
+			-- nvim 0.11 or above
+			vim.lsp.config('vtsls', vtsls_config)
+			vim.lsp.config('vue_ls', vue_ls_config)
+			vim.lsp.enable({'vtsls', 'vue_ls'})
 
 			local insert_mapping = cmp.mapping.preset.insert({
 				['<C-u>'] = cmp.mapping.scroll_docs(-4),
