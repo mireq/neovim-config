@@ -289,6 +289,24 @@ require("lazy").setup({
 			vim.lsp.config('vue_ls', vue_ls_config)
 			vim.lsp.enable({'vtsls', 'vue_ls'})
 
+			vim.api.nvim_create_autocmd('LspAttach', {
+				group = lsp_group,
+				desc = 'Set buffer-local keymaps and options after an LSP client attaches',
+				callback = function(args)
+					local bufnr = args.buf
+					local client = vim.lsp.get_client_by_id(args.data.client_id)
+					if not client then
+						return
+					end
+					pcall(vim.keymap.del, 'n', 'K', { buffer = bufnr })
+					on_attach(client, bufnr)
+
+					if client.server_capabilities.completionProvider then
+						vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
+						vim.bo[bufnr].formatexpr = 'v:lua.vim.lsp.formatexpr()'
+					end
+				end,
+			})
 			local insert_mapping = cmp.mapping.preset.insert({
 				['<C-u>'] = cmp.mapping.scroll_docs(-4),
 				['<C-d>'] = cmp.mapping.scroll_docs(4),
