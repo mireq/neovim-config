@@ -199,7 +199,8 @@ local colorscheme = {
 	{"CmpItemKindEnum", {ctermfg=28, ctermbg=255, cterm={reverse=true}}},
 	{"CmpItemKindKeyword", {ctermfg=28, ctermbg=255, cterm={reverse=true}}},
 
-	{"CmpItemKindConstant", {ctermfg=23, ctermbg=255, cterm={reverse=true}}},
+	{"CmpItemKindConstant", {ctermfg=53, ctermbg=255, cterm={reverse=true}}},
+
 	{"CmpItemKindConstructor", {ctermfg=23, ctermbg=255, cterm={reverse=true}}},
 	{"CmpItemKindReference", {ctermfg=23, ctermbg=255, cterm={reverse=true}}},
 
