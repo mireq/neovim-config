@@ -580,6 +580,7 @@ require("lazy").setup({
 						statusline = 5000,
 						tabline = 5000,
 						winbar = 5000,
+						refresh_time = 1000,
 					}
 				},
 				sections = {
