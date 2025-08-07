@@ -47,7 +47,7 @@ local colorscheme = {
 	{"Normal", {ctermfg=252, ctermbg=16}},
 	{"Number", {ctermfg=111}},
 	{"Operator", {ctermfg=153, cterm={bold=true}}},
-	{"Pmenu", {ctermfg=252, ctermbg=235}},
+	{"Pmenu", {ctermfg=250, ctermbg=235}},
 	{"PmenuSel", {ctermbg=16, cterm={reverse=true}}},
 	--{"PmenuSel", {ctermfg=16, ctermbg=156}},
 	{"PmenuSbar", {ctermfg=248, ctermbg=237}},
