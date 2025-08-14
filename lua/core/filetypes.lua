@@ -170,3 +170,4 @@ vim.api.nvim_create_autocmd({"BufWritePre"}, {
 })
 
 vim.g.python3_host_prog = "/usr/bin/python3"
+vim.g.vim_markdown_conceal_code_blocks = 0
