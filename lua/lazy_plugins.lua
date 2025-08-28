@@ -254,10 +254,25 @@ require("lazy").setup({
 								vue_plugin,
 							},
 						},
+						typescript = {
+							suggestionActions = {
+								enabled = false
+							},
+							preferences = {
+								importModuleSpecifier = "non-relative",
+							},
+						},
+						javascript = {
+							suggestionActions = {
+								enabled = false
+							},
+							preferences = {
+								importModuleSpecifier = "non-relative",
+							},
+						},
 					},
 				},
 				filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-				on_attach = on_attach,
 			}
 
 			local vue_ls_config = {
