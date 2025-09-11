@@ -927,6 +927,7 @@ require("lazy").setup({
 			'nvim-lua/plenary.nvim'
 		},
 		cmd = {'Telescope'},
+		event = 'InsertEnter',
 		init = function()
 			vim.keymap.set('n', '<leader>fg', "<Cmd>Telescope live_grep<CR>", {})
 			vim.keymap.set('n', '<leader>ff', "<Cmd>Telescope find_files<CR>", {})
@@ -1035,10 +1036,14 @@ require("lazy").setup({
 						override_generic_sorter = true,
 						override_file_sorter = true,
 						case_mode = "smart_case",
-					}
+					},
+					["ui-select"] = {
+						require("telescope.themes").get_dropdown {}
+					},
 				},
 			})
 			require('telescope').load_extension('fzf')
+			require("telescope").load_extension("ui-select")
 		end
 	},
 	{
@@ -1389,6 +1394,9 @@ require("lazy").setup({
 		dependencies = "nvzone/volt",
 		opts = {},
 		cmd = { "Typr", "TyprStats" },
+	},
+	{
+		"nvim-telescope/telescope-ui-select.nvim",
 	},
 
 --  {{
