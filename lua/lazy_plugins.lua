@@ -83,7 +83,7 @@ require("lazy").setup({
 				end, bufopts)
 				vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
 				vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-				vim.keymap.set('n', '<space>ca', function() vim.cmd("CodeActionMenu") end, bufopts)
+				vim.keymap.set('n', '<space>ca', function() vim.lsp.buf.code_action({ apply = false, context = { only = { "empty", "quickfix", "refactor", "refactor_extract", "refactor_inline", "source" } } }) end, bufopts)
 				--vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
 				vim.keymap.set('n', '<C-c>ro', function() vim.lsp.buf.code_action({ apply = true, context = { only = {"source.organizeImports"} } }) end, bufopts)
 				vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
