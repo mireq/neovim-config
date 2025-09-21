@@ -270,6 +270,14 @@ require("lazy").setup({
 								importModuleSpecifier = "non-relative",
 							},
 						},
+						vue = {
+							suggestionActions = {
+								enabled = false
+							},
+							preferences = {
+								importModuleSpecifier = "non-relative",
+							},
+						},
 					},
 				},
 				filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
@@ -301,7 +309,6 @@ require("lazy").setup({
 							end)
 					end
 				end,
-				on_attach = on_attach,
 			}
 			-- nvim 0.11 or above
 			vim.lsp.config('vtsls', vtsls_config)
