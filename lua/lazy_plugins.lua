@@ -331,8 +331,23 @@ require("lazy").setup({
 						vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 						vim.bo[bufnr].formatexpr = 'v:lua.vim.lsp.formatexpr()'
 					end
+
+					if client.name == "vtsls" or client.name == "tsserver" then
+						vim.lsp.handlers["textDocument/publishDiagnostics"] = function(_, result, ctx, config)
+							local filtered = {}
+							for _, diag in ipairs(result.diagnostics) do
+								if not (diag.code == 80006 and diag.source == "ts" and diag.severity == 4) then
+									table.insert(filtered, diag)
+								end
+							end
+							result.diagnostics = filtered
+							vim.lsp.diagnostic.on_publish_diagnostics(_, result, ctx, config)
+						end
+					end
+
 				end,
 			})
+
 			local insert_mapping = cmp.mapping.preset.insert({
 				['<C-u>'] = cmp.mapping.scroll_docs(-4),
 				['<C-d>'] = cmp.mapping.scroll_docs(4),
