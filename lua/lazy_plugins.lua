@@ -49,8 +49,6 @@ require("lazy").setup({
 		config = function()
 			local cmp = require('cmp')
 			local types = require("cmp.types")
-			local lspconfig = require('lspconfig')
-			local lspconfig_util = require 'lspconfig.util'
 			local cmp_nvim_lsp = require('cmp_nvim_lsp');
 			cmp_nvim_lsp.setup()
 			local capabiliies = cmp_nvim_lsp.default_capabilities();
@@ -123,19 +121,14 @@ require("lazy").setup({
 				end
 			end
 
-			lspconfig['pylsp'].setup {
-				on_attach = on_attach,
+			local pylsp_config = {
 				capabilities = capabilities,
+				filetypes = { 'python' },
+				cmd = { 'pylsp' },
 				flags = {
 					debounce_text_changes = 500
 				},
-				root_dir = function(fname)
-					local root_files = {
-						'.ropeproject',
-						'.git',
-					}
-					return lspconfig.util.root_pattern(unpack(root_files))(fname) or lspconfig.util.find_git_ancestor(fname)
-				end,
+				root_markers = { '.git', '.ropeproject', 'pyproject.toml', 'setup.cfg', 'setup.py', 'requirements.txt', 'Pipfile' },
 				settings = {
 					pylsp = {
 						plugins = {
@@ -152,92 +145,8 @@ require("lazy").setup({
 					}
 				}
 			}
-
-			---- https://www.reddit.com/r/neovim/comments/1f9iakw/lspconfig_renamed_tsserver_to_ts_ls_what_to_do_to/
-			--local ts_plugin_path = vim.env.HOME .. '/.npm/lib64/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin'
-			--local tsdk_path = vim.env.HOME .. '/.npm/lib64/node_modules/typescript/lib'
-			--lspconfig.ts_ls.setup {
-			--	init_options = {
-			--		plugins = {
-			--			{
-			--				name = '@vue/typescript-plugin',
-			--				location = ts_plugin_path,
-			--				languages = { 'typescript', 'vue' },
-			--			},
-			--		},
-			--	},
-			--	flags = {
-			--		debounce_text_changes = 500
-			--	},
-			--	on_attach = on_attach,
-			--	filetypes = { 'typescript', 'typescriptreact', 'vue' },
-			--	settings = {
-			--		typescript = {
-			--			inlayHints = {
-			--				includeInlayParameterNameHints = 'none',
-			--				includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-			--				includeInlayFunctionParameterTypeHints = false,
-			--				includeInlayVariableTypeHints = false,
-			--				includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-			--				includeInlayPropertyDeclarationTypeHints = false,
-			--				includeInlayFunctionLikeReturnTypeHints = false,
-			--				includeInlayEnumMemberValueHints = false,
-			--			}
-			--		},
-			--		javascript = {
-			--			inlayHints = {
-			--				includeInlayParameterNameHints = 'none',
-			--				includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-			--				includeInlayFunctionParameterTypeHints = false,
-			--				includeInlayVariableTypeHints = false,
-			--				includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-			--				includeInlayPropertyDeclarationTypeHints = false,
-			--				includeInlayFunctionLikeReturnTypeHints = false,
-			--				includeInlayEnumMemberValueHints = false,
-			--			}
-			--		}
-			--	},
-			--	--settings = {
-			--	--	typescript = {
-			--	--		inlayHints = {
-			--	--			includeInlayParameterNameHints = 'all',
-			--	--			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-			--	--			includeInlayFunctionParameterTypeHints = true,
-			--	--			includeInlayVariableTypeHints = true,
-			--	--			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-			--	--			includeInlayPropertyDeclarationTypeHints = true,
-			--	--			includeInlayFunctionLikeReturnTypeHints = true,
-			--	--			includeInlayEnumMemberValueHints = true,
-			--	--		}
-			--	--	},
-			--	--	javascript = {
-			--	--		inlayHints = {
-			--	--			includeInlayParameterNameHints = 'all',
-			--	--			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-			--	--			includeInlayFunctionParameterTypeHints = true,
-			--	--			includeInlayVariableTypeHints = true,
-			--	--			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-			--	--			includeInlayPropertyDeclarationTypeHints = true,
-			--	--			includeInlayFunctionLikeReturnTypeHints = true,
-			--	--			includeInlayEnumMemberValueHints = true,
-			--	--		}
-			--	--	}
-			--	--},
-			--}
-
-			--lspconfig.volar.setup {
-			--	init_options = {
-			--		typescript = {
-			--			-- replace with your global TypeScript library path
-			--			tsdk = tsdk_path
-			--		}
-			--	},
-			--	flags = {
-			--		debounce_text_changes = 500
-			--	},
-			--	on_attach = on_attach,
-			--}
-
+			vim.lsp.config('pylsp', pylsp_config)
+			vim.lsp.enable('pylsp')
 
 			local vue_language_server_path = vim.env.HOME .. '/.npm/lib64/node_modules/@vue/language-server'
 			local vue_plugin = {
@@ -247,6 +156,7 @@ require("lazy").setup({
 				configNamespace = 'typescript',
 			}
 			local vtsls_config = {
+				cmd = { "vtsls", "--stdio" },
 				settings = {
 					vtsls = {
 						tsserver = {
@@ -284,6 +194,7 @@ require("lazy").setup({
 			}
 
 			local vue_ls_config = {
+				cmd = { "vue-language-server", "--stdio" },
 				on_init = function(client)
 					client.handlers['tsserver/request'] = function(_, result, context)
 						local clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = 'vtsls' })
@@ -532,7 +443,7 @@ require("lazy").setup({
 			--end)
 
 
-			vim.api.nvim_exec_autocmds("FileType", { group = 'lspconfig', modeline = false })
+			--vim.api.nvim_exec_autocmds("FileType", { group = 'lspconfig', modeline = false })
 			vim.diagnostic.config({update_in_insert = false })
 			--vim.lsp.set_log_level("debug")
 
