@@ -567,7 +567,7 @@ require("lazy").setup({
 										sleep = "  ",   -- auto-trigger disabled
 										disabled = " ",
 										warning = "𥉉 ",
-										unknown = " "
+										unknown = " "
 									},
 									hl = {
 										enabled = "#50FA7B",
