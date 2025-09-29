@@ -172,6 +172,9 @@ require("lazy").setup({
 							preferences = {
 								importModuleSpecifier = "non-relative",
 							},
+							format = {
+								semicolons = 'remove',
+							},
 						},
 						javascript = {
 							suggestionActions = {
@@ -180,6 +183,9 @@ require("lazy").setup({
 							preferences = {
 								importModuleSpecifier = "non-relative",
 							},
+							format = {
+								semicolons = 'remove',
+							},
 						},
 						vue = {
 							suggestionActions = {
@@ -187,6 +193,9 @@ require("lazy").setup({
 							},
 							preferences = {
 								importModuleSpecifier = "non-relative",
+							},
+							format = {
+								semicolons = 'remove',
 							},
 						},
 					},
