@@ -542,7 +542,7 @@ require("lazy").setup({
 						statusline = 5000,
 						tabline = 5000,
 						winbar = 5000,
-						refresh_time = 1000,
+						refresh_time = 5000,
 					}
 				},
 				sections = {
@@ -709,9 +709,30 @@ require("lazy").setup({
 			_G.FancyTabLine = fancyTabLine
 			vim.o.tabline = '%!v:lua.FancyTabLine()'
 
-			vim.api.nvim_create_autocmd({'WinEnter', 'BufEnter', 'BufWritePost', 'SessionLoadPost', 'FileChangedShellPost', 'VimResized', 'Filetype', 'CursorMoved', 'CursorMovedI', 'ModeChanged'}, {
+			vim.api.nvim_create_autocmd({'WinEnter', 'BufEnter', 'BufWritePost', 'SessionLoadPost', 'FileChangedShellPost', 'VimResized', 'Filetype', 'ModeChanged'}, {
 				callback = function(e)
-					require('lualine').refresh()
+					require('lualine').refresh({force=true})
+				end
+			})
+
+			local changed = false
+			local timer = vim.loop.new_timer()
+
+			vim.api.nvim_create_autocmd({'CursorMoved', 'CursorMovedI'}, {
+				callback = function(e)
+					if not changed then
+						changed = true
+						vim.loop.timer_start(
+							timer,
+							0,
+							16,
+							function()
+								vim.loop.timer_stop(timer)
+								changed = false
+								vim.schedule(function() require('lualine').refresh({force=true}) end)
+							end
+						)
+					end
 				end
 			})
 		end
