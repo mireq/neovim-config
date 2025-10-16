@@ -165,38 +165,38 @@ require("lazy").setup({
 								vue_plugin,
 							},
 						},
-						typescript = {
-							suggestionActions = {
-								enabled = false
-							},
-							preferences = {
-								importModuleSpecifier = "non-relative",
-							},
-							format = {
-								semicolons = 'remove',
-							},
+					},
+					typescript = {
+						suggestionActions = {
+							enabled = false
 						},
-						javascript = {
-							suggestionActions = {
-								enabled = false
-							},
-							preferences = {
-								importModuleSpecifier = "non-relative",
-							},
-							format = {
-								semicolons = 'remove',
-							},
+						preferences = {
+							importModuleSpecifier = "non-relative",
 						},
-						vue = {
-							suggestionActions = {
-								enabled = false
-							},
-							preferences = {
-								importModuleSpecifier = "non-relative",
-							},
-							format = {
-								semicolons = 'remove',
-							},
+						format = {
+							semicolons = 'remove',
+						},
+					},
+					javascript = {
+						suggestionActions = {
+							enabled = false
+						},
+						preferences = {
+							importModuleSpecifier = "non-relative",
+						},
+						format = {
+							semicolons = 'remove',
+						},
+					},
+					vue = {
+						suggestionActions = {
+							enabled = false
+						},
+						preferences = {
+							importModuleSpecifier = "non-relative",
+						},
+						format = {
+							semicolons = 'remove',
 						},
 					},
 				},
