@@ -1372,6 +1372,15 @@ require("lazy").setup({
 			vim.o.undofile = true
 			require("fundo").setup()
 		end,
+	},
+	{
+		"gisketch/triforce.nvim",
+		dependencies = {
+			"nvzone/volt",
+		},
+		config = function()
+			require("triforce").setup({})
+		end,
 	}
 
 --  {{
