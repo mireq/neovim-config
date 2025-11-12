@@ -36,7 +36,7 @@
   "quickfix.nvim": { "branch": "main", "commit": "8abedcc1da2ee6878689ce3b303e8fe8489b99bb" },
   "telescope-fzf-native.nvim": { "branch": "main", "commit": "1f08ed60cafc8f6168b72b80be2b2ea149813e55" },
   "telescope-ui-select.nvim": { "branch": "master", "commit": "6e51d7da30bd139a6950adf2a47fda6df9fa06d2" },
-  "telescope.nvim": { "branch": "master", "commit": "b4da76be54691e854d3e0e02c36b0245f945c2c7" },
+  "telescope.nvim": { "branch": "master", "commit": "0294ae3eafe662c438addb8692d9c98ef73a983e" },
   "toggleterm.nvim": { "branch": "main", "commit": "9a88eae817ef395952e08650b3283726786fb5fb" },
   "triforce.nvim": { "branch": "main", "commit": "9ba8c3f3d93907c311a102fca253ae0454a6edb8" },
   "typr": { "branch": "main", "commit": "bdd9ef7143702851edd1dac85101e0a537056d2f" },
