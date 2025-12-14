@@ -44,7 +44,7 @@ local colorscheme = {
 	{"ModeMsg", {ctermfg=181, cterm={bold=true}}},
 	{"MoreMsg", {ctermfg=231, cterm={bold=true}}},
 	{"NonText", {ctermfg=104}},
-	{"Normal", {ctermfg=252, ctermbg=16}},
+	{"Normal", {ctermfg=253, ctermbg=16}},
 	{"Number", {ctermfg=111}},
 	{"Operator", {ctermfg=153, cterm={bold=true}}},
 	{"Pmenu", {ctermfg=250, ctermbg=235}},
