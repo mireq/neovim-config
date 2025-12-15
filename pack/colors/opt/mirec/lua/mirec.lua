@@ -107,7 +107,7 @@ local colorscheme = {
 
 	{"QtObject", {ctermfg=120}},
 
-	{"NormalFloat", {link="Pmenu"}},
+	{"NormalFloat", {ctermfg=252, ctermbg=16}},
 	{"FloatBorder", {link="WinSeparator"}},
 	{"FloatTitle", {link="Title"}},
 	{"FloatFooter", {link="Title"}},
