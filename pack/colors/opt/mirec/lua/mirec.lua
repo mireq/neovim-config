@@ -201,8 +201,6 @@ local colorscheme = {
 
 	{"CmpItemKindConstant", {ctermfg=53, ctermbg=255, cterm={reverse=true}}},
 
-	{"CmpItemKindConstructor", {ctermfg=23, ctermbg=255, cterm={reverse=true}}},
-
 	{"CmpItemKindFunction", {ctermfg=90, ctermbg=255, cterm={reverse=true}}},
 
 	{"CmpItemKindStruct", {ctermfg=124, ctermbg=255, cterm={reverse=true}}},
@@ -212,6 +210,7 @@ local colorscheme = {
 
 	{"CmpItemKindVariable", {ctermfg=55, ctermbg=255, cterm={reverse=true}}},
 	{"CmpItemKindReference", {ctermfg=54, ctermbg=255, cterm={reverse=true}}},
+	{"CmpItemKindConstructor", {ctermfg=56, ctermbg=255, cterm={reverse=true}}},
 
 	{"CmpItemKindSnippet", {ctermfg=23, ctermbg=255, cterm={reverse=true}}},
 
