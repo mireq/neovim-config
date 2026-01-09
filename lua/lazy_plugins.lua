@@ -1374,16 +1374,15 @@ require("lazy").setup({
 			require("fundo").setup()
 		end,
 	},
-	{
-		"gisketch/triforce.nvim",
-		dependencies = {
-			"nvzone/volt",
-		},
-		config = function()
-			require("triforce").setup({})
-		end,
-	}
-
+--	{
+--		"gisketch/triforce.nvim",
+--		dependencies = {
+--			"nvzone/volt",
+--		},
+--		config = function()
+--			require("triforce").setup({})
+--		end,
+--	}
 --  {{
 --    'tadaa/vimade',
 --    -- default opts (you can partially set these or configure them however you like)
