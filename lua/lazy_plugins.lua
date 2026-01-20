@@ -392,23 +392,52 @@ require("lazy").setup({
 				},
 				mapping = insert_mapping,
 				formatting = {
-					--fields = { "kind", "abbr", "menu" },
-					fields = { "kind", "abbr" },
-					format = function(entry, vim_item)
-						-- Hide function arguments in the completion menu
-						vim_item.menu = vim_item.menu or ""
-						if vim_item.kind == "Function" or vim_item.kind == "Method" or vim_item.kind == "Copilot" then
-							vim_item.abbr = vim_item.abbr:gsub('%b()', '')
-						end
+					fields = { 'kind', 'abbr', 'menu' },
+					format = lspkind.cmp_format({
+						maxwidth = {
+							menu = 50,
+							abbr = 50,
+						},
+						ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+						show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+						symbol_map = {
+							Text = "",
+							Method = "",
+							Function = "",
+							Constructor = "",
+							Field = "ﰠ",
+							Variable = "",
+							Class = "ﴯ",
+							Interface = "",
+							Module = "",
+							Property = "ﰠ",
+							Unit = "塞",
+							Value = "",
+							Enum = "",
+							Keyword = "",
+							Snippet = "",
+							Color = "",
+							File = "",
+							Reference = "",
+							Folder = "",
+							EnumMember = "",
+							Constant = "",
+							Struct = "פּ",
+							Event = "",
+							Operator = "±",
+							TypeParameter = "",
+							Copilot = "",
+						},
+						before = function (entry, vim_item)
+							vim_item.menu = vim_item.menu or ""
+							if vim_item.kind == "Function" or vim_item.kind == "Method" or vim_item.kind == "Copilot" then
+								vim_item.abbr = vim_item.abbr:gsub('%b()', '')
+							end
 
-						--vim_item.abbr = vim_item.word
-						local kind = lspkind_format(entry, vim_item)
-						local strings = vim.split(kind.kind, "%s", { trimempty = true })
-						kind.kind = " " .. (strings[1] or "") .. " "
-						--kind.kind = '▍' -- instead of symbol
-						kind.menu = " " .. (strings[2] or "")
-						return kind
-					end
+							vim_item.kind = ' ' .. vim_item.icon .. ' '
+							return vim_item
+						end
+					})
 				},
 				view = {
 					--entries = "native"
