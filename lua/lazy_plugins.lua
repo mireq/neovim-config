@@ -279,38 +279,35 @@ require("lazy").setup({
 			})
 			insert_mapping['<C-E>'] = nil
 
-			local lspkind_format = require("lspkind").cmp_format({
-				mode = "symbol_text",
-				maxwidth = 50,
-				symbol_map = {
-					Text = "",
-					Method = "",
-					Function = "",
-					Constructor = "",
-					Field = "ﰠ",
-					Variable = "",
-					Class = "ﴯ",
-					Interface = "",
-					Module = "",
-					Property = "ﰠ",
-					Unit = "塞",
-					Value = "",
-					Enum = "",
-					Keyword = "",
-					Snippet = "",
-					Color = "",
-					File = "",
-					Reference = "",
-					Folder = "",
-					EnumMember = "",
-					Constant = "",
-					Struct = "פּ",
-					Event = "",
-					Operator = "±",
-					TypeParameter = "",
-					Copilot = "",
-				}
-			})
+			local lspkind = require('lspkind')
+			local lspkind_symbol_map = {
+				Text = "",
+				Method = "",
+				Function = "",
+				Constructor = "",
+				Field = "ﰠ",
+				Variable = "",
+				Class = "ﴯ",
+				Interface = "",
+				Module = "",
+				Property = "ﰠ",
+				Unit = "塞",
+				Value = "",
+				Enum = "",
+				Keyword = "",
+				Snippet = "",
+				Color = "",
+				File = "",
+				Reference = "",
+				Folder = "",
+				EnumMember = "",
+				Constant = "",
+				Struct = "פּ",
+				Event = "",
+				Operator = "±",
+				TypeParameter = "",
+				Copilot = "",
+			}
 
 			cmp.setup({
 				sources = cmp.config.sources(
@@ -400,40 +397,16 @@ require("lazy").setup({
 						},
 						ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
 						show_labelDetails = true, -- show labelDetails in menu. Disabled by default
-						symbol_map = {
-							Text = "",
-							Method = "",
-							Function = "",
-							Constructor = "",
-							Field = "ﰠ",
-							Variable = "",
-							Class = "ﴯ",
-							Interface = "",
-							Module = "",
-							Property = "ﰠ",
-							Unit = "塞",
-							Value = "",
-							Enum = "",
-							Keyword = "",
-							Snippet = "",
-							Color = "",
-							File = "",
-							Reference = "",
-							Folder = "",
-							EnumMember = "",
-							Constant = "",
-							Struct = "פּ",
-							Event = "",
-							Operator = "±",
-							TypeParameter = "",
-							Copilot = "",
-						},
+						symbol_map = lspkind_symbol_map,
 						before = function (entry, vim_item)
 							vim_item.menu = vim_item.menu or ""
 							if vim_item.kind == "Function" or vim_item.kind == "Method" or vim_item.kind == "Copilot" then
 								vim_item.abbr = vim_item.abbr:gsub('%b()', '')
 							end
 
+							if lspkind_symbol_map[vim_item.kind] ~= nil then
+								vim_item.icon = lspkind_symbol_map[vim_item.kind]
+							end
 							vim_item.kind = ' ' .. vim_item.icon .. ' '
 							return vim_item
 						end
