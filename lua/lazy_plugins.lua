@@ -1237,9 +1237,9 @@ require("lazy").setup({
 
 			--vim.keymap.set({"i", "s"}, "<Tab>", function() ls.jump(1) end, {silent = true})
 			--vim.cmd("snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>")
-			--require("luasnip.loaders.from_lua").lazy_load({
-			--	paths = { "./lua/luasnip_snippets/" }
-			--})
+			require("luasnip.loaders.from_lua").lazy_load({
+				paths = { vim.fn.stdpath("config") .. "/luasnip" }
+			})
 		end
 	},
 	{
