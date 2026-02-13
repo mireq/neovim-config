@@ -567,7 +567,25 @@ require("lazy").setup({
 						'branch',
 						{'diagnostics', colored=true},
 					},
-					lualine_c = {{'filename', path=1}},
+					lualine_c = {
+						{
+							'filename',
+							file_status = true,
+							newfile_status = true,
+							path = 0,
+							symbols = {
+								modified = ' [+]',
+								readonly = ' ',
+								unnamed = '[No Name]',
+							},
+							separator = { left = '', right = '' },
+							color = function(section)
+								if vim.bo.modified then
+									return { fg = '#ffffff', bg = '#d70087', gui = 'bold' }
+								end
+							end,
+						}
+					},
 					lualine_x = {
 						{
 							'copilot',
@@ -619,7 +637,26 @@ require("lazy").setup({
 				inactive_sections = {
 					lualine_a = {},
 					lualine_b = {},
-					lualine_c = {'filename'},
+					lualine_c = {
+						{
+							'filename',
+							file_status = true,
+							newfile_status = true,
+							path = 0,
+							symbols = {
+								modified = ' [+]',
+								readonly = ' ',
+								unnamed = '[No Name]',
+							},
+							separator = { left = '', right = '' },
+							color = function(section)
+								if vim.bo.modified then
+									return { fg = '#ffffff', bg = '#af00af', gui = 'bold' }
+								end
+								return { bg = '#1c1c1c', fg = '#606060' }
+							end,
+						}
+					},
 					lualine_x = {'location'},
 					lualine_y = {},
 					lualine_z = {}
