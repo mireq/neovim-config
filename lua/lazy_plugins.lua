@@ -443,6 +443,10 @@ require("lazy").setup({
 				},
 			})
 
+			require('cmp').setup.filetype('AgenticInput', {
+				sources = {}
+			})
+
 			--local hl = vim.api.nvim_get_hl_by_name('PmenuSel', true)
 			--local cmp_namespace = vim.api.nvim_create_namespace('nvim-comp')
 			--vim.api.nvim_set_hl(cmp_namespace, 'CursorLine', {ctermbg=238})
@@ -534,8 +538,8 @@ require("lazy").setup({
 					component_separators = { left = '', right = ''},
 					section_separators = { left = '', right = ''},
 					disabled_filetypes = {
-						statusline = {},
-						winbar = {},
+						statusline = { 'AgenticChat', 'AgenticInput', 'AgenticCode', 'AgenticFiles' },
+						winbar = { 'AgenticChat', 'AgenticInput', 'AgenticCode', 'AgenticFiles' },
 					},
 					ignore_focus = {},
 					always_divide_middle = true,
@@ -1335,6 +1339,16 @@ require("lazy").setup({
 					rst = true,
 					["*"] = false,
 				},
+				should_attach = function(bufnr, bufname)
+					local filetype = vim.bo[bufnr].filetype
+
+					if filetype == "AgenticInput" then
+						return true
+					end
+
+					local default_should_attach = require("copilot.config.should_attach").default
+					return default_should_attach(bufnr, bufname)
+				end,
 			})
 
 			-- hide copilot suggestions when cmp menu is open
@@ -1413,6 +1427,47 @@ require("lazy").setup({
 			require("fundo").setup()
 		end,
 	},
+	{
+		"carlos-algms/agentic.nvim",
+		opts = {
+			provider = "codex-acp", -- setting the name here is all you need to get started
+		},
+		keys = {
+			{
+				"<space>a",
+				function() require("agentic").toggle() end,
+				mode = { "n" },
+				desc = "Toggle Agentic Chat"
+			},
+			{
+				"<leader>aa",
+				function() require("agentic").add_selection_or_file_to_context() end,
+				mode = { "n", "v" },
+				desc = "Add file or selection to Agentic to Context"
+			},
+			{
+				"<leader>an",
+				function() require("agentic").new_session() end,
+				mode = { "n" },
+				desc = "New Agentic Session"
+			},
+			{
+				"<leader>ar", -- ai Restore
+				function()
+					require("agentic").restore_session()
+				end,
+				desc = "Agentic Restore session",
+				silent = true,
+				mode = { "n" },
+			},
+		}
+	},
+	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		opts = {
+			file_types = { "markdown", "md", "AgenticChat" },
+		}
+	}
 --	{
 --		"gisketch/triforce.nvim",
 --		dependencies = {
