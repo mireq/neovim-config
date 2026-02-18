@@ -1430,7 +1430,15 @@ require("lazy").setup({
 	{
 		"carlos-algms/agentic.nvim",
 		opts = {
-			provider = "codex-acp", -- setting the name here is all you need to get started
+			provider = "codex-acp",
+			acp_providers = {
+				["codex-acp"] = {
+					command = 'codex-acp_sandbox',
+					args = {
+						'-c', "sandbox_mode=danger-full-access"
+					}
+				}
+			}
 		},
 		keys = {
 			{
@@ -1442,7 +1450,13 @@ require("lazy").setup({
 			{
 				"<leader>aa",
 				function() require("agentic").add_selection_or_file_to_context() end,
-				mode = { "n", "v" },
+				mode = { "v" },
+				desc = "Add file or selection to Agentic to Context"
+			},
+			{
+				"<leader>aa",
+				function() require("agentic").add_file() end,
+				mode = { "n" },
 				desc = "Add file or selection to Agentic to Context"
 			},
 			{
