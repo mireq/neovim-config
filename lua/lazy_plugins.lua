@@ -1373,7 +1373,8 @@ require("lazy").setup({
 	},
 	{
 		"CopilotC-Nvim/CopilotChat.nvim",
-		cmd = {'CopilotChat', 'CopilotChatClose', 'CopilotChatCommit', 'CopilotChatCommitStaged', 'CopilotChatDebugInfo', 'CopilotChatDocs', 'CopilotChatExplain', 'CopilotChatFix', 'CopilotChatFixDiagnostic', 'CopilotChatLoad', 'CopilotChatOpen', 'CopilotChatOptimize', 'CopilotChatReset', 'CopilotChatReview', 'CopilotChatSave', 'CopilotChatTests'},
+		cmd = {'CopilotChat', 'CopilotChatClose', 'CopilotChatCommit', 'CopilotChatDocs', 'CopilotChatExplain', 'CopilotChatFix', 'CopilotChatLoad', 'CopilotChatModels', 'CopilotChatOpen', 'CopilotChatOptimize', 'CopilotChatPrompts', 'CopilotChatReset', 'CopilotChatReview', 'CopilotChatSave', 'CopilotChatStop', 'CopilotChatTests', 'CopilotChatToggle'},
+
 		dependencies = {
 			{ "zbirenbaum/copilot.lua" },
 			{ "nvim-lua/plenary.nvim" },
