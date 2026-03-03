@@ -159,6 +159,14 @@ require("lazy").setup({
 			local vtsls_config = {
 				cmd = { "vtsls", "--stdio" },
 				settings = {
+					init_options = {
+						preferences = {
+							tabSize = 4,
+							indentSize = 4,
+							convertTabsToSpaces = false,
+							indentStyle = "tab",
+						},
+					},
 					vtsls = {
 						tsserver = {
 							globalPlugins = {
@@ -175,6 +183,9 @@ require("lazy").setup({
 						},
 						format = {
 							semicolons = 'remove',
+							indentSize = 4,
+							tabSize = 4,
+							convertTabsToSpaces = false,
 						},
 					},
 					javascript = {
@@ -186,6 +197,9 @@ require("lazy").setup({
 						},
 						format = {
 							semicolons = 'remove',
+							indentSize = 4,
+							tabSize = 4,
+							convertTabsToSpaces = false,
 						},
 					},
 					vue = {
@@ -197,6 +211,9 @@ require("lazy").setup({
 						},
 						format = {
 							semicolons = 'remove',
+							indentSize = 4,
+							tabSize = 4,
+							convertTabsToSpaces = false,
 						},
 					},
 				},
