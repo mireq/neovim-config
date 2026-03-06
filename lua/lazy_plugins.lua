@@ -595,8 +595,8 @@ require("lazy").setup({
 							newfile_status = true,
 							path = 0,
 							symbols = {
-								modified = ' [+]',
-								readonly = ' ',
+								modified = '[+]',
+								readonly = '',
 								unnamed = '[No Name]',
 							},
 							separator = { left = '', right = '' },
