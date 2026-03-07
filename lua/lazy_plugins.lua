@@ -1492,6 +1492,15 @@ require("lazy").setup({
 				silent = true,
 				mode = { "n" },
 			},
+			{
+				"<leader>as", -- ai stop generation
+				function()
+					require("agentic").stop_generation()
+				end,
+				desc = "Agentic Stop generation",
+				silent = true,
+				mode = { "n" },
+			},
 		}
 	},
 	{
