@@ -137,3 +137,47 @@ end, {})
 vim.api.nvim_create_user_command('LspInfo', function()
 	vim.cmd('checkhealth vim.lsp')
 end, {})
+
+
+vim.api.nvim_create_user_command("HiPreview", function()
+	local out
+	if vim.api.nvim_exec2 then
+		out = vim.api.nvim_exec2("silent highlight", { output = true }).output
+	else
+		out = vim.fn.execute("silent highlight")
+	end
+
+	local lines = vim.split(out, "\n", { plain = true, trimempty = true })
+
+	local buf = vim.api.nvim_create_buf(false, true)
+	vim.api.nvim_buf_set_name(buf, "HiPreviewAll")
+	vim.bo[buf].buftype = "nofile"
+	vim.bo[buf].bufhidden = "wipe"
+	vim.bo[buf].swapfile = false
+	vim.bo[buf].modifiable = true
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+	vim.bo[buf].modifiable = false
+	vim.bo[buf].filetype = "text"
+
+	vim.cmd("botright vnew")
+	vim.api.nvim_win_set_buf(0, buf)
+
+	local ns = vim.api.nvim_create_namespace("HiPreviewAll")
+
+	for i, line in ipairs(lines) do
+		local name = line:match("^(%S+)")
+		if name then
+			local s, e = line:find("xxx", 1, true)
+			if s then
+				pcall(vim.api.nvim_buf_add_highlight,
+					buf,
+					ns,
+					name,
+					i - 1,
+					s - 1,
+					e
+				)
+			end
+		end
+	end
+end, {})
