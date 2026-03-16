@@ -1508,6 +1508,10 @@ require("lazy").setup({
 		opts = {
 			file_types = { "markdown", "md", "AgenticChat" },
 		}
+	},
+	{
+		"joryeugene/dadbod-grip.nvim",
+		version = "*",   -- always latest stable; remove to track HEAD
 	}
 --	{
 --		"gisketch/triforce.nvim",
