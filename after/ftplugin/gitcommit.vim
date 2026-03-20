@@ -32,9 +32,19 @@ inoremap <buffer> <C-e> resolves <ESC>:call <SID>insertTime()<CR>i
 inoreabbrev <buffer> BB BREAKING CHANGE:
 nnoremap <buffer> i i<C-r>=<sid>commit_type()<CR>
 
-fun! s:commit_type()
+fun! s:commit_type_deferred(timer) abort
+	if mode() !=# 'i'
+		return
+	endif
+	if col('.') != 1 || line('.') != 1
+		return
+	endif
+	call complete(1, ['build: ', 'bump: ', 'ci: ', 'docs: ', 'feat: ', 'fix: ', 'perf: ', 'refactor: ', 'revert: ', 'style: ', 'test: '])
+endfun
+
+fun! s:commit_type() abort
 	if col('.') == 1 && line('.') == 1
-		call complete(1, ['build: ', 'bump: ', 'ci: ', 'docs: ', 'feat: ', 'fix: ', 'perf: ', 'refactor: ', 'revert: ', 'style: ', 'test: '])
+		call timer_start(0, function('s:commit_type_deferred'))
 	endif
 	return ''
 endfun
