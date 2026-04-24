@@ -1449,6 +1449,15 @@ require("lazy").setup({
 		"carlos-algms/agentic.nvim",
 		opts = {
 			provider = "codex-acp",
+			debug = false,
+			file_picker = {
+				enabled = false,
+			},
+			keymaps = {
+				prompt = {
+					paste_image = {},
+				},
+			},
 			acp_providers = {
 				["codex-acp"] = {
 					command = 'codex-acp_sandbox',
