@@ -84,7 +84,38 @@ require("lazy").setup({
 				vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
 				vim.keymap.set('n', '<space>ca', function() vim.lsp.buf.code_action({ apply = false, context = { only = { "empty", "quickfix", "refactor", "refactor_extract", "refactor_inline", "source" } } }) end, bufopts)
 				--vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
-				vim.keymap.set('n', '<C-c>ro', function() vim.lsp.buf.code_action({ apply = true, context = { only = {"source.organizeImports"} } }) end, bufopts)
+--				vim.keymap.set('n', '<C-c>ro', function() vim.lsp.buf.code_action({ apply = true, context = { only = {"source.organizeImports"} } }) end, bufopts)
+
+				vim.keymap.set('n', '<C-c>ro', function()
+					local ft = vim.bo[bufnr].filetype
+
+					if vim.tbl_contains({
+						'typescript',
+						'javascript',
+						'typescriptreact',
+						'javascriptreact',
+						'vue',
+					}, ft) then
+						local clients = vim.lsp.get_clients({ bufnr = bufnr, name = 'vtsls' })
+
+						if #clients > 0 then
+							clients[1]:request('workspace/executeCommand', {
+								command = 'typescript.organizeImports',
+								arguments = { vim.api.nvim_buf_get_name(bufnr) },
+							}, nil, bufnr)
+							return
+						end
+					end
+
+					vim.lsp.buf.code_action({
+						apply = true,
+						context = {
+							only = { 'source.organizeImports' },
+						},
+					})
+				end, bufopts)
+
+
 				vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
 				vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 
