@@ -172,6 +172,7 @@ require("lazy").setup({
 							pycodestyle = { enabled = false },
 							yapf = { enabled = false },
 							rope = { enabled = true },
+							--rope_autoimport = { enabled = true },
 						},
 
 					}
