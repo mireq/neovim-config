@@ -1542,6 +1542,18 @@ require("lazy").setup({
 				silent = true,
 				mode = { "n" },
 			},
+			{
+				"<leader>ak",
+				function()
+					local SessionRegistry = require("agentic.session_registry")
+					local AgentInstance = require("agentic.acp.agent_instance")
+
+					SessionRegistry.destroy_session()
+					AgentInstance:cleanup_all()
+				end,
+				mode = { "n" },
+				desc = "Kill agentic session + clean chat",
+			},
 		}
 	},
 	{
