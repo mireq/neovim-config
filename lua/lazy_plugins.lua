@@ -273,9 +273,11 @@ require("lazy").setup({
 								payload,
 							},
 						}, { bufnr = context.bufnr }, function(_, r)
-								local response_data = { { id, r.body } }
-								---@diagnostic disable-next-line: param-type-mismatch
-								client:notify('tsserver/response', response_data)
+								if r ~= nil then
+									local response_data = { { id, r.body } }
+									---@diagnostic disable-next-line: param-type-mismatch
+									client:notify('tsserver/response', response_data)
+								end
 							end)
 					end
 				end,
