@@ -39,7 +39,7 @@ fun! s:commit_type_deferred(timer) abort
 	if col('.') != 1 || line('.') != 1
 		return
 	endif
-	call complete(1, ['build: ', 'bump: ', 'ci: ', 'docs: ', 'feat: ', 'fix: ', 'perf: ', 'refactor: ', 'revert: ', 'style: ', 'test: '])
+	call complete(1, ['build: ', 'bump: ', 'chore: ', 'ci: ', 'docs: ', 'feat: ', 'fix: ', 'i18n: ', 'infra: ', 'perf: ', 'refactor: ', 'revert: ', 'style: ', 'ux: ', 'test: ', 'wip: '])
 endfun
 
 fun! s:commit_type() abort
