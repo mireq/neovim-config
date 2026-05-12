@@ -20,7 +20,7 @@
   "large_file": { "branch": "main", "commit": "d9740134f80994d56f50e2931ba9307f49e420dc" },
   "lazy.nvim": { "branch": "main", "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97" },
   "lspkind.nvim": { "branch": "master", "commit": "c7274c48137396526b59d86232eabcdc7fed8a32" },
-  "lualine.nvim": { "branch": "master", "commit": "a905eeebc4e63fdc48b5135d3bf8aea5618fb21c" },
+  "lualine.nvim": { "branch": "master", "commit": "131a558e13f9f28b15cd235557150ccb23f89286" },
   "luasnip-snippets": { "branch": "main", "commit": "262196accf37d00c72d2e4fc99011b5f6537f118" },
   "markdown-preview.nvim": { "branch": "master", "commit": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee" },
   "mini.nvim": { "branch": "main", "commit": "29447d7b0e1fc9bc9d0384953e63be3fae816736" },
