@@ -153,4 +153,4 @@ vim.keymap.set("n", "<leader>tc", function() if vim.opt_local.conceallevel:get()
 
 -- disable macro recording using q
 vim.keymap.set("n", "q", "<nop>")
-vim.keymap.set("n", "<Leader>r", "q", { noremap = true })
+vim.keymap.set("n", "<Leader>qq", "q", { noremap = true })
