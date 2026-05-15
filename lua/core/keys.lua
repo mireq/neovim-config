@@ -154,3 +154,14 @@ vim.keymap.set("n", "<leader>tc", function() if vim.opt_local.conceallevel:get()
 -- disable macro recording using q
 vim.keymap.set("n", "q", "<nop>")
 vim.keymap.set("n", "<Leader>qq", "q", { noremap = true })
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "fugitive",
+	callback = function(args)
+		vim.keymap.set("n", "D", "O:Gdiffsplit<CR>", {
+			buffer = args.buf,
+			remap = true,   -- important: let O use Fugitive's own mapping
+			silent = true,
+		})
+	end,
+})
