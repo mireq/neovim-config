@@ -245,6 +245,20 @@ local colorscheme = {
 	{"TelescopeResultsBorder", {link="TelescopeInvisible2"}},
 	{"TelescopePreviewBorder", {link="TelescopeInvisible"}},
 
+	{"RenderMarkdownH1Bg", {ctermbg=236}},
+	{"RenderMarkdownH2Bg", {ctermbg=235}},
+	{"RenderMarkdownH3Bg", {ctermbg=234}},
+	{"RenderMarkdownH4Bg", {ctermbg=233}},
+	{"RenderMarkdownH5Bg", {ctermbg=232}},
+	{"RenderMarkdownH6Bg", {ctermbg=16}},
+
+	{"@markup.heading.1.markdown", {cterm={bold=true}, ctermfg=153}},
+	{"@markup.heading.2.markdown", {cterm={bold=true}, ctermfg=179}},
+	{"@markup.heading.3.markdown", {cterm={bold=true}, ctermfg=113}},
+	{"@markup.heading.4.markdown", {cterm={bold=true}, ctermfg=37}},
+	{"@markup.heading.5.markdown", {cterm={bold=true}, ctermfg=141}},
+	{"@markup.heading.6.markdown", {cterm={bold=true}, ctermfg=98}},
+
 	{"@variable", {}},
 	{"@attribute", {link="Attribute"}},
 	{"@property", {link="Attribute"}},
