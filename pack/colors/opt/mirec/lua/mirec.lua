@@ -252,6 +252,9 @@ local colorscheme = {
 	{"RenderMarkdownH5Bg", {ctermbg=232}},
 	{"RenderMarkdownH6Bg", {ctermbg=16}},
 
+	--{"LspReferenceWrite", {ctermbg=53}},
+	{"LspReferenceText", {ctermbg=53}},
+
 	{"@markup.heading.1.markdown", {cterm={bold=true}, ctermfg=153}},
 	{"@markup.heading.2.markdown", {cterm={bold=true}, ctermfg=179}},
 	{"@markup.heading.3.markdown", {cterm={bold=true}, ctermfg=113}},

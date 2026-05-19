@@ -171,3 +171,38 @@ vim.api.nvim_create_autocmd({"BufWritePre"}, {
 
 vim.g.python3_host_prog = "/usr/bin/python3"
 vim.g.vim_markdown_conceal_code_blocks = 0
+
+vim.o.updatetime = 300
+
+local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
+
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = group,
+	callback = function(args)
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+		if not client or not client:supports_method("textDocument/documentHighlight") then
+			return
+		end
+
+		local bufnr = args.buf
+
+		vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+			group = group,
+			buffer = bufnr,
+			callback = function()
+				vim.lsp.buf.clear_references()
+				vim.lsp.buf.document_highlight()
+				highlighted = true
+			end,
+		})
+
+		vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+			group = group,
+			buffer = bufnr,
+			callback = function()
+				vim.lsp.buf.clear_references()
+			end,
+		})
+	end,
+})
