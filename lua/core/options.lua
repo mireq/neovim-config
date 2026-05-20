@@ -219,3 +219,79 @@ end
 
 -- temporary disable async parsin
 --vim.g._ts_force_sync_parsing = true 
+
+
+--vim.fn.setcellwidths({
+--	{ 0x23fb, 0x23fe, 2 },
+--	{ 0x2665, 0x2665, 2 },
+--	{ 0x2b58, 0x2b58, 2 },
+--	{ 0xe000, 0xe09f, 2 },
+--	{ 0xe0c0, 0xf8ff, 2 },
+--	{ 0xf0001, 0xfffff, 2 },
+--})
+
+local ns_insert = vim.api.nvim_create_namespace("cursorline_insert")
+
+vim.api.nvim_set_hl(ns_insert, "CursorLine", {
+	bg = "#002432",
+})
+
+local ignored_filetypes = {
+	TelescopePrompt = true,
+	TelescopeResults = true,
+	TelescopePreview = true,
+}
+
+local ignored_buftypes = {
+	prompt = true,
+	terminal = true,
+	quickfix = true,
+	nofile = true,
+	help = true,
+}
+
+local function is_normal_window(win)
+	local buf = vim.api.nvim_win_get_buf(win)
+
+	if vim.api.nvim_win_get_config(win).relative ~= "" then
+		return false
+	end
+
+	if ignored_buftypes[vim.bo[buf].buftype] then
+		return false
+	end
+
+	if ignored_filetypes[vim.bo[buf].filetype] then
+		return false
+	end
+
+	return true
+end
+
+local function set_ns()
+	local win = vim.api.nvim_get_current_win()
+
+	if not is_normal_window(win) then
+		return
+	end
+
+	if vim.api.nvim_get_mode().mode:match("^i") then
+		vim.api.nvim_win_set_hl_ns(win, ns_insert)
+	else
+		vim.api.nvim_win_set_hl_ns(win, -1)
+	end
+end
+
+vim.api.nvim_create_autocmd("InsertEnter", {
+	callback = function()
+		vim.schedule(set_ns)
+	end,
+})
+
+vim.api.nvim_create_autocmd("InsertLeave", {
+	callback = set_ns,
+})
+
+vim.api.nvim_create_autocmd("WinEnter", {
+	callback = set_ns,
+})
