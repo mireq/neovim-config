@@ -582,6 +582,42 @@ require("lazy").setup({
 			powerline_darker.normal.b.bg = '#444444'
 			powerline_darker.normal.c.bg = '#262626'
 			powerline_darker.inactive.c.bg = '#1c1c1c'
+
+			local custom_fname = require('lualine.components.filename'):extend()
+			local highlight = require('lualine.highlight')
+
+			local colors = {
+				modified = '#d70087',
+			}
+
+			function custom_fname:init(options)
+				custom_fname.super.init(self, options)
+
+				self.status_colors = {
+					modified = highlight.create_component_highlight_group({
+						fg = '#ffffff',
+						bg = colors.modified,
+						gui = 'bold',
+					}, 'filename_status_modified', self.options),
+				}
+
+				if self.options.color == nil then
+					self.options.color = ''
+				end
+			end
+
+			function custom_fname:update_status()
+				local data = custom_fname.super.update_status(self)
+
+				if vim.bo.modified then
+					return highlight.component_format_highlight(self.status_colors.modified) .. data
+				else
+					return data
+				end
+
+				return highlight.component_format_highlight(status_color) .. data
+			end
+
 			require('lualine').setup {
 				options = {
 					icons_enabled = false,
@@ -624,7 +660,7 @@ require("lazy").setup({
 					},
 					lualine_c = {
 						{
-							'filename',
+							custom_fname,
 							file_status = true,
 							newfile_status = true,
 							path = 0,
@@ -634,11 +670,6 @@ require("lazy").setup({
 								unnamed = '[No Name]',
 							},
 							separator = { left = '', right = '' },
-							color = function(section)
-								if vim.bo.modified then
-									return { fg = '#ffffff', bg = '#d70087', gui = 'bold' }
-								end
-							end,
 						}
 					},
 					lualine_x = {
@@ -648,10 +679,10 @@ require("lazy").setup({
 							symbols = {
 								status = {
 									icons = {
-										enabled = "  ",
+										enabled = " ",
 										sleep = "  ",   -- auto-trigger disabled
 										disabled = " ",
-										warning = "𥉉 ",
+										warning = " ",
 										unknown = " "
 									},
 									hl = {
@@ -694,7 +725,7 @@ require("lazy").setup({
 					lualine_b = {},
 					lualine_c = {
 						{
-							'filename',
+							custom_fname,
 							file_status = true,
 							newfile_status = true,
 							path = 0,
@@ -704,12 +735,6 @@ require("lazy").setup({
 								unnamed = '[No Name]',
 							},
 							separator = { left = '', right = '' },
-							color = function(section)
-								if vim.bo.modified then
-									return { fg = '#ffffff', bg = '#af00af', gui = 'bold' }
-								end
-								return { bg = '#1c1c1c', fg = '#606060' }
-							end,
 						}
 					},
 					lualine_x = {'location'},
