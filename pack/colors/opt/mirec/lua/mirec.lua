@@ -15,6 +15,8 @@ local colorscheme = {
 	{"Cursor", {ctermfg=9, ctermbg=192, cterm={bold=true, nocombine=true}}},
 	{"CursorColumn", {ctermbg=232}},
 	{"CursorLine", {ctermbg=233}},
+	{"CursorLineInsert", {ctermbg=51}},
+	{"CursorLineNormal", {ctermbg=233}},
 	{"CursorLineNr", {ctermfg=255, ctermbg=240, cterm={bold=true, nocombine=true}}},
 	{"CursorLineSign", {ctermfg=255, ctermbg=125, cterm={bold=true, nocombine=true}}},
 	{"Debug", {ctermfg=181, cterm={bold=true}}},
