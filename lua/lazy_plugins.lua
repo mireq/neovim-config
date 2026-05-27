@@ -1592,6 +1592,12 @@ require("lazy").setup({
 	{
 		"joryeugene/dadbod-grip.nvim",
 		version = "*",   -- always latest stable; remove to track HEAD
+		config = function()
+			require("dadbod-grip").setup({
+				completion = false,
+				keymaps = { qpad_execute = "<C-s>" },
+			})
+		end
 	}
 --	{
 --		"gisketch/triforce.nvim",
