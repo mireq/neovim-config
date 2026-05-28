@@ -1507,7 +1507,7 @@ require("lazy").setup({
 	{
 		"carlos-algms/agentic.nvim",
 		opts = {
-			provider = "codex-acp",
+			provider = "vibe-acp",
 			debug = false,
 			file_picker = {
 				enabled = false,
@@ -1523,7 +1523,13 @@ require("lazy").setup({
 					args = {
 						'-c', "sandbox_mode=danger-full-access"
 					}
-				}
+				},
+				["vibe-acp"] = {
+					name = "Mistral vibe",
+					--default_mode = "auto-approve",
+					--default_mode = "caveman",
+					command = 'vibe-acp_sandbox',
+				},
 			}
 		},
 		keys = {
