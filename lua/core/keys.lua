@@ -155,6 +155,9 @@ vim.keymap.set("n", "<leader>tc", function() if vim.opt_local.conceallevel:get()
 vim.keymap.set("n", "q", "<nop>")
 vim.keymap.set("n", "<Leader>qq", "q", { noremap = true })
 
+-- rename symbol under cursor
+vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, {})
+
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "fugitive",
 	callback = function(args)
