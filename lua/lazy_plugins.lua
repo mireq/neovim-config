@@ -1415,6 +1415,11 @@ require("lazy").setup({
 					rst = true,
 					["*"] = false,
 				},
+				server_opts_overrides = {
+					cmd_env = {
+						DBUS_SESSION_BUS_ADDRESS = "unix:path=/dev/null",
+					},
+				},
 				should_attach = function(bufnr, bufname)
 					local filetype = vim.bo[bufnr].filetype
 
