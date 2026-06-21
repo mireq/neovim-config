@@ -51,7 +51,7 @@ require("lazy").setup({
 			local types = require("cmp.types")
 			local cmp_nvim_lsp = require('cmp_nvim_lsp');
 			cmp_nvim_lsp.setup()
-			local capabiliies = cmp_nvim_lsp.default_capabilities();
+			local capabilities = cmp_nvim_lsp.default_capabilities();
 
 
 			local opts = { noremap=true, silent=true }
