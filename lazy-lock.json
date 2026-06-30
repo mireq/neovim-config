@@ -1,7 +1,7 @@
 {
   "CopilotChat.nvim": { "branch": "main", "commit": "f0c2a23ab79dc295f5e0eef0d8b587a39020c852" },
   "LuaSnip": { "branch": "master", "commit": "642b0c595e11608b4c18219e93b88d7637af27bc" },
-  "agentic.nvim": { "branch": "main", "commit": "a19fee663aa8be5f46f0af6fc0b46427b0e75cf2" },
+  "agentic.nvim": { "branch": "main", "commit": "37a53a7ad074d12740d90eab9efc0c01e6155864" },
   "cmp-buffer": { "branch": "main", "commit": "b74fab3656eea9de20a9b8116afa3cfc4ec09657" },
   "cmp-cmdline": { "branch": "main", "commit": "d126061b624e0af6c3a556428712dd4d4194ec6d" },
   "cmp-copilot": { "branch": "master", "commit": "9f592b352a9730fdc955c20146a6556096a8659e" },
