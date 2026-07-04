@@ -281,6 +281,7 @@ require("lazy").setup({
 							end)
 					end
 				end,
+				filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
 			}
 			-- nvim 0.11 or above
 			vim.lsp.config('vtsls', vtsls_config)
