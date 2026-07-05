@@ -371,6 +371,9 @@ require("lazy").setup({
 							name = snippet_engine,
 						},
 						{
+							name = 'dadbod_grip',
+						},
+						{
 							name = 'nvim_lsp',
 						},
 						{
