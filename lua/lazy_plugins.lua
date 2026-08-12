@@ -1587,10 +1587,10 @@ require("lazy").setup({
 			{
 				"<leader>ak",
 				function()
-					local SessionRegistry = require("agentic.session_registry")
 					local AgentInstance = require("agentic.acp.agent_instance")
+					local agentic = require("agentic")
 
-					SessionRegistry.destroy_session()
+					agentic.destroy_session()
 					AgentInstance:cleanup_all()
 				end,
 				mode = { "n" },
