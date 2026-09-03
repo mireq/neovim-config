@@ -454,6 +454,15 @@ require("lazy").setup({
 						show_labelDetails = true, -- show labelDetails in menu. Disabled by default
 						symbol_map = lspkind_symbol_map,
 						before = function (entry, vim_item)
+							local item = entry:get_completion_item()
+
+							if entry.source.name == 'nvim_lsp'
+								and type(item.detail) == 'string'
+								and item.detail:find('^# Auto%-Import\n') then
+								local import_stmt = item.detail:gsub('^# Auto%-Import\n', '')
+								vim_item.menu = import_stmt
+							end
+
 							vim_item.menu = vim_item.menu or ""
 							if vim_item.kind == "Function" or vim_item.kind == "Method" or vim_item.kind == "Copilot" then
 								vim_item.abbr = vim_item.abbr:gsub('%b()', '')
