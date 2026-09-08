@@ -1397,6 +1397,7 @@ require("lazy").setup({
 		enabled = enable_ai,
 		dependencies = {
 			"hrsh7th/nvim-cmp",
+			"copilotlsp-nvim/copilot-lsp",
 		},
 		cmd = "Copilot",
 		build = ":Copilot auth",
