@@ -1549,6 +1549,23 @@ require("lazy").setup({
 					--default_mode = "caveman",
 					command = 'vibe-acp_sandbox',
 				},
+			},
+			headers = {
+				chat = function(parts, session_state)
+					local header = parts.title
+					if session_state then
+						local used = session_state:get_context_used()
+						if used then
+							header = header .. " | " .. used .. " tok"
+						end
+						local cost = session_state:get_cost_amount()
+						if cost then
+							local currency = session_state:get_cost_currency()
+							header = header .. " | " .. (currency and currency .. " " or "") .. cost
+						end
+					end
+					return header
+				end,
 			}
 		},
 		keys = {
