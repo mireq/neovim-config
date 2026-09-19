@@ -1557,6 +1557,12 @@ require("lazy").setup({
 						local used = session_state:get_context_used()
 						if used then
 							header = header .. " | " .. used .. " tok"
+							local used_raw = session_state:get_context_used_raw()
+							local size_raw = session_state:get_context_size_raw()
+
+							if used_raw and size_raw and size_raw > 0 then
+								header = header .. string.format(" | %.1f percent", used_raw / size_raw * 100)
+							end
 						end
 						local cost = session_state:get_cost_amount()
 						if cost then
