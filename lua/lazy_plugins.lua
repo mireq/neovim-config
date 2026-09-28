@@ -1647,6 +1647,23 @@ require("lazy").setup({
 				keymaps = { qpad_execute = "<C-s>" },
 			})
 		end
+	},
+	{
+		"2giosangmitom/sqmeow.nvim",
+		dependencies = { "MunifTanjim/nui.nvim" },
+		version = "*",
+		build = function()
+			-- Downloads the matching release binary; pass 'curl', 'wget', 'powershell' or 'cargo' to choose.
+			require("sqmeow").install()
+		end,
+		opts = {},
+		cmd = "Sqmeow",
+		keys = {
+			{ "<leader>Dd", "<cmd>Sqmeow toggle<cr>", desc = "Toggle" },
+			{ "<leader>Dc", "<cmd>Sqmeow cancel<cr>", desc = "Cancel" },
+			{ "<leader>Da", "<cmd>Sqmeow add<cr>", desc = "Add Connection" },
+			{ "<leader>Ds", "<cmd>Sqmeow scratch<cr>", desc = "New Scratchpad" },
+		},
 	}
 --	{
 --		"gisketch/triforce.nvim",
