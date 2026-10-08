@@ -24,7 +24,7 @@
   "lualine.nvim": { "branch": "master", "commit": "221ce6b2d999187044529f49da6554a92f740a96" },
   "luasnip-snippets": { "branch": "main", "commit": "262196accf37d00c72d2e4fc99011b5f6537f118" },
   "markdown-preview.nvim": { "branch": "master", "commit": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee" },
-  "mini.nvim": { "branch": "main", "commit": "561751e839b99a4baca36b9d963166b66d2536a6" },
+  "mini.nvim": { "branch": "main", "commit": "6f0cd5049f414932ba55a5d6f3282a59d55c71a3" },
   "neorepl.nvim": { "branch": "master", "commit": "15f4c4e523e1fbec74766e1967e1c2491df013c9" },
   "nui.nvim": { "branch": "main", "commit": "10fc361835c856ba4233ef5ea135b919bf3dce97" },
   "nvim-autopairs": { "branch": "master", "commit": "430522f95fe4fb7c511ec64f8c1a90cc6a66c05c" },
