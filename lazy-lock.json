@@ -16,7 +16,7 @@
   "dadbod-grip.nvim": { "branch": "main", "commit": "a7992ca97d3e2a54c7831e9249799d4aac8dc0c4" },
   "emmet-vim": { "branch": "master", "commit": "92ef2f74f4093edc99db5e9e4cf7e40116a85bd6" },
   "gentoo-syntax": { "branch": "master", "commit": "218a89826bf6cd09e95360ff9c621fbbe61552b8" },
-  "gitsigns.nvim": { "branch": "main", "commit": "aa6cc2d7addb288cfd79a05ac257695d5ff61deb" },
+  "gitsigns.nvim": { "branch": "main", "commit": "fd780920613e541cbdfac41bf711583ed49f9249" },
   "gv.vim": { "branch": "master", "commit": "ed7e9c6a118d92462c7d709c34a92682b60fa9f7" },
   "large_file": { "branch": "main", "commit": "d9740134f80994d56f50e2931ba9307f49e420dc" },
   "lazy.nvim": { "branch": "main", "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97" },
