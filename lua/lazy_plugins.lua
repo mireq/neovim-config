@@ -772,7 +772,32 @@ require("lazy").setup({
 				--},
 				winbar = {},
 				inactive_winbar = {},
-				extensions = {}
+				extensions = {
+					{
+						filetypes = {
+							'AgenticChat',
+							'AgenticInput',
+							'AgenticCode',
+							'AgenticFiles',
+						},
+						sections = {
+							lualine_a = {},
+							lualine_b = {},
+							lualine_c = { 'filename' },
+							lualine_x = {},
+							lualine_y = {},
+							lualine_z = {},
+						},
+						inactive_sections = {
+							lualine_a = {},
+							lualine_b = {},
+							lualine_c = { 'filename' },
+							lualine_x = {},
+							lualine_y = {},
+							lualine_z = {},
+						},
+					},
+				}
 			}
 
 			local function fancyTabLine()
