@@ -187,6 +187,7 @@ require("lazy").setup({
 				location = vue_language_server_path,
 				languages = { 'vue' },
 				configNamespace = 'typescript',
+				enableForWorkspaceTypeScriptVersions = true,
 			}
 			local vtsls_config = {
 				cmd = { "vtsls", "--stdio" },
