@@ -201,6 +201,7 @@ require("lazy").setup({
 						},
 					},
 					vtsls = {
+						autoUseWorkspaceTsdk = true,
 						tsserver = {
 							globalPlugins = {
 								vue_plugin,
