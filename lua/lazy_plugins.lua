@@ -529,15 +529,15 @@ require("lazy").setup({
 			vim.diagnostic.config({update_in_insert = false })
 			--vim.lsp.set_log_level("debug")
 
-			vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-				vim.lsp.diagnostic.on_publish_diagnostics, {
-					signs = true,
-					underline = false,
-					virtual_text = true,
-					show_diagnostic_autocmds = {'PostSave'},
-					diagnostic_delay = 1000
-				}
-			)
+			--vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+			--	vim.lsp.diagnostic.on_publish_diagnostics, {
+			--		signs = true,
+			--		underline = false,
+			--		virtual_text = true,
+			--		show_diagnostic_autocmds = {'PostSave'},
+			--		diagnostic_delay = 1000
+			--	}
+			--)
 
 			if snippet_engine == 'ultisnips' then
 				vim.cmd("au! UltiSnips_AutoTrigger")
