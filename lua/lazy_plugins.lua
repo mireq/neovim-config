@@ -1199,44 +1199,12 @@ require("lazy").setup({
 	--},
 	{
 		"nvim-treesitter/nvim-treesitter",
-		version = false, -- last release is way too old and doesn't work on Windows
+		branch = "main",
+		lazy = false,
 		build = ":TSUpdate",
-		event = { "BufReadPost", "BufNewFile" },
-		dependencies = {
-			{
-				"nvim-treesitter/nvim-treesitter-textobjects",
-				init = function()
-					-- disable rtp plugin, as we only need its queries for mini.ai
-					-- In case other textobject modules are enabled, we will load them
-					-- once nvim-treesitter is loaded
-					require("lazy.core.loader").disable_rtp_plugin("nvim-treesitter-textobjects")
-					load_textobjects = true
-				end,
-			},
-		},
-		cmd = { "TSUpdateSync" },
-		keys = {
-			{ "<c-space>", desc = "Increment selection" },
-			{ "<bs>", desc = "Decrement selection", mode = "x" },
-		},
-		---@type TSConfig
-		opts = {
-			highlight = {
-				enable = true,
-				additional_vim_regex_highlighting = false,
-				use_languagetree = false,
-				disable = function(lang, buf)
-					local max_filesize = 1024 * 1024 -- 1 MB
-					local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-					if ok and stats and stats.size > max_filesize then
-						return true
-					end
-				end,
-			},
-			indent = {
-				enable = false
-			},
-			ensure_installed = {
+		config = function()
+			require("nvim-treesitter").setup()
+			require("nvim-treesitter").install({
 				"python",
 				"javascript",
 				"typescript",
@@ -1245,61 +1213,18 @@ require("lazy").setup({
 				"php",
 				"html",
 				"vimdoc",
-			},
-			incremental_selection = {
-				enable = false,
-				keymaps = {
-					init_selection = "<C-space>",
-					node_incremental = "<C-space>",
-					scope_incremental = false,
-					node_decremental = "<bs>",
-				},
-			},
-		},
-		---@param opts TSConfig
-		config = function(_, opts)
-			if opts == nil then
-				return
-			end
-			if type(opts.ensure_installed) == "table" then
-				---@type table<string, boolean>
-				local added = {}
-				opts.ensure_installed = vim.tbl_filter(function(lang)
-					if added[lang] then
-						return false
+				"markdown",
+				"markdown_inline",
+			})
+
+			vim.api.nvim_create_autocmd("FileType", {
+				callback = function()
+					if vim.fn.executable("tree-sitter") == 0 then
+						return
 					end
-					added[lang] = true
-					return true
-				end, opts.ensure_installed)
-			end
-
-			--local is_supported = function(ft)
-			--	for __, lang in ipairs(opts.ensure_installed) do
-			--		if lang == ft then
-			--			return true
-			--		end
-			--	end
-			--	return false
-			--end
-
-			--opts.highlight.is_supported = is_supported
-			--opts.indent.is_supported = is_supported
-			require("nvim-treesitter.configs").setup(opts)
-
-			if load_textobjects then
-				-- PERF: no need to load the plugin, if we only need its queries for mini.ai
-				if opts.textobjects then
-					for _, mod in ipairs({ "move", "select", "swap", "lsp_interop" }) do
-						if opts.textobjects[mod] and opts.textobjects[mod].enable then
-							local Loader = require("lazy.core.loader")
-							Loader.disabled_rtp_plugins["nvim-treesitter-textobjects"] = nil
-							local plugin = require("lazy.core.config").plugins["nvim-treesitter-textobjects"]
-							require("lazy.core.loader").source_runtime(plugin.dir, "plugin")
-							break
-						end
-					end
-				end
-			end
+					pcall(vim.treesitter.start)
+				end,
+			})
 		end,
 	},
 	{
