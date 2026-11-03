@@ -1503,27 +1503,66 @@ require("lazy").setup({
 				},
 			},
 			headers = {
-				chat = function(parts, session_state)
-					local header = parts.title
-					if session_state then
-						local used = session_state:get_context_used()
-						if used then
-							header = header .. " | " .. used .. " tok"
-							local used_raw = session_state:get_context_used_raw()
-							local size_raw = session_state:get_context_size_raw()
+				chat = function(parts, session_state) return ''; end,
+				input = function(parts, session_state) return ''; end,
+				code = function(parts, session_state) return ''; end,
+				files = function(parts, session_state) return ''; end,
+				diagnostics = function(parts, session_state) return ''; end,
+				todos = function(parts, session_state) return ''; end,
+				--chat = function(parts, session_state)
+				--	local header = parts.title
+				--	if session_state then
+				--		local used = session_state:get_context_used()
+				--		if used then
+				--			header = header .. " | " .. used .. " tok"
+				--			local used_raw = session_state:get_context_used_raw()
+				--			local size_raw = session_state:get_context_size_raw()
 
-							if used_raw and size_raw and size_raw > 0 then
-								header = header .. string.format(" | %.1f percent", used_raw / size_raw * 100)
+				--			if used_raw and size_raw and size_raw > 0 then
+				--				header = header .. string.format(" | %.1f percent", used_raw / size_raw * 100)
+				--			end
+				--		end
+				--		local cost = session_state:get_cost_amount()
+				--		if cost then
+				--			local currency = session_state:get_cost_currency()
+				--			header = header .. " | " .. (currency and currency .. " " or "") .. cost
+				--		end
+				--	end
+				--	return header
+				--end,
+			},
+			windows = {
+				chat = {
+					buffer_name = function(parts, session_state)
+						local header = parts.title
+						if session_state then
+							local used = session_state:get_context_used()
+							if used then
+								header = header .. " | " .. used .. " tok"
+								local used_raw = session_state:get_context_used_raw()
+								local size_raw = session_state:get_context_size_raw()
+
+								if used_raw and size_raw and size_raw > 0 then
+									header = header .. string.format(" | %.1f percent", used_raw / size_raw * 100)
+								end
+							end
+							local cost = session_state:get_cost_amount()
+							if cost then
+								local currency = session_state:get_cost_currency()
+								header = header .. " | " .. (currency and currency .. " " or "") .. cost
+							end
+							local model_name = session_state:get_model_name()
+							if model_name then
+								header = header .. " | " .. model_name
+							end
+							local mode_name = session_state:get_mode_name()
+							if mode_name then
+								header = header .. " | " .. mode_name
 							end
 						end
-						local cost = session_state:get_cost_amount()
-						if cost then
-							local currency = session_state:get_cost_currency()
-							header = header .. " | " .. (currency and currency .. " " or "") .. cost
-						end
-					end
-					return header
-				end,
+						return header
+					end,
+				},
 			}
 		},
 		keys = {
