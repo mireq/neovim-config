@@ -1219,6 +1219,9 @@ require("lazy").setup({
 
 			vim.api.nvim_create_autocmd("FileType", {
 				callback = function()
+					if vim.bo.filetype == "AgenticChat" then
+						return
+					end
 					if vim.fn.executable("tree-sitter") == 0 then
 						return
 					end
