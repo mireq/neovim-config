@@ -1481,7 +1481,7 @@ require("lazy").setup({
 	{
 		"carlos-algms/agentic.nvim",
 		opts = {
-			provider = "vibe-acp",
+			provider = "claude-agent-acp",
 			debug = false,
 			file_picker = {
 				enabled = false,
@@ -1493,16 +1493,26 @@ require("lazy").setup({
 			},
 			acp_providers = {
 				["codex-acp"] = {
-					command = 'codex-acp_sandbox',
-					args = {
-						'-c', "sandbox_mode=danger-full-access"
-					}
+					command = 'codex-acp_vm',
+					default_mode = "agent-full-access",
+					env = {
+						INITIAL_AGENT_MODE = "agent-full-access",
+						CODEX_CONFIG = vim.json.encode({
+							sandbox_mode = "danger-full-access",
+							approval_policy = "never",
+						}),
+					},
 				},
 				["vibe-acp"] = {
 					name = "Mistral vibe",
 					--default_mode = "auto-approve",
 					--default_mode = "caveman",
 					command = 'vibe-acp_sandbox',
+				},
+				["claude-agent-acp"] = {
+					name = "Claude",
+					command = 'claude-agent-acp_vm',
+					default_mode = 'bypassPermissions',
 				},
 			},
 			headers = {
