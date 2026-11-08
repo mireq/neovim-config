@@ -1576,7 +1576,24 @@ require("lazy").setup({
 						return header
 					end,
 				},
-			}
+			},
+			hooks = {
+				on_prompt_submit = function(data)
+					local session = require("agentic.session_registry").get(data.session_key)
+					local bufnr = session and session.widget.buf_nrs.chat
+					if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
+						vim.treesitter.stop(bufnr)
+					end
+				end,
+
+				on_response_complete = function(data)
+					local session = require("agentic.session_registry").get(data.session_key)
+					local bufnr = session and session.widget.buf_nrs.chat
+					if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
+						vim.treesitter.start(bufnr, "markdown")
+					end
+				end,
+			},
 		},
 		keys = {
 			{
