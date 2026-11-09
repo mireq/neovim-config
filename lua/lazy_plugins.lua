@@ -1598,7 +1598,7 @@ require("lazy").setup({
 		keys = {
 			{
 				"<space>a",
-				function() require("agentic").toggle() end,
+				function() require("agentic").toggle({auto_add_to_context = false}) end,
 				mode = { "n" },
 				desc = "Toggle Agentic Chat"
 			},
