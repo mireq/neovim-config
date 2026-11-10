@@ -678,7 +678,7 @@ require("lazy").setup({
 							custom_fname,
 							file_status = true,
 							newfile_status = true,
-							path = 0,
+							path = 1,
 							symbols = {
 								modified = '[+]',
 								readonly = '',
