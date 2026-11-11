@@ -51,11 +51,12 @@ end
 local buf_enter = function(ev)
 	if vim.b[ev.buf].is_large_file then
 		if vim.g.loaded_matchparen then
-			vim.cmd('NoMatchParen')  -- Disable matching parentheses highlighting for large files
+			vim.cmd('silent! autocmd! matchparen') -- Disable matching parentheses highlighting for large files
+			vim.g.loaded_matchparen = nil
 		end
 	else
 		if not vim.g.loaded_matchparen then
-			vim.cmd('DoMatchParen')  -- Enable matching parentheses highlighting
+			vim.cmd('runtime plugin/matchparen.vim') -- Enable matching parentheses highlighting
 		end
 	end
 end
