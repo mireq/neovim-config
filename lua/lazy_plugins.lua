@@ -1621,6 +1621,12 @@ require("lazy").setup({
 				desc = "New Agentic Session"
 			},
 			{
+				"<leader>aN",
+				function() require("agentic").new_session_with_provider() end,
+				mode = { "n" },
+				desc = "New Agentic Session with new provider"
+			},
+			{
 				"<leader>ar", -- ai Restore
 				function()
 					require("agentic").restore_session()
