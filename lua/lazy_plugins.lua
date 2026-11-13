@@ -1644,19 +1644,56 @@ require("lazy").setup({
 				silent = true,
 				mode = { "n" },
 			},
-			{
-				"<leader>ak",
-				function()
-					local AgentInstance = require("agentic.acp.agent_instance")
-					local agentic = require("agentic")
+			--{
+			--	"<leader>ak",
+			--	function()
+			--		local AgentInstance = require("agentic.acp.agent_instance")
+			--		local agentic = require("agentic")
 
-					agentic.destroy_session()
-					AgentInstance:cleanup_all()
+			--		agentic.destroy_session()
+			--		AgentInstance:cleanup_all()
+			--	end,
+			--	mode = { "n" },
+			--	desc = "Kill agentic session + clean chat",
+			--},
+			{
+				"<leader>al", -- ai selet session
+				function()
+					require("agentic").select_session()
 				end,
+				desc = "Agentic list sessions",
+				silent = true,
 				mode = { "n" },
-				desc = "Kill agentic session + clean chat",
 			},
-		}
+			{
+				"<leader>ad", -- ai destroy session
+				function()
+					require("agentic").destroy_session()
+				end,
+				desc = "Destroy current session",
+				silent = true,
+				mode = { "n" },
+			},
+			{
+				"<leader>aD", -- ai destroy session and clean
+				function()
+					require("agentic").destroy_session()
+					require("agentic.acp.agent_instance"):cleanup_all()
+				end,
+				desc = "Destroy current session",
+				silent = true,
+				mode = { "n" },
+			},
+			{
+				"<leader>ap", -- ai switch providers
+				function()
+					require("agentic").switch_provider()
+				end,
+				desc = "Agentic switch providers",
+				silent = true,
+				mode = { "n" },
+			},
+		},
 	},
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
