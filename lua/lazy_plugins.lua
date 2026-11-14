@@ -1694,6 +1694,34 @@ require("lazy").setup({
 				mode = { "n" },
 			},
 		},
+		config = function(_, opts)
+			local SessionManager = require("agentic.session_manager")
+			local prepare_start = SessionManager.prepare_start
+			local complete_start = SessionManager.complete_start
+
+			SessionManager.prepare_start = function(self, spec, is_replaying)
+				if spec.kind == "load" then
+					local bufnr = self.widget.buf_nrs.chat
+					if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
+						vim.treesitter.stop(bufnr)
+					end
+				end
+				return prepare_start(self, spec, is_replaying)
+			end
+
+			SessionManager.complete_start = function(self, spec, result, err)
+				complete_start(self, spec, result, err)
+
+				if spec.kind == "load" then
+					local bufnr = self.widget.buf_nrs.chat
+					if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
+						vim.treesitter.start(bufnr, "markdown")
+					end
+				end
+			end
+
+			require("agentic").setup(opts)
+		end,
 	},
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
