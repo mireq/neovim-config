@@ -1728,6 +1728,15 @@ require("lazy").setup({
 		dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.nvim' },
 		opts = {
 			file_types = { "markdown", "md", "AgenticChat" },
+			overrides = {
+				filetype = {
+					AgenticChat = {
+						anti_conceal = { enabled = false },
+						win_options = { concealcursor = { rendered = "nvic" } },
+						link = { enabled = false },
+					},
+				},
+			},
 		}
 	},
 	{
