@@ -1217,6 +1217,17 @@ require("lazy").setup({
 				"markdown_inline",
 			})
 
+			-- Show markdown links raw: drop conceal from @markup.link captures in markdown_inline highlights.
+			-- Runs here because nvim-treesitter queries must be on runtimepath first.
+			do
+				local src = {}
+				for _, f in ipairs(vim.treesitter.query.get_files("markdown_inline", "highlights")) do
+					src[#src + 1] = table.concat(vim.fn.readfile(f), "\n")
+				end
+				local query = table.concat(src, "\n"):gsub('(@markup%.link%s*)%(#set! conceal ""%)', "%1")
+				vim.treesitter.query.set("markdown_inline", "highlights", query)
+			end
+
 			vim.api.nvim_create_autocmd("FileType", {
 				callback = function()
 					if vim.bo.filetype == "AgenticChat" then
