@@ -1398,6 +1398,7 @@ require("lazy").setup({
 				server_opts_overrides = {
 					cmd_env = {
 						DBUS_SESSION_BUS_ADDRESS = "unix:path=/dev/null",
+						NODE_OPTIONS = "--disable-warning=ExperimentalWarning",
 					},
 				},
 				should_attach = function(bufnr, bufname)
