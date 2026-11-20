@@ -1393,6 +1393,7 @@ require("lazy").setup({
 					typescript = true,
 					markdown = true,
 					rst = true,
+					sh = true,
 					["*"] = false,
 				},
 				server_opts_overrides = {
