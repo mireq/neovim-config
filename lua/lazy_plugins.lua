@@ -1763,6 +1763,13 @@ require("lazy").setup({
 		end
 	},
 --	{
+--		"ryan-WORK/ohm",
+--		build = "./build.sh",
+--		config = function()
+--			require("ohm").setup()
+--		end,
+--	},
+--	{
 --		"2giosangmitom/sqmeow.nvim",
 --		dependencies = { "MunifTanjim/nui.nvim" },
 --		version = "*",
